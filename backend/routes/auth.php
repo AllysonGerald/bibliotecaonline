@@ -2,17 +2,18 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 use Illuminate\Support\Facades\Route;
 
-// Rotas de autenticação serão adicionadas na próxima branch
-Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
+Route::middleware('guest')->group(function (): void {
+    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [LoginController::class, 'login']);
 
-Route::get('/register', function () {
-    return view('auth.register');
-})->name('register');
+    Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+    Route::post('/register', [RegisterController::class, 'register']);
+});
 
-Route::post('/logout', function (): void {
-    abort(404);
-})->name('logout');
+Route::middleware('auth')->group(function (): void {
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+});
