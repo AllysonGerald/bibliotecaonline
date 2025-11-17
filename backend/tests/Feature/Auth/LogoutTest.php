@@ -14,6 +14,7 @@ class LogoutTest extends TestCase
 
     public function testAuthenticatedUserCanLogout(): void
     {
+        /** @var User $user */
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)->post(route('logout'));
@@ -31,6 +32,7 @@ class LogoutTest extends TestCase
 
     public function testLogoutInvalidatesSession(): void
     {
+        /** @var User $user */
         $user = User::factory()->create();
 
         $this->actingAs($user);

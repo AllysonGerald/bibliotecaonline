@@ -24,6 +24,7 @@ class LoginTest extends TestCase
 
     public function testAuthenticatedUserCannotAccessLoginPage(): void
     {
+        /** @var User $user */
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)->get(route('login'));
@@ -33,6 +34,7 @@ class LoginTest extends TestCase
 
     public function testUserCanLoginWithValidCredentials(): void
     {
+        /** @var User $user */
         $user = User::factory()->create([
             'email' => 'test@example.com',
             'password' => bcrypt('password123'),
@@ -82,6 +84,7 @@ class LoginTest extends TestCase
 
     public function testUserCannotLoginWithInactiveAccount(): void
     {
+        /** @var User $user */
         $user = User::factory()->create([
             'email' => 'test@example.com',
             'password' => bcrypt('password123'),
@@ -99,6 +102,7 @@ class LoginTest extends TestCase
 
     public function testRememberMeFunctionality(): void
     {
+        /** @var User $user */
         $user = User::factory()->create([
             'email' => 'test@example.com',
             'password' => bcrypt('password123'),

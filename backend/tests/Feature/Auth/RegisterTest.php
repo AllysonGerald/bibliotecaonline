@@ -25,6 +25,7 @@ class RegisterTest extends TestCase
 
     public function testAuthenticatedUserCannotAccessRegisterPage(): void
     {
+        /** @var User $user */
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)->get(route('register'));
