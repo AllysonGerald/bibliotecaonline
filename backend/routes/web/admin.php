@@ -45,10 +45,21 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         'destroy' => 'categorias.destroy',
     ]);
 
-    // Rotas futuras (alugueis, reservas, usuarios)
-    Route::get('/alugueis', function () {
-        return view('admin.alugueis.index');
-    })->name('alugueis.index');
+    // Rotas de Aluguéis
+    Route::resource('alugueis', App\Http\Controllers\Admin\RentalController::class)
+        ->parameters(['alugueis' => 'aluguel'])
+        ->names([
+            'index' => 'alugueis.index',
+            'create' => 'alugueis.create',
+            'store' => 'alugueis.store',
+            'show' => 'alugueis.show',
+            'edit' => 'alugueis.edit',
+            'update' => 'alugueis.update',
+            'destroy' => 'alugueis.destroy',
+        ])
+    ;
+
+    // Rotas futuras (reservas, usuarios)
 
     Route::get('/reservas', function () {
         return view('admin.reservas.index');
