@@ -111,6 +111,12 @@
                 <a href="{{ route('minhas-reservas') }}" style="display: inline-flex; align-items: center; padding: 10px 20px; background: linear-gradient(135deg, #fce7f3, #fdf2f8); color: #ec4899; border: 2px solid #fbcfe8; border-radius: 10px; font-weight: 700; text-decoration: none; transition: all 0.3s;" onmouseover="this.style.background='linear-gradient(135deg, #ec4899, #f472b6)'; this.style.color='white'; this.style.borderColor='#ec4899';" onmouseout="this.style.background='linear-gradient(135deg, #fce7f3, #fdf2f8)'; this.style.color='#ec4899'; this.style.borderColor='#fbcfe8';">
                     Minhas Reservas
                 </a>
+                @if($user->isAdmin())
+                    <a href="{{ route('admin.alugueis.index') }}" style="display: inline-flex; align-items: center; padding: 10px 20px; background: linear-gradient(135deg, #8b5cf6, #ec4899); color: white; border: 2px solid transparent; border-radius: 10px; font-weight: 700; text-decoration: none; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3); transition: all 0.3s;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 6px 20px rgba(139, 92, 246, 0.4)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 15px rgba(139, 92, 246, 0.3)';">
+                        <i data-lucide="settings" style="width: 16px; height: 16px; margin-right: 6px;"></i>
+                        Gerenciar Aluguéis
+                    </a>
+                @endif
             </div>
         </div>
     </div>
