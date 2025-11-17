@@ -59,11 +59,21 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         ])
     ;
 
-    // Rotas futuras (reservas, usuarios)
+    // Rotas de Reservas
+    Route::resource('reservas', App\Http\Controllers\Admin\ReservationController::class)
+        ->parameters(['reservas' => 'reserva'])
+        ->names([
+            'index' => 'reservas.index',
+            'create' => 'reservas.create',
+            'store' => 'reservas.store',
+            'show' => 'reservas.show',
+            'edit' => 'reservas.edit',
+            'update' => 'reservas.update',
+            'destroy' => 'reservas.destroy',
+        ])
+    ;
 
-    Route::get('/reservas', function () {
-        return view('admin.reservas.index');
-    })->name('reservas.index');
+    // Rotas futuras (usuarios)
 
     Route::get('/usuarios', function () {
         return view('admin.usuarios.index');
