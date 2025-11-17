@@ -1,98 +1,118 @@
 @extends('layouts.app')
 
-@section('title', 'Início')
+@section('title', 'Dashboard')
 
 @section('content')
-<div class="mb-8">
-    <h2 class="text-3xl font-bold text-gray-900">Olá, {{ auth()->user()->name }}! 👋</h2>
-    <p class="mt-2 text-gray-600">Bem-vindo de volta à Biblioteca Online</p>
+@php
+    $user = auth()->user();
+    $activeRentals = $user->rentals()->where('status', 'ativo')->count();
+    $pendingReservations = $user->reservations()->whereIn('status', ['pendente', 'confirmada'])->count();
+    $wishlistCount = $user->wishlists()->count();
+    $reviewsCount = $user->reviews()->count();
+@endphp
+
+<div style="margin-bottom: 32px;">
+    <h1 style="font-size: 36px; font-weight: 900; color: #1f2937; margin-bottom: 8px;">Olá, {{ $user->name }}!</h1>
+    <p style="font-size: 18px; color: #6b7280; font-weight: 500;">Bem-vindo de volta à Biblioteca Online</p>
 </div>
 
-<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
-    <div class="bg-white overflow-hidden shadow rounded-lg">
-        <div class="p-5">
-            <div class="flex items-center">
-                <div class="flex-shrink-0">
-                    <svg class="h-6 w-6 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/>
-                    </svg>
-                </div>
-                <div class="ml-5 w-0 flex-1">
-                    <dl>
-                        <dt class="text-sm font-medium text-gray-500 truncate">Aluguéis Ativos</dt>
-                        <dd class="text-lg font-semibold text-gray-900">0</dd>
-                    </dl>
-                </div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 32px;">
+    <!-- Card Aluguéis Ativos -->
+    <div style="background: linear-gradient(135deg, #f3e8ff, #faf5ff, white); border-radius: 16px; padding: 24px; border: 3px solid #e9d5ff; box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15); transition: all 0.3s;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 15px 40px rgba(139, 92, 246, 0.25)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 30px rgba(139, 92, 246, 0.15)';">
+        <div style="display: flex; align-items: center; gap: 16px;">
+            <div style="width: 56px; height: 56px; background: linear-gradient(135deg, #8b5cf6, #a855f7); border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);">
+                <i data-lucide="book" style="width: 28px; height: 28px; color: white;"></i>
+            </div>
+            <div style="flex: 1;">
+                <p style="font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Aluguéis Ativos</p>
+                <p style="font-size: 32px; font-weight: 900; color: #1f2937; margin: 0;">{{ $activeRentals }}</p>
             </div>
         </div>
     </div>
 
-    <div class="bg-white overflow-hidden shadow rounded-lg">
-        <div class="p-5">
-            <div class="flex items-center">
-                <div class="flex-shrink-0">
-                    <svg class="h-6 w-6 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
-                    </svg>
-                </div>
-                <div class="ml-5 w-0 flex-1">
-                    <dl>
-                        <dt class="text-sm font-medium text-gray-500 truncate">Reservas Pendentes</dt>
-                        <dd class="text-lg font-semibold text-gray-900">0</dd>
-                    </dl>
-                </div>
+    <!-- Card Reservas Pendentes -->
+    <div style="background: linear-gradient(135deg, #fce7f3, #fdf2f8, white); border-radius: 16px; padding: 24px; border: 3px solid #fbcfe8; box-shadow: 0 10px 30px rgba(236, 72, 153, 0.15); transition: all 0.3s;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 15px 40px rgba(236, 72, 153, 0.25)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 30px rgba(236, 72, 153, 0.15)';">
+        <div style="display: flex; align-items: center; gap: 16px;">
+            <div style="width: 56px; height: 56px; background: linear-gradient(135deg, #ec4899, #f472b6); border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(236, 72, 153, 0.3);">
+                <i data-lucide="clock" style="width: 28px; height: 28px; color: white;"></i>
+            </div>
+            <div style="flex: 1;">
+                <p style="font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Reservas Pendentes</p>
+                <p style="font-size: 32px; font-weight: 900; color: #1f2937; margin: 0;">{{ $pendingReservations }}</p>
             </div>
         </div>
     </div>
 
-    <div class="bg-white overflow-hidden shadow rounded-lg">
-        <div class="p-5">
-            <div class="flex items-center">
-                <div class="flex-shrink-0">
-                    <svg class="h-6 w-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
-                    </svg>
-                </div>
-                <div class="ml-5 w-0 flex-1">
-                    <dl>
-                        <dt class="text-sm font-medium text-gray-500 truncate">Lista de Desejos</dt>
-                        <dd class="text-lg font-semibold text-gray-900">0</dd>
-                    </dl>
-                </div>
+    <!-- Card Lista de Desejos -->
+    <div style="background: linear-gradient(135deg, #fff1f2, #fff7ed, white); border-radius: 16px; padding: 24px; border: 3px solid #fed7aa; box-shadow: 0 10px 30px rgba(249, 115, 22, 0.15); transition: all 0.3s;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 15px 40px rgba(249, 115, 22, 0.25)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 30px rgba(249, 115, 22, 0.15)';">
+        <div style="display: flex; align-items: center; gap: 16px;">
+            <div style="width: 56px; height: 56px; background: linear-gradient(135deg, #f97316, #fb923c); border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(249, 115, 22, 0.3);">
+                <i data-lucide="heart" style="width: 28px; height: 28px; color: white;"></i>
+            </div>
+            <div style="flex: 1;">
+                <p style="font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Lista de Desejos</p>
+                <p style="font-size: 32px; font-weight: 900; color: #1f2937; margin: 0;">{{ $wishlistCount }}</p>
             </div>
         </div>
     </div>
 
-    <div class="bg-white overflow-hidden shadow rounded-lg">
-        <div class="p-5">
-            <div class="flex items-center">
-                <div class="flex-shrink-0">
-                    <svg class="h-6 w-6 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
-                        <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
-                    </svg>
-                </div>
-                <div class="ml-5 w-0 flex-1">
-                    <dl>
-                        <dt class="text-sm font-medium text-gray-500 truncate">Avaliações Feitas</dt>
-                        <dd class="text-lg font-semibold text-gray-900">0</dd>
-                    </dl>
-                </div>
+    <!-- Card Avaliações Feitas -->
+    <div style="background: linear-gradient(135deg, #faf5ff, #f3e8ff, white); border-radius: 16px; padding: 24px; border: 3px solid #e9d5ff; box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15); transition: all 0.3s;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 15px 40px rgba(139, 92, 246, 0.25)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 30px rgba(139, 92, 246, 0.15)';">
+        <div style="display: flex; align-items: center; gap: 16px;">
+            <div style="width: 56px; height: 56px; background: linear-gradient(135deg, #8b5cf6, #a855f7); border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);">
+                <i data-lucide="star" style="width: 28px; height: 28px; color: white;"></i>
+            </div>
+            <div style="flex: 1;">
+                <p style="font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Avaliações Feitas</p>
+                <p style="font-size: 32px; font-weight: 900; color: #1f2937; margin: 0;">{{ $reviewsCount }}</p>
             </div>
         </div>
     </div>
 </div>
 
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-    <div class="bg-white shadow rounded-lg p-6">
-        <h3 class="text-lg font-semibold text-gray-900 mb-4">Livros em Destaque</h3>
-        <p class="text-gray-500 text-center py-8">Nenhum livro para exibir no momento.</p>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 24px;">
+    <!-- Livros em Destaque -->
+    <div style="background: white; border-radius: 20px; padding: 32px; border: 3px solid #e9d5ff; box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15);">
+        <h3 style="font-size: 22px; font-weight: 900; color: #1f2937; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
+            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #8b5cf6, #ec4899); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                <i data-lucide="star" style="width: 20px; height: 20px; color: white;"></i>
+            </div>
+            Livros em Destaque
+        </h3>
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px 0;">
+            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #f3e8ff, #fce7f3); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+                <i data-lucide="book-open" style="width: 40px; height: 40px; color: #8b5cf6;"></i>
+            </div>
+            <p style="font-size: 16px; color: #6b7280; text-align: center; margin-bottom: 24px; font-weight: 500;">Nenhum livro para exibir no momento.</p>
+            <a href="{{ route('livros.index') }}" style="display: inline-flex; align-items: center; padding: 12px 24px; background: linear-gradient(135deg, #8b5cf6, #ec4899); color: white; border-radius: 12px; font-weight: 700; text-decoration: none; box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3); transition: all 0.3s;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 10px 25px rgba(139, 92, 246, 0.4)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 8px 20px rgba(139, 92, 246, 0.3)';">
+                <span>Explorar Catálogo</span>
+                <i data-lucide="arrow-right" style="width: 18px; height: 18px; margin-left: 8px;"></i>
+            </a>
+        </div>
     </div>
 
-    <div class="bg-white shadow rounded-lg p-6">
-        <h3 class="text-lg font-semibold text-gray-900 mb-4">Últimas Atividades</h3>
-        <p class="text-gray-500 text-center py-8">Nenhuma atividade recente.</p>
+    <!-- Últimas Atividades -->
+    <div style="background: white; border-radius: 20px; padding: 32px; border: 3px solid #fbcfe8; box-shadow: 0 10px 30px rgba(236, 72, 153, 0.15);">
+        <h3 style="font-size: 22px; font-weight: 900; color: #1f2937; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
+            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #ec4899, #f97316); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                <i data-lucide="clock" style="width: 20px; height: 20px; color: white;"></i>
+            </div>
+            Últimas Atividades
+        </h3>
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px 0;">
+            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #fce7f3, #fff1f2); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+                <i data-lucide="activity" style="width: 40px; height: 40px; color: #ec4899;"></i>
+            </div>
+            <p style="font-size: 16px; color: #6b7280; text-align: center; margin-bottom: 24px; font-weight: 500;">Nenhuma atividade recente.</p>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;">
+                <a href="{{ route('meus-alugueis') }}" style="display: inline-flex; align-items: center; padding: 10px 20px; background: linear-gradient(135deg, #f3e8ff, #faf5ff); color: #8b5cf6; border: 2px solid #e9d5ff; border-radius: 10px; font-weight: 700; text-decoration: none; transition: all 0.3s;" onmouseover="this.style.background='linear-gradient(135deg, #8b5cf6, #a855f7)'; this.style.color='white'; this.style.borderColor='#8b5cf6';" onmouseout="this.style.background='linear-gradient(135deg, #f3e8ff, #faf5ff)'; this.style.color='#8b5cf6'; this.style.borderColor='#e9d5ff';">
+                    Meus Aluguéis
+                </a>
+                <a href="{{ route('minhas-reservas') }}" style="display: inline-flex; align-items: center; padding: 10px 20px; background: linear-gradient(135deg, #fce7f3, #fdf2f8); color: #ec4899; border: 2px solid #fbcfe8; border-radius: 10px; font-weight: 700; text-decoration: none; transition: all 0.3s;" onmouseover="this.style.background='linear-gradient(135deg, #ec4899, #f472b6)'; this.style.color='white'; this.style.borderColor='#ec4899';" onmouseout="this.style.background='linear-gradient(135deg, #fce7f3, #fdf2f8)'; this.style.color='#ec4899'; this.style.borderColor='#fbcfe8';">
+                    Minhas Reservas
+                </a>
+            </div>
+        </div>
     </div>
 </div>
 @endsection
-
