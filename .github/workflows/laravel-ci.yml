@@ -1,0 +1,105 @@
+name: Laravel CI
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main", "develop" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    name: Build, Test & Lint
+
+    steps:
+    # 1. Baixa o código do repositório
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    # 2. Configura o PHP 8.4
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.4'
+        extensions: dom, curl, libxml, mbstring, zip, pcntl, bcmath, sqlite3, pdo_sqlite, pdo_mysql, pdo_pgsql, intl, gd, fileinfo
+        tools: composer
+
+    # 3. Cache das dependências do Composer
+    - name: Cache Composer dependencies
+      uses: actions/cache@v4
+      with:
+        path: backend/vendor
+        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-composer-
+
+    # 4. Instala dependências do Composer
+    - name: Install Composer dependencies
+      working-directory: ./backend
+      run: composer install --no-interaction --no-progress --prefer-dist
+
+    # 5. Verifica se existe configuração de frontend
+    - name: Check if frontend exists
+      id: check-frontend
+      working-directory: ./backend
+      run: |
+        if [ -f "package.json" ] && [ -f "vite.config.js" ]; then
+          echo "has_frontend=true" >> $GITHUB_OUTPUT
+        else
+          echo "has_frontend=false" >> $GITHUB_OUTPUT
+        fi
+
+    # 6. Configura o Node.js (apenas se tiver frontend)
+    - name: Setup Node.js
+      if: steps.check-frontend.outputs.has_frontend == 'true'
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+
+    # 7. Cache das dependências do NPM (apenas se tiver frontend)
+    - name: Cache Node.js modules
+      if: steps.check-frontend.outputs.has_frontend == 'true'
+      uses: actions/cache@v4
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    # 8. Instala dependências do NPM (apenas se tiver frontend)
+    - name: Install NPM dependencies
+      if: steps.check-frontend.outputs.has_frontend == 'true'
+      working-directory: ./backend
+      run: npm install
+
+    # 9. Compila os assets (apenas se tiver frontend)
+    - name: Build frontend assets
+      if: steps.check-frontend.outputs.has_frontend == 'true'
+      working-directory: ./backend
+      run: npm run build
+
+    # 10. Prepara o ambiente Laravel para testes
+    - name: Prepare Laravel Environment
+      working-directory: ./backend
+      run: |
+        cp .env.example .env
+        php artisan key:generate
+
+    # 11. Prepara o banco de dados de teste (SQLite)
+    - name: Setup Test Database
+      working-directory: ./backend
+      run: |
+        touch database/database.sqlite
+
+    # 12. Verifica o Estilo do Código (PHP-CS-Fixer)
+    - name: Check Code Style (PHP-CS-Fixer)
+      working-directory: ./backend
+      run: ./vendor/bin/php-cs-fixer fix --dry-run --diff --verbose
+
+    # 13. Roda os testes (PHPUnit / Pest)
+    - name: Run tests
+      working-directory: ./backend
+      env:
+        DB_CONNECTION: sqlite
+        DB_DATABASE: ${{ github.workspace }}/backend/database/database.sqlite
+      run: php artisan test

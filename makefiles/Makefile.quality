@@ -1,0 +1,427 @@
+##@ 🔍 Qualidade de Código - PHP Insights
+
+phpinsights-install: ## Instala PHP Insights
+	@echo "$(GREEN)📦 Instalando PHP Insights...$(NC)"
+	docker compose exec php composer require --dev nunomaduro/phpinsights
+	@echo "$(GREEN)✅ PHP Insights instalado!$(NC)"
+	@echo "$(YELLOW)💡 Execute: make phpinsights-analyze$(NC)"
+
+phpinsights-analyze: ## Analisa código com PHP Insights
+	@echo "$(GREEN)🔍 Analisando código com PHP Insights...$(NC)"
+	docker compose exec php ./vendor/bin/phpinsights analyse backend/app --min-quality=80 --min-complexity=80 --min-architecture=80 --min-style=80 || true
+
+phpinsights-analyze-simple: ## Análise simples (sem métricas mínimas)
+	@echo "$(GREEN)🔍 Análise simples com PHP Insights...$(NC)"
+	docker compose exec php ./vendor/bin/phpinsights analyse backend/app
+
+phpinsights-fix: ## Corrige problemas automaticamente (quando possível)
+	@echo "$(YELLOW)🔧 Corrigindo problemas automaticamente...$(NC)"
+	docker compose exec php ./vendor/bin/phpinsights analyse backend/app --fix || true
+
+phpinsights-config: ## Gera arquivo de configuração phpinsights.php
+	@echo "$(GREEN)⚙️  Gerando configuração do PHP Insights...$(NC)"
+	docker compose exec php ./vendor/bin/phpinsights --init || true
+
+
+##@ 🎯 PHPStan - Análise Estática
+
+phpstan-install: ## Instala PHPStan
+	@echo "$(GREEN)📦 Instalando PHPStan...$(NC)"
+	docker compose exec php composer require --dev phpstan/phpstan phpstan/extension-installer
+	@echo "$(GREEN)✅ PHPStan instalado!$(NC)"
+
+phpstan-analyze: ## Analisa código com PHPStan (nível 0)
+	@echo "$(GREEN)🔍 Analisando código com PHPStan...$(NC)"
+	docker compose exec php ./vendor/bin/phpstan analyse backend/app --memory-limit=2G || true
+
+phpstan-analyze-level: ## Analisa com nível específico (0-9)
+	@read -p "Nível de análise (0-9, padrão: 5): " level; \
+	level=$${level:-5}; \
+	echo "$(GREEN)🔍 Analisando com nível $$level...$(NC)"; \
+	docker compose exec php ./vendor/bin/phpstan analyse backend/app --level=$$level --memory-limit=2G || true
+
+phpstan-analyze-strict: ## Análise rigorosa (nível 9)
+	@echo "$(GREEN)🔍 Análise rigorosa com PHPStan (nível 9)...$(NC)"
+	docker compose exec php ./vendor/bin/phpstan analyse backend/app --level=9 --memory-limit=2G || true
+
+phpstan-baseline: ## Gera baseline para ignorar erros existentes
+	@echo "$(YELLOW)📝 Gerando baseline do PHPStan...$(NC)"
+	docker compose exec php ./vendor/bin/phpstan analyse backend/app --generate-baseline --memory-limit=2G || true
+
+phpstan-clear-result-cache: ## Limpa cache de resultados do PHPStan
+	@echo "$(YELLOW)🧹 Limpando cache do PHPStan...$(NC)"
+	docker compose exec php ./vendor/bin/phpstan clear-result-cache || true
+
+
+##@ 🎨 PHP CS Fixer - Formatação de Código
+
+phpcs-install: ## Instala PHP CS Fixer
+	@echo "$(GREEN)📦 Instalando PHP CS Fixer...$(NC)"
+	docker compose exec php composer require --dev friendsofphp/php-cs-fixer
+	@echo "$(GREEN)✅ PHP CS Fixer instalado!$(NC)"
+	@echo "$(YELLOW)💡 Configure em: backend/.php-cs-fixer.dist.php$(NC)"
+
+phpcs-check: ## Verifica estilo de código (sem alterar)
+	@echo "$(GREEN)🔍 Verificando estilo de código...$(NC)"
+	docker compose exec php ./vendor/bin/php-cs-fixer fix --dry-run --diff --verbose
+
+phpcs-check-app: ## Verifica apenas diretório app/
+	@echo "$(GREEN)🔍 Verificando app/...$(NC)"
+	docker compose exec php ./vendor/bin/php-cs-fixer fix app/ --dry-run --diff
+
+phpcs-check-file: ## Verifica arquivo específico
+	@read -p "Arquivo (ex: app/Http/Controllers/Controller.php): " file; \
+	echo "$(GREEN)🔍 Verificando $$file...$(NC)"; \
+	docker compose exec php ./vendor/bin/php-cs-fixer fix $$file --dry-run --diff --verbose
+
+phpcs-fix: ## Corrige estilo de código automaticamente (todo o projeto)
+	@echo "$(GREEN)🔧 Corrigindo estilo de código...$(NC)"
+	docker compose exec php ./vendor/bin/php-cs-fixer fix
+
+phpcs-fix-app: ## Corrige apenas diretório app/
+	@echo "$(GREEN)🔧 Corrigindo app/...$(NC)"
+	docker compose exec php ./vendor/bin/php-cs-fixer fix app/
+
+phpcs-fix-controllers: ## Corrige apenas Controllers
+	@echo "$(GREEN)🔧 Corrigindo Controllers...$(NC)"
+	docker compose exec php ./vendor/bin/php-cs-fixer fix app/Http/Controllers/
+
+phpcs-fix-models: ## Corrige apenas Models
+	@echo "$(GREEN)🔧 Corrigindo Models...$(NC)"
+	docker compose exec php ./vendor/bin/php-cs-fixer fix app/Models/
+
+phpcs-fix-services: ## Corrige apenas Services
+	@echo "$(GREEN)🔧 Corrigindo Services...$(NC)"
+	docker compose exec php ./vendor/bin/php-cs-fixer fix app/Services/
+
+phpcs-fix-repositories: ## Corrige apenas Repositories
+	@echo "$(GREEN)🔧 Corrigindo Repositories...$(NC)"
+	docker compose exec php ./vendor/bin/php-cs-fixer fix app/Repositories/
+
+phpcs-fix-file: ## Corrige arquivo específico
+	@read -p "Arquivo (ex: app/Http/Controllers/Controller.php): " file; \
+	echo "$(GREEN)🔧 Corrigindo $$file...$(NC)"; \
+	docker compose exec php ./vendor/bin/php-cs-fixer fix $$file --verbose
+
+phpcs-list-files: ## Lista arquivos que serão verificados
+	@echo "$(GREEN)📋 Listando arquivos a serem verificados...$(NC)"
+	docker compose exec php ./vendor/bin/php-cs-fixer list-files
+
+phpcs-describe: ## Descreve as regras ativas
+	@echo "$(GREEN)📖 Regras ativas do PHP CS Fixer:$(NC)"
+	docker compose exec php ./vendor/bin/php-cs-fixer describe
+
+phpcs-cache-clear: ## Limpa cache do PHP CS Fixer
+	@echo "$(YELLOW)🧹 Limpando cache do PHP CS Fixer...$(NC)"
+	docker compose exec php rm -f .php-cs-fixer.cache
+	@echo "$(GREEN)✅ Cache limpo!$(NC)"
+
+phpcs-version: ## Mostra versão do PHP CS Fixer
+	@docker compose exec php ./vendor/bin/php-cs-fixer --version
+
+phpcs-config: ## Mostra configuração atual
+	@echo "$(GREEN)⚙️  Configuração do PHP CS Fixer:$(NC)"
+	@if [ -f "backend/.php-cs-fixer.dist.php" ]; then \
+		echo "$(GREEN)✅ Arquivo: backend/.php-cs-fixer.dist.php$(NC)"; \
+		cat backend/.php-cs-fixer.dist.php; \
+	else \
+		echo "$(RED)❌ Arquivo .php-cs-fixer.dist.php não encontrado$(NC)"; \
+	fi
+
+
+##@ 🎨 Laravel Pint - Formatação Moderna
+
+pint-install: ## Instala Laravel Pint
+	@echo "$(GREEN)📦 Instalando Laravel Pint...$(NC)"
+	docker compose exec php composer require --dev laravel/pint
+	@echo "$(GREEN)✅ Laravel Pint instalado!$(NC)"
+
+pint-check: ## Verifica formatação (sem alterar)
+	@echo "$(GREEN)🔍 Verificando formatação com Pint...$(NC)"
+	docker compose exec php ./vendor/bin/pint --test backend/app || true
+
+pint-fix: ## Corrige formatação automaticamente
+	@echo "$(GREEN)🔧 Corrigindo formatação com Pint...$(NC)"
+	docker compose exec php ./vendor/bin/pint backend/app
+
+
+##@ 🐛 PHPMD - PHP Mess Detector
+
+phpmd-install: ## Instala PHPMD
+	@echo "$(GREEN)📦 Instalando PHPMD...$(NC)"
+	docker compose exec php composer require --dev phpmd/phpmd
+	@echo "$(GREEN)✅ PHPMD instalado!$(NC)"
+
+phpmd-analyze: ## Analisa código com PHPMD
+	@echo "$(GREEN)🔍 Analisando código com PHPMD...$(NC)"
+	docker compose exec php ./vendor/bin/phpmd backend/app text codesize,unusedcode,naming,design,controversial,cleancode || true
+
+phpmd-analyze-xml: ## Análise PHPMD em formato XML
+	@read -p "Arquivo de saída (ex: phpmd-report.xml): " file; \
+	echo "$(GREEN)🔍 Gerando relatório XML...$(NC)"; \
+	docker compose exec php ./vendor/bin/phpmd backend/app xml codesize,unusedcode,naming,design,controversial,cleancode > $$file || true
+
+
+##@ 📊 Psalm - Análise Estática Avançada
+
+psalm-install: ## Instala Psalm
+	@echo "$(GREEN)📦 Instalando Psalm...$(NC)"
+	docker compose exec php composer require --dev vimeo/psalm
+	@echo "$(GREEN)✅ Psalm instalado!$(NC)"
+
+psalm-init: ## Inicializa Psalm no projeto
+	@echo "$(GREEN)⚙️  Inicializando Psalm...$(NC)"
+	docker compose exec php ./vendor/bin/psalm --init || true
+
+psalm-analyze: ## Analisa código com Psalm
+	@echo "$(GREEN)🔍 Analisando código com Psalm...$(NC)"
+	docker compose exec php ./vendor/bin/psalm --memory-limit=2G || true
+
+psalm-baseline: ## Gera baseline do Psalm
+	@echo "$(YELLOW)📝 Gerando baseline do Psalm...$(NC)"
+	docker compose exec php ./vendor/bin/psalm --set-baseline=psalm-baseline.xml || true
+
+psalm-clear-cache: ## Limpa cache do Psalm
+	@echo "$(YELLOW)🧹 Limpando cache do Psalm...$(NC)"
+	docker compose exec php ./vendor/bin/psalm --clear-cache || true
+
+
+##@ 🔧 Análise de Complexidade
+
+complexity-check: ## Verifica complexidade ciclomática
+	@echo "$(GREEN)🔍 Verificando complexidade do código...$(NC)"
+	@if command -v phploc > /dev/null 2>&1 || docker compose exec php composer show | grep -q phploc; then \
+		docker compose exec php ./vendor/bin/phploc backend/app || true; \
+	else \
+		echo "$(YELLOW)💡 Instale phploc: make composer-require-dev package=phploc/phploc$(NC)"; \
+	fi
+
+phploc-install: ## Instala phploc (análise de métricas)
+	@echo "$(GREEN)📦 Instalando phploc...$(NC)"
+	docker compose exec php composer require --dev phploc/phploc
+	@echo "$(GREEN)✅ phploc instalado!$(NC)"
+
+phploc-analyze: ## Analisa métricas do código
+	@echo "$(GREEN)📊 Analisando métricas com phploc...$(NC)"
+	docker compose exec php ./vendor/bin/phploc backend/app || true
+
+
+##@ 🛠️ Verificação de Dependências
+
+composer-audit: ## Verifica vulnerabilidades (Composer)
+	@echo "$(GREEN)🔒 Verificando vulnerabilidades...$(NC)"
+	docker compose exec php composer audit
+
+composer-audit-format: ## Auditoria em formato JSON
+	@echo "$(GREEN)🔒 Verificando vulnerabilidades (JSON)...$(NC)"
+	docker compose exec php composer audit --format=json || true
+
+
+##@ 🎯 Workflow Completo de Qualidade
+
+quality-check: ## Executa todas as verificações de qualidade
+	@echo "$(BLUE)━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━$(NC)"
+	@echo "$(GREEN)🔍 Verificação Completa de Qualidade$(NC)"
+	@echo "$(BLUE)━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━$(NC)"
+	@echo ""
+	@echo "$(YELLOW)1/5 Executando testes...$(NC)"
+	$(MAKE) test || echo "$(YELLOW)⚠️  Testes não passaram$(NC)"
+	@echo ""
+	@echo "$(YELLOW)2/5 Verificando estilo de código...$(NC)"
+	$(MAKE) phpcs-check || echo "$(YELLOW)⚠️  PHP CS Fixer não configurado$(NC)"
+	@echo ""
+	@echo "$(YELLOW)3/5 Analisando com PHPStan...$(NC)"
+	$(MAKE) phpstan-analyze || echo "$(YELLOW)⚠️  PHPStan não configurado$(NC)"
+	@echo ""
+	@echo "$(YELLOW)4/5 Verificando vulnerabilidades...$(NC)"
+	$(MAKE) composer-audit || echo "$(YELLOW)⚠️  Auditoria não disponível$(NC)"
+	@echo ""
+	@echo "$(YELLOW)5/5 Gerando métricas...$(NC)"
+	$(MAKE) phploc-analyze || echo "$(YELLOW)⚠️  phploc não configurado$(NC)"
+	@echo ""
+	@echo "$(GREEN)✅ Verificação de qualidade concluída!$(NC)"
+
+quality-fix: ## Corrige automaticamente problemas de qualidade
+	@echo "$(BLUE)━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━$(NC)"
+	@echo "$(GREEN)🔧 Correção Automática de Qualidade$(NC)"
+	@echo "$(BLUE)━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━$(NC)"
+	@echo ""
+	@echo "$(YELLOW)1/3 Corrigindo estilo com PHP CS Fixer...$(NC)"
+	$(MAKE) phpcs-fix || echo "$(YELLOW)⚠️  PHP CS Fixer não configurado$(NC)"
+	@echo ""
+	@echo "$(YELLOW)2/3 Corrigindo com PHP Insights...$(NC)"
+	$(MAKE) phpinsights-fix || echo "$(YELLOW)⚠️  PHP Insights não configurado$(NC)"
+	@echo ""
+	@echo "$(YELLOW)3/3 Formatando com Laravel Pint...$(NC)"
+	$(MAKE) pint-fix || echo "$(YELLOW)⚠️  Laravel Pint não configurado$(NC)"
+	@echo ""
+	@echo "$(GREEN)✅ Correção automática concluída!$(NC)"
+
+quality-install-all: ## Instala todas as ferramentas de qualidade
+	@echo "$(BLUE)━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━$(NC)"
+	@echo "$(GREEN)📦 Instalando Todas as Ferramentas de Qualidade$(NC)"
+	@echo "$(BLUE)━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━$(NC)"
+	@echo ""
+	@echo "$(YELLOW)Instalando PHP Insights...$(NC)"
+	$(MAKE) phpinsights-install || true
+	@echo ""
+	@echo "$(YELLOW)Instalando PHPStan...$(NC)"
+	$(MAKE) phpstan-install || true
+	@echo ""
+	@echo "$(YELLOW)Instalando PHP CS Fixer...$(NC)"
+	$(MAKE) phpcs-install || true
+	@echo ""
+	@echo "$(YELLOW)Instalando Laravel Pint...$(NC)"
+	$(MAKE) pint-install || true
+	@echo ""
+	@echo "$(YELLOW)Instalando PHPMD...$(NC)"
+	$(MAKE) phpmd-install || true
+	@echo ""
+	@echo "$(YELLOW)Instalando phploc...$(NC)"
+	$(MAKE) phploc-install || true
+	@echo ""
+	@echo "$(GREEN)✅ Instalação concluída!$(NC)"
+	@echo "$(YELLOW)💡 Execute: make quality-check$(NC)"
+
+
+##@ 📊 Métricas e Relatórios
+
+code-metrics: ## Mostra métricas gerais do código
+	@echo "$(BLUE)━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━$(NC)"
+	@echo "$(GREEN)📊 Métricas do Código$(NC)"
+	@echo "$(BLUE)━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━$(NC)"
+	@echo ""
+	@echo "$(YELLOW)📁 Arquivos PHP:$(NC)"
+	@find backend/app -name "*.php" 2>/dev/null | wc -l || echo "0"
+	@echo ""
+	@echo "$(YELLOW)📝 Linhas de código (estimado):$(NC)"
+	@find backend/app -name "*.php" -exec cat {} \; 2>/dev/null | wc -l || echo "0"
+	@echo ""
+	@echo "$(YELLOW)🧪 Testes:$(NC)"
+	@find backend/tests -name "*.php" 2>/dev/null | wc -l || echo "0"
+	@echo ""
+	@if docker compose exec php composer show | grep -q phploc; then \
+		echo "$(YELLOW)📊 Análise detalhada:$(NC)"; \
+		docker compose exec php ./vendor/bin/phploc backend/app || true; \
+	fi
+
+
+##@ 📚 Documentação - PHPDoc
+
+phpdoc-install: ## Instala phpDocumentor
+	@echo "$(GREEN)📦 Instalando phpDocumentor...$(NC)"
+	docker compose exec php composer require --dev phpdocumentor/phpdocumentor
+	@echo "$(GREEN)✅ phpDocumentor instalado!$(NC)"
+
+phpdoc-generate: ## Gera documentação PHPDoc
+	@echo "$(GREEN)📚 Gerando documentação PHPDoc...$(NC)"
+	@mkdir -p docs/api
+	docker compose exec php ./vendor/bin/phpdoc -d backend/app -t docs/api --title="API Documentation" || true
+
+phpdoc-generate-custom: ## Gera documentação com configuração customizada
+	@read -p "Diretório de saída (ex: docs/api): " dir; \
+	mkdir -p $$dir; \
+	echo "$(GREEN)📚 Gerando documentação em $$dir...$(NC)"; \
+	docker compose exec php ./vendor/bin/phpdoc -d backend/app -t $$dir --title="API Documentation" || true
+
+
+##@ 📚 Documentação - API Documentation Generator
+
+api-docs-install: ## Instala Laravel API Documentation Generator
+	@echo "$(GREEN)📦 Instalando Laravel API Documentation Generator...$(NC)"
+	docker compose exec php composer require --dev mpociot/laravel-apidoc-generator || \
+	docker compose exec php composer require --dev darkaonline/l5-swagger || \
+	echo "$(YELLOW)⚠️  Escolha uma ferramenta: mpociot/laravel-apidoc-generator ou darkaonline/l5-swagger$(NC)"
+
+api-docs-generate: ## Gera documentação da API
+	@echo "$(GREEN)📚 Gerando documentação da API...$(NC)"
+	@if docker compose exec php composer show | grep -q "mpociot/laravel-apidoc-generator"; then \
+		docker compose exec php php artisan api:generate || true; \
+	elif docker compose exec php composer show | grep -q "darkaonline/l5-swagger"; then \
+		docker compose exec php php artisan l5-swagger:generate || true; \
+	else \
+		echo "$(YELLOW)⚠️  Nenhuma ferramenta de documentação instalada$(NC)"; \
+		echo "$(YELLOW)💡 Execute: make api-docs-install$(NC)"; \
+	fi
+
+
+##@ 📚 Documentação - Scribe
+
+scribe-install: ## Instala Scribe (documentação de API)
+	@echo "$(GREEN)📦 Instalando Scribe...$(NC)"
+	docker compose exec php composer require --dev knuckleswtf/scribe
+	@echo "$(GREEN)✅ Scribe instalado!$(NC)"
+	@echo "$(YELLOW)💡 Execute: make scribe-generate$(NC)"
+
+scribe-generate: ## Gera documentação com Scribe
+	@echo "$(GREEN)📚 Gerando documentação com Scribe...$(NC)"
+	docker compose exec php php artisan scribe:generate || true
+
+scribe-publish: ## Publica configuração do Scribe
+	@echo "$(GREEN)⚙️  Publicando configuração do Scribe...$(NC)"
+	docker compose exec php php artisan vendor:publish --tag=scribe-config || true
+
+
+##@ 📝 Documentação - Scramble (API Documentation)
+
+scramble-install: ## Instala Scramble (gerador de documentação OpenAPI)
+	@echo "$(GREEN)📦 Instalando Scramble...$(NC)"
+	docker compose exec php composer require --dev dedoc/scramble
+	@echo "$(GREEN)✅ Scramble instalado!$(NC)"
+	@echo "$(YELLOW)💡 Execute: make scramble-publish$(NC)"
+
+scramble-publish: ## Publica configuração do Scramble
+	@echo "$(GREEN)⚙️  Publicando configuração do Scramble...$(NC)"
+	docker compose exec php php artisan vendor:publish --tag=scramble-config || true
+
+scramble-generate: ## Gera documentação OpenAPI/Swagger
+	@echo "$(GREEN)📚 Gerando documentação OpenAPI com Scramble...$(NC)"
+	@echo "$(YELLOW)💡 Acesse: http://localhost:8080/api/docs para ver a documentação$(NC)"
+	@echo "$(YELLOW)💡 Ou gere o arquivo JSON: make scramble-generate-json$(NC)"
+
+scramble-generate-json: ## Gera arquivo OpenAPI JSON
+	@read -p "Nome do arquivo (ex: openapi.json): " file; \
+	file=$${file:-openapi.json}; \
+	echo "$(GREEN)📚 Gerando $$file...$(NC)"; \
+	docker compose exec php php artisan scramble:export --output=$$file || true
+
+scramble-generate-yaml: ## Gera arquivo OpenAPI YAML
+	@read -p "Nome do arquivo (ex: openapi.yaml): " file; \
+	file=$${file:-openapi.yaml}; \
+	echo "$(GREEN)📚 Gerando $$file...$(NC)"; \
+	docker compose exec php php artisan scramble:export --output=$$file --format=yaml || true
+
+
+##@ 📝 Documentação - Swagger (L5-Swagger)
+
+swagger-install: ## Instala L5-Swagger (Swagger UI para Laravel)
+	@echo "$(GREEN)📦 Instalando L5-Swagger...$(NC)"
+	docker compose exec php composer require --dev darkaonline/l5-swagger
+	@echo "$(GREEN)✅ L5-Swagger instalado!$(NC)"
+	@echo "$(YELLOW)💡 Execute: make swagger-publish$(NC)"
+
+swagger-publish: ## Publica configuração do Swagger
+	@echo "$(GREEN)⚙️  Publicando configuração do Swagger...$(NC)"
+	docker compose exec php php artisan vendor:publish --provider "L5Swagger\L5SwaggerServiceProvider" || true
+
+swagger-generate: ## Gera documentação Swagger
+	@echo "$(GREEN)📚 Gerando documentação Swagger...$(NC)"
+	docker compose exec php php artisan l5-swagger:generate || true
+	@echo "$(GREEN)✅ Documentação gerada!$(NC)"
+	@echo "$(YELLOW)💡 Acesse: http://localhost:8080/api/documentation$(NC)"
+
+swagger-ui: ## Abre Swagger UI no navegador
+	@echo "$(GREEN)🌐 Abrindo Swagger UI...$(NC)"
+	@xdg-open http://localhost:8080/api/documentation 2>/dev/null || \
+	 open http://localhost:8080/api/documentation 2>/dev/null || \
+	 echo "$(YELLOW)💡 Acesse: http://localhost:8080/api/documentation$(NC)"
+
+swagger-config: ## Mostra configuração atual do Swagger
+	@echo "$(GREEN)⚙️  Configuração do Swagger:$(NC)"
+	@if [ -f "backend/config/l5-swagger.php" ]; then \
+		cat backend/config/l5-swagger.php | grep -A 5 "routes" || true; \
+	else \
+		echo "$(YELLOW)⚠️  Arquivo de configuração não encontrado$(NC)"; \
+		echo "$(YELLOW)💡 Execute: make swagger-publish$(NC)"; \
+	fi
+
