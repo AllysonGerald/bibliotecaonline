@@ -3,61 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Biblioteca Online') }} - @yield('title')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
-    <div class="min-h-screen flex flex-col">
-        <nav class="bg-white shadow-sm">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between h-16">
-                    <div class="flex items-center">
-                        <a href="/" class="flex items-center space-x-2">
-                            <svg class="w-8 h-8 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/>
-                            </svg>
-                            <span class="text-xl font-bold text-gray-900">Biblioteca Online</span>
-                        </a>
-                    </div>
-                    <div class="flex items-center space-x-4">
-                        <a href="{{ route('login') }}" class="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">
-                            Entrar
-                        </a>
-                        <a href="{{ route('register') }}" class="bg-indigo-600 text-white hover:bg-indigo-700 px-4 py-2 rounded-md text-sm font-medium">
-                            Cadastrar
-                        </a>
+<body style="min-height: 100vh; background: linear-gradient(135deg, #f3e8ff 0%, #fce7f3 50%, #fff1f2 100%); position: relative; overflow-x: hidden;">
+    <!-- Decorative Elements -->
+    <div style="position: absolute; top: -100px; left: -100px; width: 400px; height: 400px; background: rgba(196, 181, 253, 0.3); border-radius: 50%; filter: blur(80px);"></div>
+    <div style="position: absolute; bottom: -100px; right: -100px; width: 400px; height: 400px; background: rgba(251, 113, 133, 0.3); border-radius: 50%; filter: blur(80px);"></div>
+    
+    <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; position: relative; z-index: 1;">
+        <div style="width: 100%; max-width: 480px;">
+            @if (session('success'))
+                <div style="margin-bottom: 24px; padding: 16px; background: linear-gradient(135deg, #d1fae5, #a7f3d0); border-left: 4px solid #10b981; color: #065f46; border-radius: 12px; box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2);" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)">
+                    <div style="display: flex; align-items: center;">
+                        <svg style="width: 20px; height: 20px; margin-right: 12px; color: #10b981;" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span style="font-weight: 600;">{{ session('success') }}</span>
                     </div>
                 </div>
-            </div>
-        </nav>
+            @endif
 
-        <main class="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-            <div class="max-w-md w-full">
-                @if (session('success'))
-                    <div class="mb-4 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg">
-                        {{ session('success') }}
+            @if (session('error'))
+                <div style="margin-bottom: 24px; padding: 16px; background: linear-gradient(135deg, #fee2e2, #fecaca); border-left: 4px solid #ef4444; color: #991b1b; border-radius: 12px; box-shadow: 0 4px 6px rgba(239, 68, 68, 0.2);" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)">
+                    <div style="display: flex; align-items: center;">
+                        <svg style="width: 20px; height: 20px; margin-right: 12px; color: #ef4444;" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                        </svg>
+                        <span style="font-weight: 600;">{{ session('error') }}</span>
                     </div>
-                @endif
+                </div>
+            @endif
 
-                @if (session('error'))
-                    <div class="mb-4 bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg">
-                        {{ session('error') }}
-                    </div>
-                @endif
-
-                @yield('content')
-            </div>
-        </main>
-
-        <footer class="bg-white border-t border-gray-200">
-            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                <p class="text-center text-gray-500 text-sm">
-                    © {{ date('Y') }} Biblioteca Online. Todos os direitos reservados.
-                </p>
-            </div>
-        </footer>
+            @yield('content')
+        </div>
     </div>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        // Função para inicializar Lucide Icons
+        function initLucideIcons() {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+        // Inicializar quando o DOM estiver pronto
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initLucideIcons);
+        } else {
+            initLucideIcons();
+        }
+    </script>
 </body>
 </html>
-
