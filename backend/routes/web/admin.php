@@ -73,9 +73,17 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         ])
     ;
 
-    // Rotas futuras (usuarios)
-
-    Route::get('/usuarios', function () {
-        return view('admin.usuarios.index');
-    })->name('usuarios.index');
+    // Rotas de Usuários
+    Route::resource('usuarios', App\Http\Controllers\Admin\UserController::class)
+        ->parameters(['usuarios' => 'usuario'])
+        ->names([
+            'index' => 'usuarios.index',
+            'create' => 'usuarios.create',
+            'store' => 'usuarios.store',
+            'show' => 'usuarios.show',
+            'edit' => 'usuarios.edit',
+            'update' => 'usuarios.update',
+            'destroy' => 'usuarios.destroy',
+        ])
+    ;
 });
