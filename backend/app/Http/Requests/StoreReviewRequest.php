@@ -34,4 +34,14 @@ class StoreReviewRequest extends FormRequest
             'comentario.max' => 'O comentário não pode ter mais de 2000 caracteres.',
         ];
     }
+
+    protected function prepareForValidation(): void
+    {
+        // Converter string vazia para null no comentário
+        if ($this->has('comentario') && $this->comentario === '') {
+            $this->merge([
+                'comentario' => null,
+            ]);
+        }
+    }
 }
