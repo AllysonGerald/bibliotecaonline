@@ -49,9 +49,14 @@ class ReviewController extends Controller
             abort(403, 'Você não tem permissão para editar esta avaliação.');
         }
 
+        // Garantir que string vazia seja convertida para null
+        $comentario = $request->filled('comentario') && trim($request->comentario) !== ''
+            ? trim($request->comentario)
+            : null;
+
         $review->update([
-            'nota' => $request->nota,
-            'comentario' => $request->comentario,
+            'nota' => (int) $request->nota,
+            'comentario' => $comentario,
         ]);
 
         return redirect()->back()

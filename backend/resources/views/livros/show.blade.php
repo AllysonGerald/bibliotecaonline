@@ -234,7 +234,15 @@
 </div>
 
 <script>
+    // Inicializar com o valor antigo (após validação) ou o valor da avaliação existente
     let selectedRating = {{ old('nota', $userReview?->nota ?? 0) }};
+
+    // Inicializar estrelas quando a página carregar
+    document.addEventListener('DOMContentLoaded', function() {
+        if (selectedRating > 0) {
+            updateStars(selectedRating);
+        }
+    });
 
     function updateStars(rating) {
         selectedRating = rating;
