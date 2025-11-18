@@ -161,7 +161,7 @@
         /* Custom datetime-local input styling - Keep native calendar functionality but style the icon */
         input[type="datetime-local"] {
             position: relative;
-            padding-right: 12px !important;
+            padding-right: 10px !important;
         }
 
         /* Style the native calendar picker indicator to look like our custom icon - positioned more to the right */
