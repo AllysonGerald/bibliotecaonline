@@ -54,8 +54,8 @@ class RentalController extends Controller
         $validated = $request->validated();
 
         $dto = new RentalDTO(
-            usuarioId: $validated['usuario_id'],
-            livroId: $validated['livro_id'],
+            usuarioId: (int) $validated['usuario_id'],
+            livroId: (int) $validated['livro_id'],
             alugadoEm: Carbon::parse($validated['alugado_em']),
             dataDevolucao: Carbon::parse($validated['data_devolucao']),
             devolvidoEm: isset($validated['devolvido_em']) ? Carbon::parse($validated['devolvido_em']) : null,
@@ -91,8 +91,8 @@ class RentalController extends Controller
         $validated = $request->validated();
 
         $dto = new RentalDTO(
-            usuarioId: $validated['usuario_id'],
-            livroId: $validated['livro_id'],
+            usuarioId: (int) $validated['usuario_id'],
+            livroId: (int) $validated['livro_id'],
             alugadoEm: Carbon::parse($validated['alugado_em']),
             dataDevolucao: Carbon::parse($validated['data_devolucao']),
             devolvidoEm: isset($validated['devolvido_em']) ? Carbon::parse($validated['devolvido_em']) : null,
