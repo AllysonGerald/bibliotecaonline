@@ -35,10 +35,10 @@ class UserRentalStoreTest extends TestCase
             'status' => RentalStatus::ATIVO->value,
         ]);
         $book->refresh();
-        // Com a nova lógica, o livro só fica ALUGADO se não houver mais exemplares disponíveis
-        // Como tinha 5 exemplares e foi alugado 1, ainda há 4 disponíveis, então permanece DISPONIVEL
+        // O livro deve permanecer DISPONIVEL quando ainda há exemplares disponíveis
         $this->assertEquals(BookStatus::DISPONIVEL, $book->status);
-        $this->assertEquals(4, $book->quantidade); // Quantidade deve ser decrementada
+        // A quantidade deve ser decrementada
+        $this->assertEquals(4, $book->quantidade);
     }
 
     public function testBookBecomesUnavailableWhenAllCopiesAreRented(): void
@@ -47,7 +47,7 @@ class UserRentalStoreTest extends TestCase
         $user = User::factory()->create();
         $book = Book::factory()->create([
             'status' => BookStatus::DISPONIVEL,
-            'quantidade' => 1, // Apenas 1 exemplar
+            'quantidade' => 1,
         ]);
 
         $response = $this->actingAs($user)->post(route('alugueis.store', $book));
@@ -60,7 +60,7 @@ class UserRentalStoreTest extends TestCase
             'status' => RentalStatus::ATIVO->value,
         ]);
         $book->refresh();
-        // Quando todos os exemplares são alugados, o status deve mudar para ALUGADO
+        // Quando a quantidade chega a 0, o status deve mudar para ALUGADO
         $this->assertEquals(BookStatus::ALUGADO, $book->status);
         $this->assertEquals(0, $book->quantidade);
     }
