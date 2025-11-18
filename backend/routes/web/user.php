@@ -16,6 +16,7 @@ Route::middleware('auth')->group(function (): void {
     Route::post('/livros/{livro}/alugueis', [App\Http\Controllers\UserRentalController::class, 'store'])->name('alugueis.store');
 
     Route::get('/minhas-reservas', [App\Http\Controllers\UserReservationController::class, 'index'])->name('minhas-reservas');
+    Route::post('/livros/{livro}/reservas', [App\Http\Controllers\UserReservationController::class, 'store'])->name('reservas.store');
 
     Route::get('/minhas-multas', [App\Http\Controllers\FineController::class, 'index'])->name('minhas-multas');
 
