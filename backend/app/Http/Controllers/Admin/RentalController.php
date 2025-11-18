@@ -44,7 +44,7 @@ class RentalController extends Controller
     public function create(): View
     {
         $users = User::where('ativo', true)->orderBy('name')->get();
-        $books = Book::where('status', \App\Enums\BookStatus::DISPONIVEL)->orderBy('titulo')->get();
+        $books = Book::with('author')->orderBy('titulo')->get();
 
         return view('admin.alugueis.create', compact('users', 'books'));
     }
@@ -81,7 +81,7 @@ class RentalController extends Controller
     {
         $aluguel->load(['user', 'book']);
         $users = User::where('ativo', true)->orderBy('name')->get();
-        $books = Book::orderBy('titulo')->get();
+        $books = Book::with('author')->orderBy('titulo')->get();
 
         return view('admin.alugueis.edit', compact('aluguel', 'users', 'books'));
     }
