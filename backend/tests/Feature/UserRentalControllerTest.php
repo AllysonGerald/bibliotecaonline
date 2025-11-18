@@ -145,4 +145,3 @@ class UserRentalControllerTest extends TestCase
         $response->assertSee($rental->data_devolucao->format('d/m/Y'));
     }
 }
-

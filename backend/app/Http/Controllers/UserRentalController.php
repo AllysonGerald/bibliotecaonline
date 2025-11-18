@@ -47,4 +47,3 @@ class UserRentalController extends Controller
         return view('user.alugueis', compact('rentals', 'activeRentals', 'returnedRentals', 'overdueRentals'));
     }
 }
-
