@@ -16,6 +16,8 @@ Route::middleware('auth')->group(function (): void {
 
     Route::get('/minhas-reservas', [App\Http\Controllers\UserReservationController::class, 'index'])->name('minhas-reservas');
 
+    Route::get('/minhas-multas', [App\Http\Controllers\FineController::class, 'index'])->name('minhas-multas');
+
     Route::get('/perfil', [App\Http\Controllers\ProfileController::class, 'show'])->name('perfil');
     Route::put('/perfil', [App\Http\Controllers\ProfileController::class, 'update'])->name('perfil.update');
 
