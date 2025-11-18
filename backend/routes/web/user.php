@@ -13,6 +13,7 @@ Route::middleware('auth')->group(function (): void {
     Route::get('/livros/{livro}', [App\Http\Controllers\BookController::class, 'show'])->name('livros.show');
 
     Route::get('/meus-alugueis', [App\Http\Controllers\UserRentalController::class, 'index'])->name('meus-alugueis');
+    Route::post('/livros/{livro}/alugueis', [App\Http\Controllers\UserRentalController::class, 'store'])->name('alugueis.store');
 
     Route::get('/minhas-reservas', [App\Http\Controllers\UserReservationController::class, 'index'])->name('minhas-reservas');
 
