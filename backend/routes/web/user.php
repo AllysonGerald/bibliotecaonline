@@ -12,9 +12,7 @@ Route::middleware('auth')->group(function (): void {
     Route::get('/livros', [App\Http\Controllers\BookController::class, 'index'])->name('livros.index');
     Route::get('/livros/{livro}', [App\Http\Controllers\BookController::class, 'show'])->name('livros.show');
 
-    Route::get('/meus-alugueis', function () {
-        return view('user.alugueis');
-    })->name('meus-alugueis');
+    Route::get('/meus-alugueis', [App\Http\Controllers\UserRentalController::class, 'index'])->name('meus-alugueis');
 
     Route::get('/minhas-reservas', function () {
         return view('user.reservas');
