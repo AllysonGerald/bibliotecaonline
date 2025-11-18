@@ -80,12 +80,6 @@ class UserRentalController extends Controller
             ;
         }
 
-        // Calcular quantos exemplares estão alugados ANTES de criar o novo aluguel
-        $alugueisAtivos = $livro->rentals()
-            ->where('status', RentalStatus::ATIVO)
-            ->count()
-        ;
-
         // Criar o aluguel (prazo padrão: 14 dias)
         $alugadoEm = now();
         $dataDevolucao = $alugadoEm->copy()->addDays(14);
