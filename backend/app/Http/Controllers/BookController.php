@@ -43,4 +43,3 @@ class BookController extends Controller
         return view('livros.show', compact('livro', 'averageRating', 'reviewsCount'));
     }
 }
-

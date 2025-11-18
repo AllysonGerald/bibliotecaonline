@@ -110,4 +110,3 @@ class BookControllerTest extends TestCase
         }
     }
 }
-
