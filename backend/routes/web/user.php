@@ -14,9 +14,7 @@ Route::middleware('auth')->group(function (): void {
 
     Route::get('/meus-alugueis', [App\Http\Controllers\UserRentalController::class, 'index'])->name('meus-alugueis');
 
-    Route::get('/minhas-reservas', function () {
-        return view('user.reservas');
-    })->name('minhas-reservas');
+    Route::get('/minhas-reservas', [App\Http\Controllers\UserReservationController::class, 'index'])->name('minhas-reservas');
 
     Route::get('/perfil', function () {
         return view('user.perfil');
