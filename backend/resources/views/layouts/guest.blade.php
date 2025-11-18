@@ -40,6 +40,7 @@
     </div>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="{{ asset('js/utils/masks.js') }}"></script>
     <script>
         // Função para inicializar Lucide Icons
         function initLucideIcons() {
@@ -53,6 +54,17 @@
         } else {
             initLucideIcons();
         }
+
+        // Remove máscaras de formulários antes de enviar
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('form').forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    if (typeof InputMasks !== 'undefined') {
+                        InputMasks.removeMasksFromForm(this);
+                    }
+                });
+            });
+        });
     </script>
 </body>
 </html>

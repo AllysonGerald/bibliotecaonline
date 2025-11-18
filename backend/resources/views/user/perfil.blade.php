@@ -59,6 +59,7 @@
                         name="telefone"
                         id="telefone"
                         value="{{ old('telefone', $user->telefone) }}"
+                        data-mask="phone"
                         style="width: 100%; padding: 12px 16px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 14px; transition: all 0.3s; @error('telefone') border-color: #ef4444; @enderror"
                         onfocus="this.style.borderColor='#8b5cf6'; this.style.boxShadow='0 0 0 3px rgba(139, 92, 246, 0.1)';"
                         onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='none';"
