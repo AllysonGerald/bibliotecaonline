@@ -80,6 +80,12 @@ class UserRentalController extends Controller
             ;
         }
 
+        // Calcular quantos exemplares estão alugados ANTES de criar o novo aluguel
+        $alugueisAtivos = $livro->rentals()
+            ->where('status', RentalStatus::ATIVO)
+            ->count()
+        ;
+
         // Criar o aluguel (prazo padrão: 14 dias)
         $alugadoEm = now();
         $dataDevolucao = $alugadoEm->copy()->addDays(14);
@@ -96,8 +102,21 @@ class UserRentalController extends Controller
 
         $this->createRentalAction->execute($dto);
 
-        // Atualizar o status do livro para ALUGADO
-        $livro->update(['status' => \App\Enums\BookStatus::ALUGADO]);
+        // Atualizar a quantidade do livro (decrementar)
+        if ($livro->quantidade !== null && $livro->quantidade > 0) {
+            $livro->decrement('quantidade');
+        }
+
+        // Verificar se ainda há exemplares disponíveis após este aluguel
+        // Agora temos alugueisAtivos + 1 (o novo aluguel criado)
+        $quantidadeDisponivel = $livro->quantidade === null
+            ? null
+            : max(0, $livro->quantidade - ($alugueisAtivos + 1));
+
+        // Só atualizar o status para ALUGADO se não houver mais exemplares disponíveis
+        if ($livro->quantidade !== null && $quantidadeDisponivel <= 0) {
+            $livro->update(['status' => \App\Enums\BookStatus::ALUGADO]);
+        }
 
         return redirect()->route('meus-alugueis')
             ->with('success', 'Livro alugado com sucesso! Data de devolução: '.$dataDevolucao->format('d/m/Y'))
