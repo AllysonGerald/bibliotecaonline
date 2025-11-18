@@ -66,6 +66,7 @@
                     name="telefone"
                     id="telefone"
                     value="{{ old('telefone') }}"
+                    data-mask="phone"
                     style="width: 100%; padding: 12px 14px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; transition: all 0.3s; box-sizing: border-box; @error('telefone') border-color: #ef4444; @enderror"
                     onfocus="this.style.borderColor='#ec4899'; this.style.boxShadow='0 0 0 3px rgba(236, 72, 153, 0.1)';"
                     onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='none';"

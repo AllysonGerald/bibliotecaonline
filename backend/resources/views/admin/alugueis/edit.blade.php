@@ -124,12 +124,12 @@
                 <div>
                     <label for="taxa_atraso" style="display: block; font-size: 14px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">Taxa de Atraso (R$)</label>
                     <input
-                        type="number"
+                        type="text"
                         name="taxa_atraso"
                         id="taxa_atraso"
                         value="{{ old('taxa_atraso', $aluguel->taxa_atraso) }}"
-                        step="0.01"
-                        min="0"
+                        data-mask="currency"
+                        placeholder="R$ 0,00"
                         style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('taxa_atraso') ? '#ef4444' : '#e9d5ff' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #faf5ff, #ffffff); box-sizing: border-box;"
                         onfocus="this.style.borderColor='#8b5cf6'; this.style.boxShadow='0 0 0 3px rgba(139, 92, 246, 0.1)';"
                         onblur="this.style.borderColor='{{ $errors->has('taxa_atraso') ? '#ef4444' : '#e9d5ff' }}'; this.style.boxShadow='none';"

@@ -119,6 +119,7 @@
                         name="telefone"
                         id="telefone"
                         value="{{ old('telefone') }}"
+                        data-mask="phone"
                         placeholder="(00) 00000-0000"
                         style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('telefone') ? '#ef4444' : '#bae6fd' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #f0f9ff, #ffffff); box-sizing: border-box;"
                         onfocus="this.style.borderColor='#0ea5e9'; this.style.boxShadow='0 0 0 3px rgba(14, 165, 233, 0.1)';"

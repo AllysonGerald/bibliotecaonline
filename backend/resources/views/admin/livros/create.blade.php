@@ -180,14 +180,13 @@
                 <div>
                     <label for="preco" style="display: block; font-size: 14px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">Preço *</label>
                     <input
-                        type="number"
+                        type="text"
                         name="preco"
                         id="preco"
                         value="{{ old('preco') }}"
+                        data-mask="currency"
                         required
-                        step="0.01"
-                        min="0"
-                        placeholder="0.00"
+                        placeholder="R$ 0,00"
                         style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('preco') ? '#ef4444' : '#fed7aa' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #fff7ed, #ffffff); box-sizing: border-box;"
                         onfocus="this.style.borderColor='#f97316'; this.style.boxShadow='0 0 0 3px rgba(249, 115, 22, 0.1)';"
                         onblur="this.style.borderColor='{{ $errors->has('preco') ? '#ef4444' : '#fed7aa' }}'; this.style.boxShadow='none';"
