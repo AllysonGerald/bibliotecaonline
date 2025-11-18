@@ -9,9 +9,8 @@ Route::middleware('auth')->group(function (): void {
         return view('home');
     })->name('home');
 
-    Route::get('/livros', function () {
-        return view('livros.index');
-    })->name('livros.index');
+    Route::get('/livros', [App\Http\Controllers\BookController::class, 'index'])->name('livros.index');
+    Route::get('/livros/{livro}', [App\Http\Controllers\BookController::class, 'show'])->name('livros.show');
 
     Route::get('/meus-alugueis', function () {
         return view('user.alugueis');
