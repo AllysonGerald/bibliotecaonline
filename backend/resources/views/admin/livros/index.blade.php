@@ -6,7 +6,7 @@
 <div style="margin-bottom: 32px;">
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
         <div>
-            <h1 style="font-size: 36px; font-weight: 900; color: #1f2937; margin-bottom: 8px;">Gerenciar Livros</h1>
+            <h1 style="font-size: 36px; font-weight: 900; color: #374151; margin-bottom: 8px;">Gerenciar Livros</h1>
             <p style="font-size: 18px; color: #6b7280; font-weight: 500;">Gerencie o catálogo de livros</p>
         </div>
         <div style="display: flex; gap: 12px; flex-wrap: wrap;">
@@ -26,7 +26,7 @@
 <div style="background: white; border-radius: 20px; padding: 32px; border: 3px solid #fed7aa; box-shadow: 0 10px 30px rgba(249, 115, 22, 0.15); margin-bottom: 24px; position: relative; overflow: hidden;">
     <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(249, 115, 22, 0.05); border-radius: 50%; filter: blur(60px); z-index: 0;"></div>
     <div style="position: relative; z-index: 1;">
-        <h3 style="font-size: 20px; font-weight: 900; color: #1f2937; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
+        <h3 style="font-size: 20px; font-weight: 900; color: #374151; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
             <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #f97316, #fb923c, #fdba74, #fed7aa); border-radius: 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(249, 115, 22, 0.3);">
                 <i data-lucide="filter" style="width: 20px; height: 20px; color: white;"></i>
             </div>
@@ -51,7 +51,7 @@
                 <select
                     name="categoria_id"
                     id="categoria_id"
-                    style="width: 100%; padding: 12px 16px; border: 2px solid #fed7aa; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #fff7ed, #ffffff); cursor: pointer; box-sizing: border-box;"
+                    style="width: 100%; padding: 12px 16px; border: 2px solid #fed7aa; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #fff7ed, #ffffff); cursor: pointer; box-sizing: border-box; color: #374151;"
                     onfocus="this.style.borderColor='#f97316'; this.style.boxShadow='0 0 0 3px rgba(249, 115, 22, 0.1)';"
                     onblur="this.style.borderColor='#fed7aa'; this.style.boxShadow='none';"
                 >
@@ -68,7 +68,7 @@
                 <select
                     name="autor_id"
                     id="autor_id"
-                    style="width: 100%; padding: 12px 16px; border: 2px solid #fed7aa; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #fff7ed, #ffffff); cursor: pointer; box-sizing: border-box;"
+                    style="width: 100%; padding: 12px 16px; border: 2px solid #fed7aa; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #fff7ed, #ffffff); cursor: pointer; box-sizing: border-box; color: #374151;"
                     onfocus="this.style.borderColor='#f97316'; this.style.boxShadow='0 0 0 3px rgba(249, 115, 22, 0.1)';"
                     onblur="this.style.borderColor='#fed7aa'; this.style.boxShadow='none';"
                 >
@@ -110,7 +110,7 @@
                     @forelse($books as $book)
                         <tr style="border-bottom: 2px solid #fff1f2; transition: all 0.3s;" onmouseover="this.style.background='linear-gradient(135deg, #fff7ed, #fff1f2)';" onmouseout="this.style.background='transparent';">
                             <td style="padding: 16px;">
-                                <div style="font-size: 15px; font-weight: 700; color: #1f2937; margin-bottom: 4px;">{{ $book->titulo }}</div>
+                                <div style="font-size: 15px; font-weight: 700; color: #374151; margin-bottom: 4px;">{{ $book->titulo }}</div>
                                 @if($book->isbn)
                                     <div style="font-size: 12px; color: #9ca3af; font-weight: 500;">ISBN: {{ $book->isbn }}</div>
                                 @endif

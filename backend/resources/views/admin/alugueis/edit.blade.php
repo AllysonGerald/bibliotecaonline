@@ -6,7 +6,7 @@
 <div style="margin-bottom: 32px;">
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
         <div>
-            <h1 style="font-size: 36px; font-weight: 900; color: #1f2937; margin-bottom: 8px;">Editar Aluguel</h1>
+            <h1 style="font-size: 36px; font-weight: 900; color: #374151; margin-bottom: 8px;">Editar Aluguel</h1>
             <p style="font-size: 18px; color: #6b7280; font-weight: 500;">Atualize as informações do aluguel</p>
         </div>
         <a href="{{ route('admin.alugueis.index') }}" style="display: inline-flex; align-items: center; padding: 12px 20px; background: linear-gradient(135deg, #f3e8ff, #faf5ff); color: #8b5cf6; border: 3px solid #e9d5ff; border-radius: 12px; font-size: 14px; font-weight: 700; text-decoration: none; transition: all 0.3s; box-shadow: 0 4px 10px rgba(139, 92, 246, 0.15);" onmouseover="this.style.background='linear-gradient(135deg, #8b5cf6, #a855f7)'; this.style.color='white'; this.style.borderColor='#8b5cf6'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 15px rgba(139, 92, 246, 0.3)';" onmouseout="this.style.background='linear-gradient(135deg, #f3e8ff, #faf5ff)'; this.style.color='#8b5cf6'; this.style.borderColor='#e9d5ff'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 10px rgba(139, 92, 246, 0.15)';">
@@ -31,7 +31,7 @@
                         name="usuario_id"
                         id="usuario_id"
                         required
-                        style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('usuario_id') ? '#ef4444' : '#e9d5ff' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #faf5ff, #ffffff); cursor: pointer; box-sizing: border-box;"
+                        style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('usuario_id') ? '#ef4444' : '#e9d5ff' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #faf5ff, #ffffff); cursor: pointer; box-sizing: border-box; color: #374151;"
                         onfocus="this.style.borderColor='#8b5cf6'; this.style.boxShadow='0 0 0 3px rgba(139, 92, 246, 0.1)';"
                         onblur="this.style.borderColor='{{ $errors->has('usuario_id') ? '#ef4444' : '#e9d5ff' }}'; this.style.boxShadow='none';"
                     >
@@ -53,7 +53,7 @@
                         name="livro_id"
                         id="livro_id"
                         required
-                        style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('livro_id') ? '#ef4444' : '#e9d5ff' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #faf5ff, #ffffff); cursor: pointer; box-sizing: border-box;"
+                        style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('livro_id') ? '#ef4444' : '#e9d5ff' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #faf5ff, #ffffff); cursor: pointer; box-sizing: border-box; color: #374151;"
                         onfocus="this.style.borderColor='#8b5cf6'; this.style.boxShadow='0 0 0 3px rgba(139, 92, 246, 0.1)';"
                         onblur="this.style.borderColor='{{ $errors->has('livro_id') ? '#ef4444' : '#e9d5ff' }}'; this.style.boxShadow='none';"
                     >
@@ -78,7 +78,7 @@
                         id="alugado_em"
                         value="{{ old('alugado_em', $aluguel->alugado_em->format('Y-m-d\TH:i')) }}"
                         required
-                        style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('alugado_em') ? '#ef4444' : '#e9d5ff' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #faf5ff, #ffffff); box-sizing: border-box;"
+                        style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('alugado_em') ? '#ef4444' : '#e9d5ff' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #faf5ff, #ffffff); box-sizing: border-box; color: #374151;"
                         onfocus="this.style.borderColor='#8b5cf6'; this.style.boxShadow='0 0 0 3px rgba(139, 92, 246, 0.1)';"
                         onblur="this.style.borderColor='{{ $errors->has('alugado_em') ? '#ef4444' : '#e9d5ff' }}'; this.style.boxShadow='none';"
                     >
@@ -95,7 +95,7 @@
                         id="data_devolucao"
                         value="{{ old('data_devolucao', $aluguel->data_devolucao->format('Y-m-d\TH:i')) }}"
                         required
-                        style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('data_devolucao') ? '#ef4444' : '#e9d5ff' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #faf5ff, #ffffff); box-sizing: border-box;"
+                        style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('data_devolucao') ? '#ef4444' : '#e9d5ff' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #faf5ff, #ffffff); box-sizing: border-box; color: #374151;"
                         onfocus="this.style.borderColor='#8b5cf6'; this.style.boxShadow='0 0 0 3px rgba(139, 92, 246, 0.1)';"
                         onblur="this.style.borderColor='{{ $errors->has('data_devolucao') ? '#ef4444' : '#e9d5ff' }}'; this.style.boxShadow='none';"
                     >
@@ -111,7 +111,7 @@
                         name="devolvido_em"
                         id="devolvido_em"
                         value="{{ old('devolvido_em', $aluguel->devolvido_em ? $aluguel->devolvido_em->format('Y-m-d\TH:i') : '') }}"
-                        style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('devolvido_em') ? '#ef4444' : '#e9d5ff' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #faf5ff, #ffffff); box-sizing: border-box;"
+                        style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('devolvido_em') ? '#ef4444' : '#e9d5ff' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #faf5ff, #ffffff); box-sizing: border-box; color: #374151;"
                         onfocus="this.style.borderColor='#8b5cf6'; this.style.boxShadow='0 0 0 3px rgba(139, 92, 246, 0.1)';"
                         onblur="this.style.borderColor='{{ $errors->has('devolvido_em') ? '#ef4444' : '#e9d5ff' }}'; this.style.boxShadow='none';"
                     >
@@ -130,7 +130,7 @@
                         value="{{ old('taxa_atraso', $aluguel->taxa_atraso) }}"
                         step="0.01"
                         min="0"
-                        style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('taxa_atraso') ? '#ef4444' : '#e9d5ff' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #faf5ff, #ffffff); box-sizing: border-box;"
+                        style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('taxa_atraso') ? '#ef4444' : '#e9d5ff' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #faf5ff, #ffffff); box-sizing: border-box; color: #374151;"
                         onfocus="this.style.borderColor='#8b5cf6'; this.style.boxShadow='0 0 0 3px rgba(139, 92, 246, 0.1)';"
                         onblur="this.style.borderColor='{{ $errors->has('taxa_atraso') ? '#ef4444' : '#e9d5ff' }}'; this.style.boxShadow='none';"
                     >
@@ -145,7 +145,7 @@
                         name="status"
                         id="status"
                         required
-                        style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('status') ? '#ef4444' : '#e9d5ff' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #faf5ff, #ffffff); cursor: pointer; box-sizing: border-box;"
+                        style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('status') ? '#ef4444' : '#e9d5ff' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #faf5ff, #ffffff); cursor: pointer; box-sizing: border-box; color: #374151;"
                         onfocus="this.style.borderColor='#8b5cf6'; this.style.boxShadow='0 0 0 3px rgba(139, 92, 246, 0.1)';"
                         onblur="this.style.borderColor='{{ $errors->has('status') ? '#ef4444' : '#e9d5ff' }}'; this.style.boxShadow='none';"
                     >

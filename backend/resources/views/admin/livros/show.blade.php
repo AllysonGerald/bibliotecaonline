@@ -6,7 +6,7 @@
 <div style="margin-bottom: 32px;">
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
         <div>
-            <h1 style="font-size: 36px; font-weight: 900; color: #1f2937; margin-bottom: 8px;">Detalhes do Livro</h1>
+            <h1 style="font-size: 36px; font-weight: 900; color: #374151; margin-bottom: 8px;">Detalhes do Livro</h1>
             <p style="font-size: 18px; color: #6b7280; font-weight: 500;">Visualize todas as informações do livro</p>
         </div>
         <div style="display: flex; gap: 12px; flex-wrap: wrap;">
@@ -27,7 +27,7 @@
     <div style="background: white; border-radius: 20px; padding: 32px; border: 3px solid #e9d5ff; box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15); position: relative; overflow: hidden;">
         <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(139, 92, 246, 0.05); border-radius: 50%; filter: blur(60px); z-index: 0;"></div>
         <div style="position: relative; z-index: 1;">
-            <h3 style="font-size: 28px; font-weight: 900; color: #1f2937; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
+            <h3 style="font-size: 28px; font-weight: 900; color: #374151; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
                 <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #8b5cf6, #ec4899); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
                     <i data-lucide="book-open" style="width: 24px; height: 24px; color: white;"></i>
                 </div>
@@ -43,11 +43,11 @@
                 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
                     <div>
                         <label style="display: block; font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Autor</label>
-                        <p style="font-size: 16px; font-weight: 700; color: #1f2937;">{{ $livro->author->nome }}</p>
+                        <p style="font-size: 16px; font-weight: 700; color: #374151;">{{ $livro->author->nome }}</p>
                     </div>
                     <div>
                         <label style="display: block; font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Categoria</label>
-                        <p style="font-size: 16px; font-weight: 700; color: #1f2937;">{{ $livro->category->nome }}</p>
+                        <p style="font-size: 16px; font-weight: 700; color: #374151;">{{ $livro->category->nome }}</p>
                     </div>
                 </div>
 
@@ -80,7 +80,7 @@
                     </div>
                     <div>
                         <label style="display: block; font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Quantidade</label>
-                        <p style="font-size: 18px; font-weight: 900; color: #1f2937;">{{ $livro->quantidade ?? 'N/A' }}</p>
+                        <p style="font-size: 18px; font-weight: 900; color: #374151;">{{ $livro->quantidade ?? 'N/A' }}</p>
                     </div>
                 </div>
 
@@ -122,7 +122,7 @@
         <div style="background: white; border-radius: 20px; padding: 32px; border: 3px solid #fbcfe8; box-shadow: 0 10px 30px rgba(236, 72, 153, 0.15); position: relative; overflow: hidden;">
             <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(236, 72, 153, 0.05); border-radius: 50%; filter: blur(60px); z-index: 0;"></div>
             <div style="position: relative; z-index: 1;">
-                <h3 style="font-size: 20px; font-weight: 900; color: #1f2937; margin-bottom: 20px; display: flex; align-items: center; gap: 12px;">
+                <h3 style="font-size: 20px; font-weight: 900; color: #374151; margin-bottom: 20px; display: flex; align-items: center; gap: 12px;">
                     <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #ec4899, #f97316); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
                         <i data-lucide="image" style="width: 20px; height: 20px; color: white;"></i>
                     </div>
@@ -147,7 +147,7 @@
         <div style="background: white; border-radius: 20px; padding: 32px; border: 3px solid #bae6fd; box-shadow: 0 10px 30px rgba(14, 165, 233, 0.15); position: relative; overflow: hidden;">
             <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(14, 165, 233, 0.05); border-radius: 50%; filter: blur(60px); z-index: 0;"></div>
             <div style="position: relative; z-index: 1;">
-                <h3 style="font-size: 20px; font-weight: 900; color: #1f2937; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
+                <h3 style="font-size: 20px; font-weight: 900; color: #374151; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
                     <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #0ea5e9, #38bdf8); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
                         <i data-lucide="info" style="width: 20px; height: 20px; color: white;"></i>
                     </div>

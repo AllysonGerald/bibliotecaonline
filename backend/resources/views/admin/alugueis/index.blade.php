@@ -6,7 +6,7 @@
 <div style="margin-bottom: 32px;">
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
         <div>
-            <h1 style="font-size: 36px; font-weight: 900; color: #1f2937; margin-bottom: 8px;">Gerenciar Aluguéis</h1>
+            <h1 style="font-size: 36px; font-weight: 900; color: #374151; margin-bottom: 8px;">Gerenciar Aluguéis</h1>
             <p style="font-size: 18px; color: #6b7280; font-weight: 500;">Gerencie os aluguéis de livros</p>
         </div>
         <div style="display: flex; gap: 12px; flex-wrap: wrap;">
@@ -68,18 +68,18 @@
                     @foreach($rentals as $rental)
                         <tr style="border-bottom: 2px solid #f3e8ff; transition: all 0.3s;" onmouseover="this.style.background='linear-gradient(135deg, #faf5ff, #f3e8ff)';" onmouseout="this.style.background='transparent';">
                             <td style="padding: 16px;">
-                                <div style="font-size: 14px; font-weight: 700; color: #1f2937; margin-bottom: 4px;">{{ $rental->user->name }}</div>
+                                <div style="font-size: 14px; font-weight: 700; color: #374151; margin-bottom: 4px;">{{ $rental->user->name }}</div>
                                 <div style="font-size: 13px; color: #6b7280;">{{ $rental->user->email }}</div>
                             </td>
                             <td style="padding: 16px;">
-                                <div style="font-size: 14px; font-weight: 700; color: #1f2937; margin-bottom: 4px;">{{ $rental->book->titulo }}</div>
+                                <div style="font-size: 14px; font-weight: 700; color: #374151; margin-bottom: 4px;">{{ $rental->book->titulo }}</div>
                                 <div style="font-size: 13px; color: #6b7280;">{{ $rental->book->author->nome }}</div>
                             </td>
                             <td style="padding: 16px;">
-                                <div style="font-size: 14px; color: #1f2937; font-weight: 600;">{{ $rental->alugado_em->format('d/m/Y H:i') }}</div>
+                                <div style="font-size: 14px; color: #374151; font-weight: 600;">{{ $rental->alugado_em->format('d/m/Y H:i') }}</div>
                             </td>
                             <td style="padding: 16px;">
-                                <div style="font-size: 14px; color: #1f2937; font-weight: 600;">{{ $rental->data_devolucao->format('d/m/Y H:i') }}</div>
+                                <div style="font-size: 14px; color: #374151; font-weight: 600;">{{ $rental->data_devolucao->format('d/m/Y H:i') }}</div>
                                 @if($rental->devolvido_em)
                                     <div style="font-size: 12px; color: #10b981; margin-top: 4px; font-weight: 600;">Devolvido: {{ $rental->devolvido_em->format('d/m/Y H:i') }}</div>
                                 @endif
@@ -126,7 +126,7 @@
             <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #f3e8ff, #fce7f3); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px;">
                 <i data-lucide="book-open" style="width: 40px; height: 40px; color: #8b5cf6;"></i>
             </div>
-            <h3 style="font-size: 24px; font-weight: 900; color: #1f2937; margin-bottom: 12px;">Nenhum aluguel encontrado</h3>
+            <h3 style="font-size: 24px; font-weight: 900; color: #374151; margin-bottom: 12px;">Nenhum aluguel encontrado</h3>
             <p style="font-size: 16px; color: #6b7280; font-weight: 500; margin-bottom: 24px;">
                 @if(request('search'))
                     Não há aluguéis que correspondam à sua busca.

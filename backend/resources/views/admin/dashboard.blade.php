@@ -117,7 +117,7 @@
 <div style="margin-bottom: 32px;">
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
         <div>
-            <h1 style="font-size: 36px; font-weight: 900; color: #1f2937; margin-bottom: 8px;">Olá, {{ $user->name }}!</h1>
+            <h1 style="font-size: 36px; font-weight: 900; color: #374151; margin-bottom: 8px;">Olá, {{ $user->name }}!</h1>
             <p style="font-size: 18px; color: #6b7280; font-weight: 500;">Painel do Administrador</p>
         </div>
         <a href="{{ route('home') }}" style="display: inline-flex; align-items: center; padding: 12px 20px; background: linear-gradient(135deg, #f3e8ff, #faf5ff); color: #8b5cf6; border: 3px solid #e9d5ff; border-radius: 12px; font-size: 14px; font-weight: 700; text-decoration: none; transition: all 0.3s; box-shadow: 0 4px 10px rgba(139, 92, 246, 0.15);" onmouseover="this.style.background='linear-gradient(135deg, #8b5cf6, #a855f7)'; this.style.color='white'; this.style.borderColor='#8b5cf6'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 15px rgba(139, 92, 246, 0.3)';" onmouseout="this.style.background='linear-gradient(135deg, #f3e8ff, #faf5ff)'; this.style.color='#8b5cf6'; this.style.borderColor='#e9d5ff'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 10px rgba(139, 92, 246, 0.15)';">
@@ -138,7 +138,7 @@
                 </div>
                 <div style="flex: 1;">
                     <p style="font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Aluguéis Ativos</p>
-                    <p style="font-size: 32px; font-weight: 900; color: #1f2937; margin: 0;">{{ $totalRentals }}</p>
+                    <p style="font-size: 32px; font-weight: 900; color: #374151; margin: 0;">{{ $totalRentals }}</p>
                 </div>
             </div>
         </div>
@@ -153,7 +153,7 @@
                 </div>
                 <div style="flex: 1;">
                     <p style="font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Reservas Pendentes</p>
-                    <p style="font-size: 32px; font-weight: 900; color: #1f2937; margin: 0;">{{ $totalReservations }}</p>
+                    <p style="font-size: 32px; font-weight: 900; color: #374151; margin: 0;">{{ $totalReservations }}</p>
                 </div>
             </div>
         </div>
@@ -168,7 +168,7 @@
                 </div>
                 <div style="flex: 1;">
                     <p style="font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Total de Livros</p>
-                    <p style="font-size: 32px; font-weight: 900; color: #1f2937; margin: 0;">{{ $totalBooks }}</p>
+                    <p style="font-size: 32px; font-weight: 900; color: #374151; margin: 0;">{{ $totalBooks }}</p>
                 </div>
             </div>
         </div>
@@ -183,7 +183,7 @@
                 </div>
                 <div style="flex: 1;">
                     <p style="font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Total de Usuários</p>
-                    <p style="font-size: 32px; font-weight: 900; color: #1f2937; margin: 0;">{{ $totalUsers }}</p>
+                    <p style="font-size: 32px; font-weight: 900; color: #374151; margin: 0;">{{ $totalUsers }}</p>
                 </div>
             </div>
         </div>
@@ -193,7 +193,7 @@
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 24px;">
     <!-- Livros em Destaque -->
     <div style="background: white; border-radius: 20px; padding: 32px; border: 3px solid #e9d5ff; box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15);">
-        <h3 style="font-size: 22px; font-weight: 900; color: #1f2937; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
+        <h3 style="font-size: 22px; font-weight: 900; color: #374151; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
             <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #8b5cf6, #ec4899); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
                 <i data-lucide="star" style="width: 20px; height: 20px; color: white;"></i>
             </div>
@@ -211,7 +211,7 @@
                             @endif
                         </div>
                         <div style="flex: 1; min-width: 0;">
-                            <h4 style="font-size: 16px; font-weight: 900; color: #1f2937; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $book->titulo }}</h4>
+                            <h4 style="font-size: 16px; font-weight: 900; color: #374151; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $book->titulo }}</h4>
                             <p style="font-size: 14px; color: #6b7280; font-weight: 600; margin-bottom: 4px;">{{ $book->author->nome }}</p>
                             <p style="font-size: 12px; color: #9ca3af;">{{ $book->category->nome }}</p>
                         </div>
@@ -240,7 +240,7 @@
 
     <!-- Últimas Atividades -->
     <div style="background: white; border-radius: 20px; padding: 32px; border: 3px solid #fbcfe8; box-shadow: 0 10px 30px rgba(236, 72, 153, 0.15);">
-        <h3 style="font-size: 22px; font-weight: 900; color: #1f2937; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
+        <h3 style="font-size: 22px; font-weight: 900; color: #374151; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
             <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #ec4899, #f97316); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
                 <i data-lucide="clock" style="width: 20px; height: 20px; color: white;"></i>
             </div>
@@ -257,7 +257,7 @@
                                         <i data-lucide="{{ $activity['icon'] }}" style="width: 18px; height: 18px; color: white;"></i>
                                     </div>
                                     <div style="flex: 1; min-width: 0;">
-                                        <p style="font-size: 14px; font-weight: 900; color: #1f2937; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $activity['title'] }}</p>
+                                        <p style="font-size: 14px; font-weight: 900; color: #374151; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $activity['title'] }}</p>
                                         <p style="font-size: 12px; color: #6b7280; font-weight: 600;">{{ ucfirst($activity['type']) }} {{ $activity['action'] }} por {{ $activity['user'] }}</p>
                                     </div>
                                 </div>
