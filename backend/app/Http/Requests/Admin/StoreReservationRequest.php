@@ -12,7 +12,7 @@ class StoreReservationRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return auth()->check() && auth()->user()->isAdmin();
     }
 
     public function rules(): array
