@@ -6,7 +6,7 @@
 <div style="margin-bottom: 32px;">
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
         <div>
-            <h1 style="font-size: 36px; font-weight: 900; color: #1f2937; margin-bottom: 8px;">Detalhes do Usuário</h1>
+            <h1 style="font-size: 36px; font-weight: 900; color: #374151; margin-bottom: 8px;">Detalhes do Usuário</h1>
             <p style="font-size: 18px; color: #6b7280; font-weight: 500;">Visualize todas as informações do usuário</p>
         </div>
         <div style="display: flex; gap: 12px; flex-wrap: wrap;">
@@ -27,7 +27,7 @@
     <div style="background: white; border-radius: 20px; padding: 32px; border: 3px solid #e9d5ff; box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15); position: relative; overflow: hidden;">
         <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(139, 92, 246, 0.05); border-radius: 50%; filter: blur(60px); z-index: 0;"></div>
         <div style="position: relative; z-index: 1;">
-            <h3 style="font-size: 22px; font-weight: 900; color: #1f2937; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
+            <h3 style="font-size: 22px; font-weight: 900; color: #374151; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
                 <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #8b5cf6, #ec4899); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
                     <i data-lucide="user" style="width: 20px; height: 20px; color: white;"></i>
                 </div>
@@ -38,7 +38,7 @@
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
                     <div>
                         <label style="display: block; font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Nome Completo</label>
-                        <p style="font-size: 16px; font-weight: 700; color: #1f2937;">{{ $usuario->name }}</p>
+                        <p style="font-size: 16px; font-weight: 700; color: #374151;">{{ $usuario->name }}</p>
                     </div>
                     <div>
                         <label style="display: block; font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">E-mail</label>
@@ -86,7 +86,7 @@
     <div style="background: white; border-radius: 20px; padding: 32px; border: 3px solid #fbcfe8; box-shadow: 0 10px 30px rgba(236, 72, 153, 0.15); position: relative; overflow: hidden;">
         <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(236, 72, 153, 0.05); border-radius: 50%; filter: blur(60px); z-index: 0;"></div>
         <div style="position: relative; z-index: 1;">
-            <h3 style="font-size: 22px; font-weight: 900; color: #1f2937; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
+            <h3 style="font-size: 22px; font-weight: 900; color: #374151; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
                 <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #ec4899, #f97316); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
                     <i data-lucide="bar-chart" style="width: 20px; height: 20px; color: white;"></i>
                 </div>
@@ -119,7 +119,7 @@
 <div style="margin-top: 24px; background: white; border-radius: 20px; padding: 32px; border: 3px solid #bae6fd; box-shadow: 0 10px 30px rgba(14, 165, 233, 0.15); position: relative; overflow: hidden;">
     <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(14, 165, 233, 0.05); border-radius: 50%; filter: blur(60px); z-index: 0;"></div>
     <div style="position: relative; z-index: 1;">
-        <h3 style="font-size: 22px; font-weight: 900; color: #1f2937; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
+        <h3 style="font-size: 22px; font-weight: 900; color: #374151; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
             <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #0ea5e9, #38bdf8); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
                 <i data-lucide="info" style="width: 20px; height: 20px; color: white;"></i>
             </div>
@@ -159,7 +159,7 @@
 
         @if($usuario->fines->where('paga', false)->count() > 0)
             <div style="margin-top: 32px; padding-top: 32px; border-top: 3px solid #e9d5ff;">
-                <h4 style="font-size: 18px; font-weight: 900; color: #1f2937; margin-bottom: 20px; display: flex; align-items: center; gap: 12px;">
+                <h4 style="font-size: 18px; font-weight: 900; color: #374151; margin-bottom: 20px; display: flex; align-items: center; gap: 12px;">
                     <div style="width: 36px; height: 36px; background: linear-gradient(135deg, #ef4444, #f87171); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
                         <i data-lucide="alert-circle" style="width: 18px; height: 18px; color: white;"></i>
                     </div>

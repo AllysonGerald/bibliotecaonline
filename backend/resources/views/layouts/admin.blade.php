@@ -125,6 +125,121 @@
     </script>
     <style>
         [x-cloak] { display: none !important; }
+
+        /* Custom select styling - Remove native arrow and add custom one with proper spacing */
+        select {
+            appearance: none !important;
+            -webkit-appearance: none !important;
+            -moz-appearance: none !important;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") !important;
+            background-repeat: no-repeat !important;
+            background-position: right 12px center !important;
+            background-size: 16px !important;
+        }
+
+        /* Override inline padding-right for selects to add space for icon */
+        select[style*="padding"] {
+            padding-right: 40px !important;
+        }
+
+        select:focus {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238b5cf6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") !important;
+        }
+
+        /* Custom datetime-local input styling - Keep native calendar functionality but style the icon */
+        input[type="datetime-local"] {
+            position: relative;
+            padding-right: 40px !important;
+        }
+        
+        /* Style the native calendar picker indicator to look like our custom icon - aligned with select arrows */
+        input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E") !important;
+            background-repeat: no-repeat !important;
+            background-position: center !important;
+            background-size: 16px !important;
+            cursor: pointer !important;
+            opacity: 1 !important;
+            width: 20px !important;
+            height: 20px !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        input[type="datetime-local"]:focus::-webkit-calendar-picker-indicator {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238b5cf6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E") !important;
+        }
+
+        /* Hide native spin buttons but keep functionality */
+        input[type="datetime-local"]::-webkit-inner-spin-button {
+            display: none !important;
+        }
+
+        input[type="datetime-local"]::-webkit-clear-button {
+            display: none !important;
+        }
+
+        /* Ensure inputs have proper text color */
+        input, select {
+            color: #374151 !important;
+        }
+
+        /* Improve date picker appearance - better styling for empty and filled states */
+        input[type="datetime-local"]::-webkit-datetime-edit {
+            color: #374151 !important;
+        }
+
+        input[type="datetime-local"]::-webkit-datetime-edit-fields-wrapper {
+            color: #374151 !important;
+        }
+
+        input[type="datetime-local"]::-webkit-datetime-edit-text {
+            color: #9ca3af !important;
+            padding: 0 2px;
+        }
+
+        input[type="datetime-local"]::-webkit-datetime-edit-month-field,
+        input[type="datetime-local"]::-webkit-datetime-edit-day-field,
+        input[type="datetime-local"]::-webkit-datetime-edit-year-field {
+            color: #374151 !important;
+            padding: 0 2px;
+        }
+
+        input[type="datetime-local"]::-webkit-datetime-edit-hour-field,
+        input[type="datetime-local"]::-webkit-datetime-edit-minute-field {
+            color: #374151 !important;
+            padding: 0 2px;
+        }
+
+        /* Style placeholder/empty state - when field is empty or invalid */
+        input[type="datetime-local"]:invalid::-webkit-datetime-edit-text,
+        input[type="datetime-local"]:not([value])::-webkit-datetime-edit-text {
+            color: #9ca3af !important;
+        }
+
+        input[type="datetime-local"]:invalid::-webkit-datetime-edit-month-field,
+        input[type="datetime-local"]:invalid::-webkit-datetime-edit-day-field,
+        input[type="datetime-local"]:invalid::-webkit-datetime-edit-year-field,
+        input[type="datetime-local"]:invalid::-webkit-datetime-edit-hour-field,
+        input[type="datetime-local"]:invalid::-webkit-datetime-edit-minute-field,
+        input[type="datetime-local"]:not([value])::-webkit-datetime-edit-month-field,
+        input[type="datetime-local"]:not([value])::-webkit-datetime-edit-day-field,
+        input[type="datetime-local"]:not([value])::-webkit-datetime-edit-year-field,
+        input[type="datetime-local"]:not([value])::-webkit-datetime-edit-hour-field,
+        input[type="datetime-local"]:not([value])::-webkit-datetime-edit-minute-field {
+            color: #9ca3af !important;
+        }
+
+        /* Better visual feedback for empty datetime fields */
+        input[type="datetime-local"]:empty::before {
+            content: attr(placeholder);
+            color: #9ca3af;
+        }
+
+        /* Improve date picker popup styling */
+        input[type="datetime-local"]::-webkit-datetime-edit-ampm-field {
+            color: #374151 !important;
+        }
     </style>
 </body>
 </html>

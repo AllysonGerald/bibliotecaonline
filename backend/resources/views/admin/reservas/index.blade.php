@@ -6,7 +6,7 @@
 <div style="margin-bottom: 32px;">
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
         <div>
-            <h1 style="font-size: 36px; font-weight: 900; color: #1f2937; margin-bottom: 8px;">Gerenciar Reservas</h1>
+            <h1 style="font-size: 36px; font-weight: 900; color: #374151; margin-bottom: 8px;">Gerenciar Reservas</h1>
             <p style="font-size: 18px; color: #6b7280; font-weight: 500;">Gerencie as reservas de livros</p>
         </div>
         <div style="display: flex; gap: 12px; flex-wrap: wrap;">
@@ -26,7 +26,7 @@
 <div style="background: white; border-radius: 20px; padding: 32px; border: 3px solid #fbcfe8; box-shadow: 0 10px 30px rgba(236, 72, 153, 0.15); margin-bottom: 24px; position: relative; overflow: hidden;">
     <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(236, 72, 153, 0.05); border-radius: 50%; filter: blur(60px); z-index: 0;"></div>
     <div style="position: relative; z-index: 1;">
-        <h3 style="font-size: 20px; font-weight: 900; color: #1f2937; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
+        <h3 style="font-size: 20px; font-weight: 900; color: #374151; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
             <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #ec4899, #f97316); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
                 <i data-lucide="filter" style="width: 20px; height: 20px; color: white;"></i>
             </div>
@@ -51,7 +51,7 @@
                 <select
                     name="usuario_id"
                     id="usuario_id"
-                    style="width: 100%; padding: 12px 16px; border: 2px solid #fbcfe8; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #fdf2f8, #ffffff); cursor: pointer; box-sizing: border-box;"
+                    style="width: 100%; padding: 12px 16px; border: 2px solid #fbcfe8; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #fdf2f8, #ffffff); cursor: pointer; box-sizing: border-box; color: #374151;"
                     onfocus="this.style.borderColor='#ec4899'; this.style.boxShadow='0 0 0 3px rgba(236, 72, 153, 0.1)';"
                     onblur="this.style.borderColor='#fbcfe8'; this.style.boxShadow='none';"
                 >
@@ -68,7 +68,7 @@
                 <select
                     name="livro_id"
                     id="livro_id"
-                    style="width: 100%; padding: 12px 16px; border: 2px solid #fbcfe8; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #fdf2f8, #ffffff); cursor: pointer; box-sizing: border-box;"
+                    style="width: 100%; padding: 12px 16px; border: 2px solid #fbcfe8; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #fdf2f8, #ffffff); cursor: pointer; box-sizing: border-box; color: #374151;"
                     onfocus="this.style.borderColor='#ec4899'; this.style.boxShadow='0 0 0 3px rgba(236, 72, 153, 0.1)';"
                     onblur="this.style.borderColor='#fbcfe8'; this.style.boxShadow='none';"
                 >
@@ -85,7 +85,7 @@
                 <select
                     name="status"
                     id="status"
-                    style="width: 100%; padding: 12px 16px; border: 2px solid #fbcfe8; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #fdf2f8, #ffffff); cursor: pointer; box-sizing: border-box;"
+                    style="width: 100%; padding: 12px 16px; border: 2px solid #fbcfe8; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #fdf2f8, #ffffff); cursor: pointer; box-sizing: border-box; color: #374151;"
                     onfocus="this.style.borderColor='#ec4899'; this.style.boxShadow='0 0 0 3px rgba(236, 72, 153, 0.1)';"
                     onblur="this.style.borderColor='#fbcfe8'; this.style.boxShadow='none';"
                 >
@@ -127,11 +127,11 @@
                     @forelse($reservations as $reservation)
                         <tr style="border-bottom: 2px solid #fce7f3; transition: all 0.3s;" onmouseover="this.style.background='linear-gradient(135deg, #fdf2f8, #fce7f3)';" onmouseout="this.style.background='transparent';">
                             <td style="padding: 16px;">
-                                <div style="font-size: 15px; font-weight: 700; color: #1f2937; margin-bottom: 4px;">{{ $reservation->user->name }}</div>
+                                <div style="font-size: 15px; font-weight: 700; color: #374151; margin-bottom: 4px;">{{ $reservation->user->name }}</div>
                                 <div style="font-size: 13px; color: #9ca3af;">{{ $reservation->user->email }}</div>
                             </td>
                             <td style="padding: 16px;">
-                                <div style="font-size: 15px; font-weight: 700; color: #1f2937; margin-bottom: 4px;">{{ $reservation->book->titulo }}</div>
+                                <div style="font-size: 15px; font-weight: 700; color: #374151; margin-bottom: 4px;">{{ $reservation->book->titulo }}</div>
                                 <div style="font-size: 13px; color: #9ca3af; font-weight: 500;">{{ $reservation->book->author->nome }}</div>
                             </td>
                             <td style="padding: 16px;">
