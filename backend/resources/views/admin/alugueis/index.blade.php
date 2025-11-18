@@ -119,9 +119,7 @@
             </table>
 
             @if($rentals->hasPages())
-                <div style="margin-top: 24px; padding-top: 24px; border-top: 2px solid #f3e8ff;">
-                    {{ $rentals->links() }}
-                </div>
+                {{ $rentals->links('components.pagination') }}
             @endif
         @else
             <div style="padding: 64px 32px; text-align: center;">

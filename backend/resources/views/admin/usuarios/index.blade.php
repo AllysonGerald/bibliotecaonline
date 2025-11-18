@@ -167,9 +167,7 @@
         </div>
 
         @if($users->hasPages())
-            <div style="margin-top: 24px; padding-top: 24px; border-top: 2px solid #e0f2fe;">
-                {{ $users->links() }}
-            </div>
+            {{ $users->links('components.pagination') }}
         @endif
     </div>
 </div>
