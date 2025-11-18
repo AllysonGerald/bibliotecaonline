@@ -64,7 +64,8 @@ class UserReservationController extends Controller
         $existingReservation = $this->reservationService->getByUser($user->id)
             ->where('livro_id', $livro->id)
             ->whereIn('status', [ReservationStatus::PENDENTE, ReservationStatus::CONFIRMADA])
-            ->first();
+            ->first()
+        ;
 
         if ($existingReservation) {
             return redirect()->back()
