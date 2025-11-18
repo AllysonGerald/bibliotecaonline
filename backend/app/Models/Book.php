@@ -107,6 +107,26 @@ class Book extends Model
 
     public function isAvailable(): bool
     {
-        return $this->status === BookStatus::DISPONIVEL && ($this->quantidade === null || $this->quantidade > 0);
+        // Se o status não é DISPONIVEL, não está disponível
+        if ($this->status !== BookStatus::DISPONIVEL) {
+            return false;
+        }
+
+        // Se quantidade é null, considera disponível (sem controle de estoque)
+        if ($this->quantidade === null) {
+            return true;
+        }
+
+        // Calcular quantos exemplares estão alugados (aluguéis ativos)
+        $alugueisAtivos = $this->rentals()
+            ->where('status', \App\Enums\RentalStatus::ATIVO)
+            ->count()
+        ;
+
+        // Verificar se há exemplares disponíveis
+        // A quantidade já reflete os aluguéis (foi decrementada), então comparamos diretamente
+        $quantidadeDisponivel = $this->quantidade - $alugueisAtivos;
+
+        return $quantidadeDisponivel > 0;
     }
 }

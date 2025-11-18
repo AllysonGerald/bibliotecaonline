@@ -35,7 +35,34 @@ class UserRentalStoreTest extends TestCase
             'status' => RentalStatus::ATIVO->value,
         ]);
         $book->refresh();
+        // O livro deve permanecer DISPONIVEL quando ainda há exemplares disponíveis
+        $this->assertEquals(BookStatus::DISPONIVEL, $book->status);
+        // A quantidade deve ser decrementada
+        $this->assertEquals(4, $book->quantidade);
+    }
+
+    public function testBookBecomesUnavailableWhenAllCopiesAreRented(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+        $book = Book::factory()->create([
+            'status' => BookStatus::DISPONIVEL,
+            'quantidade' => 1,
+        ]);
+
+        $response = $this->actingAs($user)->post(route('alugueis.store', $book));
+
+        $response->assertRedirect(route('meus-alugueis'));
+        $response->assertSessionHas('success');
+        $this->assertDatabaseHas('alugueis', [
+            'usuario_id' => $user->id,
+            'livro_id' => $book->id,
+            'status' => RentalStatus::ATIVO->value,
+        ]);
+        $book->refresh();
+        // Quando a quantidade chega a 0, o status deve mudar para ALUGADO
         $this->assertEquals(BookStatus::ALUGADO, $book->status);
+        $this->assertEquals(0, $book->quantidade);
     }
 
     public function testUserCannotRentUnavailableBook(): void
