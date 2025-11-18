@@ -92,7 +92,7 @@ class UserController extends Controller
             email: $validated['email'],
             password: $validated['password'] ?? null,
             papel: UserRole::from($validated['papel']),
-            ativo: isset($validated['ativo']) ? (bool) $validated['ativo'] : $usuario->ativo,
+            ativo: $request->has('ativo') ? (bool) $request->input('ativo') : false,
             telefone: $validated['telefone'] ?? null,
         );
 
