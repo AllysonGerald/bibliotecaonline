@@ -69,15 +69,15 @@
 
 <!-- Grid de Livros -->
 @if($books->count() > 0)
-    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; margin-bottom: 32px;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; margin-bottom: 32px; align-items: stretch;">
         @foreach($books as $book)
-            <div style="background: white; border-radius: 20px; padding: 20px; border: 3px solid #e9d5ff; box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15); transition: all 0.3s; position: relative; overflow: hidden;" onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 15px 40px rgba(139, 92, 246, 0.25)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 30px rgba(139, 92, 246, 0.15)';">
+            <div style="background: white; border-radius: 20px; padding: 20px; border: 3px solid #e9d5ff; box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15); transition: all 0.3s; position: relative; overflow: hidden; display: flex; flex-direction: column; height: 100%;" onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 15px 40px rgba(139, 92, 246, 0.25)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 30px rgba(139, 92, 246, 0.15)';">
                 <!-- Decorative background -->
                 <div style="position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: rgba(139, 92, 246, 0.1); border-radius: 50%; filter: blur(40px); z-index: 0;"></div>
                 
-                <div style="position: relative; z-index: 1;">
+                <div style="position: relative; z-index: 1; display: flex; flex-direction: column; height: 100%;">
                     <!-- Imagem do Livro -->
-                    <div style="width: 100%; height: 200px; background: linear-gradient(135deg, #f3e8ff, #fce7f3); border-radius: 16px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                    <div style="width: 100%; height: 200px; background: linear-gradient(135deg, #f3e8ff, #fce7f3); border-radius: 16px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0;">
                         @if($book->imagem_capa)
                             <img src="{{ $book->imagem_capa }}" alt="{{ $book->titulo }}" style="width: 100%; height: 100%; object-fit: cover;">
                         @else
@@ -86,14 +86,14 @@
                     </div>
 
                     <!-- Informações do Livro -->
-                    <div style="margin-bottom: 12px;">
-                        <h3 style="font-size: 18px; font-weight: 900; color: #1f2937; margin-bottom: 8px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">{{ $book->titulo }}</h3>
+                    <div style="margin-bottom: 12px; flex: 1;">
+                        <h3 style="font-size: 18px; font-weight: 900; color: #1f2937; margin-bottom: 8px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 50px;">{{ $book->titulo }}</h3>
                         <p style="font-size: 14px; color: #6b7280; font-weight: 600; margin-bottom: 4px;">{{ $book->author->nome }}</p>
                         <p style="font-size: 12px; color: #9ca3af;">{{ $book->category->nome }}</p>
                     </div>
 
                     <!-- Status e Ações -->
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; padding-top: 16px; border-top: 2px solid #f3e8ff;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 16px; border-top: 2px solid #f3e8ff; flex-shrink: 0;">
                         <div>
                             @if($book->isAvailable())
                                 <span style="display: inline-block; padding: 6px 12px; background: linear-gradient(135deg, #dcfce7, #f0fdf4); color: #166534; border-radius: 8px; font-size: 12px; font-weight: 700; border: 2px solid #86efac;">
