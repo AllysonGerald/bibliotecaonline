@@ -120,6 +120,37 @@ class InputMasks {
     }
 
     /**
+     * Aplica máscara de data/hora
+     * Formato: 00/00/0000 00:00
+     */
+    static dateTime(input) {
+        let value = input.value.replace(/\D/g, '');
+        
+        if (value.length <= 8) {
+            // Apenas data: 00/00/0000
+            value = value.replace(/^(\d{2})(\d{2})(\d{0,4}).*/, '$1/$2/$3');
+        } else if (value.length <= 10) {
+            // Data completa: 00/00/0000
+            value = value.replace(/^(\d{2})(\d{2})(\d{4}).*/, '$1/$2/$3');
+        } else if (value.length <= 12) {
+            // Data + hora parcial: 00/00/0000 00
+            value = value.replace(/^(\d{2})(\d{2})(\d{4})(\d{0,2}).*/, '$1/$2/$3 $4');
+        } else {
+            // Data + hora completa: 00/00/0000 00:00
+            value = value.replace(/^(\d{2})(\d{2})(\d{4})(\d{2})(\d{0,2}).*/, '$1/$2/$3 $4:$5');
+        }
+        
+        input.value = value;
+    }
+
+    /**
+     * Remove máscara de data/hora
+     */
+    static unMaskDateTime(value) {
+        return value ? value.replace(/\D/g, '') : '';
+    }
+
+    /**
      * Inicializa máscaras em todos os inputs com data-mask
      */
     static init() {
@@ -189,8 +220,29 @@ class InputMasks {
                     InputMasks.currency(this);
                 });
                 
+                // Aplica máscara no valor inicial se existir (mesmo que venha sem máscara do banco)
                 if (input.value) {
-                    InputMasks.currency(input);
+                    // Se o valor não tem máscara (não começa com R$), aplica a máscara
+                    if (!input.value.toString().startsWith('R$')) {
+                        // Converte valor numérico para formato de moeda
+                        let numericValue = parseFloat(input.value) || 0;
+                        input.value = numericValue.toString();
+                        InputMasks.currency(input);
+                    }
+                }
+            });
+
+            // Máscara de data/hora
+            document.querySelectorAll('input[data-mask="datetime"]').forEach(input => {
+                input.addEventListener('input', function() {
+                    InputMasks.dateTime(this);
+                });
+                
+                if (input.value) {
+                    // Se o valor não tem máscara, aplica a máscara
+                    if (!input.value.includes('/') && !input.value.includes(':')) {
+                        InputMasks.dateTime(input);
+                    }
                 }
             });
         });
@@ -228,6 +280,11 @@ class InputMasks {
         // Moeda
         form.querySelectorAll('input[data-mask="currency"]').forEach(input => {
             input.value = InputMasks.unMaskCurrency(input.value);
+        });
+
+        // Data/Hora
+        form.querySelectorAll('input[data-mask="datetime"]').forEach(input => {
+            input.value = InputMasks.unMaskDateTime(input.value);
         });
     }
 }
