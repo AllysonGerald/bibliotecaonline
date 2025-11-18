@@ -22,8 +22,4 @@ Route::middleware('auth')->group(function (): void {
     Route::get('/lista-desejos', [App\Http\Controllers\WishlistController::class, 'index'])->name('lista-desejos');
     Route::post('/lista-desejos/{livro}', [App\Http\Controllers\WishlistController::class, 'store'])->name('lista-desejos.store');
     Route::delete('/lista-desejos/{wishlist}', [App\Http\Controllers\WishlistController::class, 'destroy'])->name('lista-desejos.destroy');
-
-    Route::get('/contato', function () {
-        return view('contato');
-    })->name('contato');
 });
