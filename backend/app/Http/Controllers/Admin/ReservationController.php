@@ -62,8 +62,8 @@ class ReservationController extends Controller
         $validated = $request->validated();
 
         $dto = new ReservationDTO(
-            usuarioId: $validated['usuario_id'],
-            livroId: $validated['livro_id'],
+            usuarioId: (int) $validated['usuario_id'],
+            livroId: (int) $validated['livro_id'],
             reservadoEm: Carbon::parse($validated['reservado_em']),
             expiraEm: Carbon::parse($validated['expira_em']),
             status: ReservationStatus::from($validated['status']),
@@ -98,8 +98,8 @@ class ReservationController extends Controller
         $validated = $request->validated();
 
         $dto = new ReservationDTO(
-            usuarioId: $validated['usuario_id'],
-            livroId: $validated['livro_id'],
+            usuarioId: (int) $validated['usuario_id'],
+            livroId: (int) $validated['livro_id'],
             reservadoEm: Carbon::parse($validated['reservado_em']),
             expiraEm: Carbon::parse($validated['expira_em']),
             status: ReservationStatus::from($validated['status']),
