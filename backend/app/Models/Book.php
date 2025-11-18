@@ -107,6 +107,6 @@ class Book extends Model
 
     public function isAvailable(): bool
     {
-        return $this->status === BookStatus::DISPONIVEL && $this->quantidade > 0;
+        return $this->status === BookStatus::DISPONIVEL && ($this->quantidade === null || $this->quantidade > 0);
     }
 }

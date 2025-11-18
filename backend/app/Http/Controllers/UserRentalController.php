@@ -4,8 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Actions\Rentals\CreateRentalAction;
+use App\DTOs\RentalDTO;
 use App\Enums\RentalStatus;
+use App\Http\Requests\StoreUserRentalRequest;
+use App\Models\Book;
 use App\Services\RentalService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -13,6 +18,7 @@ class UserRentalController extends Controller
 {
     public function __construct(
         private readonly RentalService $rentalService,
+        private readonly CreateRentalAction $createRentalAction,
     ) {
     }
 
@@ -45,5 +51,56 @@ class UserRentalController extends Controller
         }
 
         return view('user.alugueis', compact('rentals', 'activeRentals', 'returnedRentals', 'overdueRentals'));
+    }
+
+    public function store(StoreUserRentalRequest $request, Book $livro): RedirectResponse
+    {
+        $user = auth()->user();
+
+        // Recarregar o livro para garantir que temos os dados atualizados
+        $livro->refresh();
+
+        // Verificar se o livro está disponível
+        if (!$livro->isAvailable()) {
+            return redirect()->back()
+                ->with('error', 'Este livro não está disponível para aluguel.')
+            ;
+        }
+
+        // Verificar se o usuário já tem um aluguel ativo deste livro
+        $existingRental = $this->rentalService->getByUser($user->id)
+            ->where('livro_id', $livro->id)
+            ->where('status', RentalStatus::ATIVO)
+            ->first()
+        ;
+
+        if ($existingRental) {
+            return redirect()->back()
+                ->with('error', 'Você já possui um aluguel ativo deste livro.')
+            ;
+        }
+
+        // Criar o aluguel (prazo padrão: 14 dias)
+        $alugadoEm = now();
+        $dataDevolucao = $alugadoEm->copy()->addDays(14);
+
+        $dto = new RentalDTO(
+            usuarioId: $user->id,
+            livroId: $livro->id,
+            alugadoEm: $alugadoEm,
+            dataDevolucao: $dataDevolucao,
+            devolvidoEm: null,
+            taxaAtraso: 0.0,
+            status: RentalStatus::ATIVO,
+        );
+
+        $this->createRentalAction->execute($dto);
+
+        // Atualizar o status do livro para ALUGADO
+        $livro->update(['status' => \App\Enums\BookStatus::ALUGADO]);
+
+        return redirect()->route('meus-alugueis')
+            ->with('success', 'Livro alugado com sucesso! Data de devolução: '.$dataDevolucao->format('d/m/Y'))
+        ;
     }
 }
