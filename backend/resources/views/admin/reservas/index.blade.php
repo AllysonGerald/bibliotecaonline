@@ -188,9 +188,7 @@
         </div>
 
         @if($reservations->hasPages())
-            <div style="margin-top: 24px; padding-top: 24px; border-top: 2px solid #fce7f3;">
-                {{ $reservations->links() }}
-            </div>
+            {{ $reservations->links('components.pagination') }}
         @endif
     </div>
 </div>

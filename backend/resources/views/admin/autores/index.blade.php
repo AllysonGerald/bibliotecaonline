@@ -96,9 +96,7 @@
     </div>
 
     @if($authors->hasPages())
-        <div class="px-6 py-4 border-t border-slate-200">
-            {{ $authors->links() }}
-        </div>
+        {{ $authors->links('components.pagination') }}
     @endif
 </div>
 @endsection

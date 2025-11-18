@@ -167,9 +167,7 @@
         </div>
 
         @if($books->hasPages())
-            <div style="margin-top: 24px; padding-top: 24px; border-top: 2px solid #fff1f2;">
-                {{ $books->links() }}
-            </div>
+            {{ $books->links('components.pagination') }}
         @endif
     </div>
 </div>
