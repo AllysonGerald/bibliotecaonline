@@ -6,7 +6,7 @@
 <div style="margin-bottom: 32px;">
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
         <div>
-            <h1 style="font-size: 36px; font-weight: 900; color: #374151; margin-bottom: 8px;">Gerenciar Usuários</h1>
+            <h1 style="font-size: 36px; font-weight: 900; color: #1f2937; margin-bottom: 8px;">Gerenciar Usuários</h1>
             <p style="font-size: 18px; color: #6b7280; font-weight: 500;">Gerencie os usuários do sistema</p>
         </div>
         <div style="display: flex; gap: 12px; flex-wrap: wrap;">
@@ -26,7 +26,7 @@
 <div style="background: white; border-radius: 20px; padding: 32px; border: 3px solid #bae6fd; box-shadow: 0 10px 30px rgba(14, 165, 233, 0.15); margin-bottom: 24px; position: relative; overflow: hidden;">
     <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(14, 165, 233, 0.05); border-radius: 50%; filter: blur(60px); z-index: 0;"></div>
     <div style="position: relative; z-index: 1;">
-        <h3 style="font-size: 20px; font-weight: 900; color: #374151; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
+        <h3 style="font-size: 20px; font-weight: 900; color: #1f2937; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
             <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #0ea5e9, #38bdf8, #60a5fa, #93c5fd); border-radius: 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(14, 165, 233, 0.3);">
                 <i data-lucide="filter" style="width: 20px; height: 20px; color: white;"></i>
             </div>
@@ -51,7 +51,7 @@
                 <select
                     name="papel"
                     id="papel"
-                    style="width: 100%; padding: 12px 16px; border: 2px solid #bae6fd; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #f0f9ff, #ffffff); cursor: pointer; color: #374151;"
+                    style="width: 100%; padding: 12px 16px; border: 2px solid #bae6fd; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #f0f9ff, #ffffff); cursor: pointer;"
                     onfocus="this.style.borderColor='#0ea5e9'; this.style.boxShadow='0 0 0 3px rgba(14, 165, 233, 0.1)';"
                     onblur="this.style.borderColor='#bae6fd'; this.style.boxShadow='none';"
                 >
@@ -68,7 +68,7 @@
                 <select
                     name="ativo"
                     id="ativo"
-                    style="width: 100%; padding: 12px 16px; border: 2px solid #bae6fd; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #f0f9ff, #ffffff); cursor: pointer; color: #374151;"
+                    style="width: 100%; padding: 12px 16px; border: 2px solid #bae6fd; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #f0f9ff, #ffffff); cursor: pointer;"
                     onfocus="this.style.borderColor='#0ea5e9'; this.style.boxShadow='0 0 0 3px rgba(14, 165, 233, 0.1)';"
                     onblur="this.style.borderColor='#bae6fd'; this.style.boxShadow='none';"
                 >
@@ -107,7 +107,7 @@
                     @forelse($users as $user)
                         <tr style="border-bottom: 2px solid #e0f2fe; transition: all 0.3s;" onmouseover="this.style.background='linear-gradient(135deg, #f0f9ff, #e0f2fe)';" onmouseout="this.style.background='transparent';">
                             <td style="padding: 16px;">
-                                <div style="font-size: 15px; font-weight: 700; color: #374151;">{{ $user->name }}</div>
+                                <div style="font-size: 15px; font-weight: 700; color: #1f2937;">{{ $user->name }}</div>
                             </td>
                             <td style="padding: 16px;">
                                 <div style="font-size: 14px; color: #4b5563;">{{ $user->email }}</div>

@@ -6,7 +6,7 @@
 <div style="margin-bottom: 32px;">
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
         <div>
-            <h1 style="font-size: 36px; font-weight: 900; color: #374151; margin-bottom: 8px;">Detalhes da Reserva</h1>
+            <h1 style="font-size: 36px; font-weight: 900; color: #1f2937; margin-bottom: 8px;">Detalhes da Reserva</h1>
             <p style="font-size: 18px; color: #6b7280; font-weight: 500;">Visualize as informações completas da reserva</p>
         </div>
         <div style="display: flex; gap: 12px; flex-wrap: wrap;">
@@ -28,7 +28,7 @@
         <div style="background: white; border-radius: 20px; padding: 32px; border: 3px solid #fbcfe8; box-shadow: 0 10px 30px rgba(236, 72, 153, 0.15); position: relative; overflow: hidden;">
             <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(236, 72, 153, 0.05); border-radius: 50%; filter: blur(60px); z-index: 0;"></div>
             <div style="position: relative; z-index: 1;">
-                <h3 style="font-size: 22px; font-weight: 900; color: #374151; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
+                <h3 style="font-size: 22px; font-weight: 900; color: #1f2937; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
                     <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #ec4899, #f472b6); border-radius: 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(236, 72, 153, 0.3);">
                         <i data-lucide="calendar" style="width: 20px; height: 20px; color: white;"></i>
                     </div>
@@ -38,21 +38,21 @@
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
                     <div>
                         <p style="font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Usuário</p>
-                        <p style="font-size: 16px; font-weight: 700; color: #374151; margin-bottom: 4px;">{{ $reserva->user->name }}</p>
+                        <p style="font-size: 16px; font-weight: 700; color: #1f2937; margin-bottom: 4px;">{{ $reserva->user->name }}</p>
                         <p style="font-size: 14px; color: #6b7280;">{{ $reserva->user->email }}</p>
                     </div>
                     <div>
                         <p style="font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Livro</p>
-                        <p style="font-size: 16px; font-weight: 700; color: #374151; margin-bottom: 4px;">{{ $reserva->book->titulo }}</p>
+                        <p style="font-size: 16px; font-weight: 700; color: #1f2937; margin-bottom: 4px;">{{ $reserva->book->titulo }}</p>
                         <p style="font-size: 14px; color: #6b7280;">{{ $reserva->book->author->nome }}</p>
                     </div>
                     <div>
                         <p style="font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Reservado em</p>
-                        <p style="font-size: 16px; font-weight: 700; color: #374151;">{{ $reserva->reservado_em->format('d/m/Y H:i') }}</p>
+                        <p style="font-size: 16px; font-weight: 700; color: #1f2937;">{{ $reserva->reservado_em->format('d/m/Y H:i') }}</p>
                     </div>
                     <div>
                         <p style="font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Expira em</p>
-                        <p style="font-size: 16px; font-weight: 700; color: #374151;">{{ $reserva->expira_em->format('d/m/Y H:i') }}</p>
+                        <p style="font-size: 16px; font-weight: 700; color: #1f2937;">{{ $reserva->expira_em->format('d/m/Y H:i') }}</p>
                     </div>
                     <div>
                         <p style="font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Status</p>
@@ -92,7 +92,7 @@
         <div style="background: white; border-radius: 20px; padding: 32px; border: 3px solid #fbcfe8; box-shadow: 0 10px 30px rgba(236, 72, 153, 0.15); position: relative; overflow: hidden;">
             <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(236, 72, 153, 0.05); border-radius: 50%; filter: blur(60px); z-index: 0;"></div>
             <div style="position: relative; z-index: 1;">
-                <h4 style="font-size: 18px; font-weight: 900; color: #374151; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                <h4 style="font-size: 18px; font-weight: 900; color: #1f2937; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
                     <i data-lucide="book-open" style="width: 20px; height: 20px; color: #ec4899;"></i>
                     Informações do Livro
                 </h4>
@@ -100,15 +100,15 @@
                 <div style="display: flex; flex-direction: column; gap: 16px;">
                     <div>
                         <p style="font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Categoria</p>
-                        <p style="font-size: 15px; font-weight: 600; color: #374151;">{{ $reserva->book->category->nome }}</p>
+                        <p style="font-size: 15px; font-weight: 600; color: #1f2937;">{{ $reserva->book->category->nome }}</p>
                     </div>
                     <div>
                         <p style="font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">ISBN</p>
-                        <p style="font-size: 15px; font-weight: 600; color: #374151;">{{ $reserva->book->isbn ?? 'N/A' }}</p>
+                        <p style="font-size: 15px; font-weight: 600; color: #1f2937;">{{ $reserva->book->isbn ?? 'N/A' }}</p>
                     </div>
                     <div>
                         <p style="font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Editora</p>
-                        <p style="font-size: 15px; font-weight: 600; color: #374151;">{{ $reserva->book->editora ?? 'N/A' }}</p>
+                        <p style="font-size: 15px; font-weight: 600; color: #1f2937;">{{ $reserva->book->editora ?? 'N/A' }}</p>
                     </div>
                 </div>
             </div>
@@ -118,7 +118,7 @@
         <div style="background: white; border-radius: 20px; padding: 32px; border: 3px solid #fbcfe8; box-shadow: 0 10px 30px rgba(236, 72, 153, 0.15); position: relative; overflow: hidden;">
             <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(236, 72, 153, 0.05); border-radius: 50%; filter: blur(60px); z-index: 0;"></div>
             <div style="position: relative; z-index: 1;">
-                <h4 style="font-size: 18px; font-weight: 900; color: #374151; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                <h4 style="font-size: 18px; font-weight: 900; color: #1f2937; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
                     <i data-lucide="user" style="width: 20px; height: 20px; color: #ec4899;"></i>
                     Informações do Usuário
                 </h4>
@@ -126,7 +126,7 @@
                 <div style="display: flex; flex-direction: column; gap: 16px;">
                     <div>
                         <p style="font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Telefone</p>
-                        <p style="font-size: 15px; font-weight: 600; color: #374151;">{{ $reserva->user->telefone ?? 'N/A' }}</p>
+                        <p style="font-size: 15px; font-weight: 600; color: #1f2937;">{{ $reserva->user->telefone ?? 'N/A' }}</p>
                     </div>
                     <div>
                         <p style="font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Status da Conta</p>
@@ -142,7 +142,7 @@
         <div style="background: white; border-radius: 20px; padding: 32px; border: 3px solid #fbcfe8; box-shadow: 0 10px 30px rgba(236, 72, 153, 0.15); position: relative; overflow: hidden;">
             <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(236, 72, 153, 0.05); border-radius: 50%; filter: blur(60px); z-index: 0;"></div>
             <div style="position: relative; z-index: 1;">
-                <h4 style="font-size: 18px; font-weight: 900; color: #374151; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                <h4 style="font-size: 18px; font-weight: 900; color: #1f2937; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
                     <i data-lucide="clock" style="width: 20px; height: 20px; color: #ec4899;"></i>
                     Informações do Sistema
                 </h4>
@@ -152,14 +152,14 @@
                         <p style="font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Criado em</p>
                         <div style="display: flex; align-items: center; gap: 8px;">
                             <i data-lucide="calendar" style="width: 16px; height: 16px; color: #6b7280;"></i>
-                            <p style="font-size: 15px; font-weight: 600; color: #374151;">{{ $reserva->created_at->format('d/m/Y H:i') }}</p>
+                            <p style="font-size: 15px; font-weight: 600; color: #1f2937;">{{ $reserva->created_at->format('d/m/Y H:i') }}</p>
                         </div>
                     </div>
                     <div>
                         <p style="font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Atualizado em</p>
                         <div style="display: flex; align-items: center; gap: 8px;">
                             <i data-lucide="clock" style="width: 16px; height: 16px; color: #6b7280;"></i>
-                            <p style="font-size: 15px; font-weight: 600; color: #374151;">{{ $reserva->updated_at->format('d/m/Y H:i') }}</p>
+                            <p style="font-size: 15px; font-weight: 600; color: #1f2937;">{{ $reserva->updated_at->format('d/m/Y H:i') }}</p>
                         </div>
                     </div>
                 </div>
