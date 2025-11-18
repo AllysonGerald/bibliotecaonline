@@ -16,9 +16,8 @@ Route::middleware('auth')->group(function (): void {
 
     Route::get('/minhas-reservas', [App\Http\Controllers\UserReservationController::class, 'index'])->name('minhas-reservas');
 
-    Route::get('/perfil', function () {
-        return view('user.perfil');
-    })->name('perfil');
+    Route::get('/perfil', [App\Http\Controllers\ProfileController::class, 'show'])->name('perfil');
+    Route::put('/perfil', [App\Http\Controllers\ProfileController::class, 'update'])->name('perfil.update');
 
     Route::get('/lista-desejos', function () {
         return view('user.wishlist');
