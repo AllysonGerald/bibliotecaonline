@@ -3,161 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - {{ config('app.name', 'Biblioteca Online') }} - @yield('title')</title>
+    <title>{{ config('app.name', 'Biblioteca Online') }} - @yield('title')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-slate-50">
-    <div class="min-h-screen flex">
-        <aside class="w-64 bg-slate-800 text-white flex-shrink-0 flex flex-col">
-            <div class="p-6 border-b border-slate-700">
-                <div class="flex items-center space-x-2">
-                    <svg class="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-                    </svg>
-                    <div>
-                        <span class="text-lg font-bold">Admin Panel</span>
-                        <p class="text-xs text-slate-400">Painel de Controle</p>
+<body style="background: linear-gradient(to bottom, #f3e8ff, #ffffff); min-height: 100vh;">
+    <nav style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-bottom: 3px solid #e9d5ff; box-shadow: 0 4px 6px rgba(139, 92, 246, 0.1); position: sticky; top: 0; z-index: 50;">
+        <div style="max-width: 1280px; margin: 0 auto; padding: 0 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; height: 80px;">
+                <div style="display: flex; align-items: center; gap: 32px;">
+                    <a href="{{ route('admin.dashboard') }}" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+                        <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #8b5cf6, #ec4899); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);">
+                            <i data-lucide="book-open" style="width: 28px; height: 28px; color: white;"></i>
+                        </div>
+                        <span style="font-size: 22px; font-weight: 800; background: linear-gradient(135deg, #8b5cf6, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Biblioteca Online</span>
+                    </a>
+
+                    <div style="display: none; gap: 4px; @media (min-width: 768px) { display: flex; }">
+                        <a href="{{ route('admin.dashboard') }}" style="padding: 10px 16px; color: #4b5563; font-weight: 600; text-decoration: none; border-radius: 10px; transition: all 0.3s; {{ request()->routeIs('admin.dashboard') ? 'background: linear-gradient(135deg, #f3e8ff, #fce7f3); color: #8b5cf6;' : '' }}" onmouseover="if (!this.style.background.includes('gradient')) { this.style.background='#f3e8ff'; this.style.color='#8b5cf6'; }" onmouseout="if (!this.style.background.includes('gradient')) { this.style.background=''; this.style.color='#4b5563'; }">
+                            Painel do Admin
+                        </a>
+                        <a href="{{ route('admin.livros.index') }}" style="padding: 10px 16px; color: #4b5563; font-weight: 600; text-decoration: none; border-radius: 10px; transition: all 0.3s; {{ request()->routeIs('admin.livros.*') ? 'background: linear-gradient(135deg, #f3e8ff, #fce7f3); color: #8b5cf6;' : '' }}" onmouseover="if (!this.style.background.includes('gradient')) { this.style.background='#f3e8ff'; this.style.color='#8b5cf6'; }" onmouseout="if (!this.style.background.includes('gradient')) { this.style.background=''; this.style.color='#4b5563'; }">
+                            Livros
+                        </a>
+                        <a href="{{ route('admin.autores.index') }}" style="padding: 10px 16px; color: #4b5563; font-weight: 600; text-decoration: none; border-radius: 10px; transition: all 0.3s; {{ request()->routeIs('admin.autores.*') ? 'background: linear-gradient(135deg, #f3e8ff, #fce7f3); color: #8b5cf6;' : '' }}" onmouseover="if (!this.style.background.includes('gradient')) { this.style.background='#f3e8ff'; this.style.color='#8b5cf6'; }" onmouseout="if (!this.style.background.includes('gradient')) { this.style.background=''; this.style.color='#4b5563'; }">
+                            Autores
+                        </a>
+                        <a href="{{ route('admin.categorias.index') }}" style="padding: 10px 16px; color: #4b5563; font-weight: 600; text-decoration: none; border-radius: 10px; transition: all 0.3s; {{ request()->routeIs('admin.categorias.*') ? 'background: linear-gradient(135deg, #f3e8ff, #fce7f3); color: #8b5cf6;' : '' }}" onmouseover="if (!this.style.background.includes('gradient')) { this.style.background='#f3e8ff'; this.style.color='#8b5cf6'; }" onmouseout="if (!this.style.background.includes('gradient')) { this.style.background=''; this.style.color='#4b5563'; }">
+                            Categorias
+                        </a>
+                        <a href="{{ route('admin.alugueis.index') }}" style="padding: 10px 16px; color: #4b5563; font-weight: 600; text-decoration: none; border-radius: 10px; transition: all 0.3s; {{ request()->routeIs('admin.alugueis.*') ? 'background: linear-gradient(135deg, #f3e8ff, #fce7f3); color: #8b5cf6;' : '' }}" onmouseover="if (!this.style.background.includes('gradient')) { this.style.background='#f3e8ff'; this.style.color='#8b5cf6'; }" onmouseout="if (!this.style.background.includes('gradient')) { this.style.background=''; this.style.color='#4b5563'; }">
+                            Aluguéis
+                        </a>
+                        <a href="{{ route('admin.reservas.index') }}" style="padding: 10px 16px; color: #4b5563; font-weight: 600; text-decoration: none; border-radius: 10px; transition: all 0.3s; {{ request()->routeIs('admin.reservas.*') ? 'background: linear-gradient(135deg, #f3e8ff, #fce7f3); color: #8b5cf6;' : '' }}" onmouseover="if (!this.style.background.includes('gradient')) { this.style.background='#f3e8ff'; this.style.color='#8b5cf6'; }" onmouseout="if (!this.style.background.includes('gradient')) { this.style.background=''; this.style.color='#4b5563'; }">
+                            Reservas
+                        </a>
+                        <a href="{{ route('admin.usuarios.index') }}" style="padding: 10px 16px; color: #4b5563; font-weight: 600; text-decoration: none; border-radius: 10px; transition: all 0.3s; {{ request()->routeIs('admin.usuarios.*') ? 'background: linear-gradient(135deg, #f3e8ff, #fce7f3); color: #8b5cf6;' : '' }}" onmouseover="if (!this.style.background.includes('gradient')) { this.style.background='#f3e8ff'; this.style.color='#8b5cf6'; }" onmouseout="if (!this.style.background.includes('gradient')) { this.style.background=''; this.style.color='#4b5563'; }">
+                            Usuários
+                        </a>
                     </div>
                 </div>
-            </div>
 
-            <nav class="flex-1 overflow-y-auto p-4 space-y-1">
-                <a href="{{ route('admin.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-slate-700 transition-colors {{ request()->routeIs('admin.dashboard') ? 'bg-cyan-600 text-white' : 'text-slate-300' }}">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-                    </svg>
-                    <span class="font-medium">Dashboard</span>
-                </a>
-
-                <div class="mt-6">
-                    <p class="px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Gerenciar</p>
-
-                    <a href="{{ route('admin.livros.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-slate-700 transition-colors {{ request()->routeIs('admin.livros.*') ? 'bg-cyan-600 text-white' : 'text-slate-300' }}">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-                        </svg>
-                        <span class="font-medium">Livros</span>
-                    </a>
-
-                    <a href="{{ route('admin.autores.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-slate-700 transition-colors {{ request()->routeIs('admin.autores.*') ? 'bg-cyan-600 text-white' : 'text-slate-300' }}">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                        </svg>
-                        <span class="font-medium">Autores</span>
-                    </a>
-
-                    <a href="{{ route('admin.categorias.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-slate-700 transition-colors {{ request()->routeIs('admin.categorias.*') ? 'bg-cyan-600 text-white' : 'text-slate-300' }}">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
-                        </svg>
-                        <span class="font-medium">Categorias</span>
-                    </a>
-
-                    <a href="{{ route('admin.alugueis.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-slate-700 transition-colors {{ request()->routeIs('admin.alugueis.*') ? 'bg-cyan-600 text-white' : 'text-slate-300' }}">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-                        </svg>
-                        <span class="font-medium">Aluguéis</span>
-                    </a>
-
-                    <a href="{{ route('admin.reservas.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-slate-700 transition-colors {{ request()->routeIs('admin.reservas.*') ? 'bg-cyan-600 text-white' : 'text-slate-300' }}">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                        <span class="font-medium">Reservas</span>
-                    </a>
-
-                    <a href="{{ route('admin.usuarios.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-slate-700 transition-colors {{ request()->routeIs('admin.usuarios.*') ? 'bg-cyan-600 text-white' : 'text-slate-300' }}">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
-                        </svg>
-                        <span class="font-medium">Usuários</span>
-                    </a>
-                </div>
-
-                <div class="mt-6">
-                    <p class="px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Sistema</p>
-
-                    <a href="{{ route('home') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-slate-700 transition-colors text-slate-300">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                        </svg>
-                        <span class="font-medium">Ver Site</span>
-                    </a>
-                </div>
-            </nav>
-
-            <div class="p-4 border-t border-slate-700">
-                <div class="flex items-center space-x-3 p-3 bg-slate-700 rounded-lg">
-                    <div class="w-10 h-10 rounded-full bg-cyan-600 flex items-center justify-center text-white font-semibold text-sm">
-                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-sm font-medium text-white truncate">{{ auth()->user()->name }}</p>
-                        <p class="text-xs text-slate-400 truncate">{{ auth()->user()->email }}</p>
-                    </div>
-                </div>
-            </div>
-        </aside>
-
-        <div class="flex-1 flex flex-col">
-            <header class="bg-white border-b border-slate-200 shadow-sm">
-                <div class="px-8 py-4 flex justify-between items-center">
-                    <h1 class="text-2xl font-bold text-slate-900">@yield('title')</h1>
-
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="px-4 py-2 text-slate-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors font-medium flex items-center space-x-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
-                            </svg>
-                            <span>Sair</span>
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <div style="position: relative;" x-data="{ open: false }">
+                        <button @click="open = !open" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; color: #4b5563; font-weight: 600; text-decoration: none; border-radius: 10px; border: none; background: transparent; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='#f3e8ff'; this.style.color='#8b5cf6';" onmouseout="this.style.background='transparent'; this.style.color='#4b5563';">
+                            <div style="width: 36px; height: 36px; background: linear-gradient(135deg, #8b5cf6, #ec4899); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 14px; box-shadow: 0 4px 10px rgba(139, 92, 246, 0.3);">
+                                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                            </div>
+                            <span style="font-size: 14px; font-weight: 600; display: none; @media (min-width: 640px) { display: inline; }">{{ auth()->user()->name }}</span>
+                            <i data-lucide="chevron-down" style="width: 16px; height: 16px;"></i>
                         </button>
-                    </form>
+
+                        <div x-show="open" @click.away="open = false" x-cloak style="position: absolute; right: 0; margin-top: 8px; width: 200px; background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(139, 92, 246, 0.2); border: 2px solid #e9d5ff; padding: 8px; z-index: 50;">
+                            <a href="{{ route('home') }}" style="display: block; padding: 12px 16px; font-size: 14px; color: #4b5563; font-weight: 600; text-decoration: none; border-radius: 8px; transition: all 0.3s;" onmouseover="this.style.background='#f3e8ff'; this.style.color='#8b5cf6';" onmouseout="this.style.background=''; this.style.color='#4b5563';">
+                                Home
+                            </a>
+                            <hr style="margin: 8px 0; border: none; border-top: 1px solid #e9d5ff;">
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" style="display: block; width: 100%; text-align: left; padding: 12px 16px; font-size: 14px; color: #ef4444; font-weight: 600; text-decoration: none; border-radius: 8px; border: none; background: transparent; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='#fee2e2';" onmouseout="this.style.background='transparent';">
+                                    Sair
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-            </header>
-
-            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-slate-50 p-8">
-                @if (session('success'))
-                    <div class="mb-6 p-4 bg-emerald-50 border-l-4 border-emerald-500 text-emerald-800 rounded-md" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                </svg>
-                                <span>{{ session('success') }}</span>
-                            </div>
-                            <button @click="show = false" class="text-emerald-600 hover:text-emerald-800">
-                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                @endif
-
-                @if (session('error'))
-                    <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-800 rounded-md" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-                                </svg>
-                                <span>{{ session('error') }}</span>
-                            </div>
-                            <button @click="show = false" class="text-red-600 hover:text-red-800">
-                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                @endif
-
-                @yield('content')
-            </main>
+            </div>
         </div>
+    </nav>
+
+    <div style="max-width: 1280px; margin: 0 auto; padding: 32px 24px;">
+        @if (session('success'))
+            <div style="margin-bottom: 24px; padding: 16px; background: linear-gradient(135deg, #d1fae5, #a7f3d0); border: 3px solid #86efac; border-radius: 12px; color: #065f46; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <i data-lucide="check-circle" style="width: 20px; height: 20px; color: #10b981;"></i>
+                        <span style="font-weight: 600;">{{ session('success') }}</span>
+                    </div>
+                    <button @click="show = false" style="background: transparent; border: none; cursor: pointer; color: #065f46; padding: 4px;" onmouseover="this.style.color='#047857';" onmouseout="this.style.color='#065f46';">
+                        <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+                    </button>
+                </div>
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div style="margin-bottom: 24px; padding: 16px; background: linear-gradient(135deg, #fee2e2, #fef2f2); border: 3px solid #fca5a5; border-radius: 12px; color: #991b1b; box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2);" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <i data-lucide="alert-circle" style="width: 20px; height: 20px; color: #ef4444;"></i>
+                        <span style="font-weight: 600;">{{ session('error') }}</span>
+                    </div>
+                    <button @click="show = false" style="background: transparent; border: none; cursor: pointer; color: #991b1b; padding: 4px;" onmouseover="this.style.color='#7f1d1d';" onmouseout="this.style.color='#991b1b';">
+                        <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+                    </button>
+                </div>
+            </div>
+        @endif
+
+        @yield('content')
     </div>
+
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
@@ -183,4 +128,3 @@
     </style>
 </body>
 </html>
-

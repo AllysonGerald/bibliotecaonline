@@ -55,7 +55,7 @@
                                 @if(auth()->user()->isAdmin())
                                     <hr style="margin: 8px 0; border: none; border-top: 1px solid #e9d5ff;">
                                     <a href="{{ route('admin.dashboard') }}" style="display: block; padding: 12px 16px; font-size: 14px; color: #8b5cf6; font-weight: 700; text-decoration: none; border-radius: 8px; transition: all 0.3s;" onmouseover="this.style.background='#f3e8ff';" onmouseout="this.style.background='';">
-                                        Painel Admin
+                                        Painel do Admin
                                     </a>
                                 @endif
                                 <hr style="margin: 8px 0; border: none; border-top: 1px solid #e9d5ff;">

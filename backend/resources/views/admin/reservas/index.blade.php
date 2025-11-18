@@ -3,37 +3,57 @@
 @section('title', 'Reservas')
 
 @section('content')
-<div class="mb-6 flex justify-between items-center">
-    <div>
-        <h2 class="text-2xl font-bold text-slate-900">Gerenciar Reservas</h2>
-        <p class="text-slate-600 mt-1">Gerencie as reservas de livros</p>
+<div style="margin-bottom: 32px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+        <div>
+            <h1 style="font-size: 36px; font-weight: 900; color: #1f2937; margin-bottom: 8px;">Gerenciar Reservas</h1>
+            <p style="font-size: 18px; color: #6b7280; font-weight: 500;">Gerencie as reservas de livros</p>
+        </div>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <a href="{{ route('admin.dashboard') }}" style="display: inline-flex; align-items: center; padding: 12px 20px; background: linear-gradient(135deg, #f3e8ff, #faf5ff); color: #8b5cf6; border: 3px solid #e9d5ff; border-radius: 12px; font-size: 14px; font-weight: 700; text-decoration: none; transition: all 0.3s; box-shadow: 0 4px 10px rgba(139, 92, 246, 0.15);" onmouseover="this.style.background='linear-gradient(135deg, #8b5cf6, #a855f7)'; this.style.color='white'; this.style.borderColor='#8b5cf6'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 15px rgba(139, 92, 246, 0.3)';" onmouseout="this.style.background='linear-gradient(135deg, #f3e8ff, #faf5ff)'; this.style.color='#8b5cf6'; this.style.borderColor='#e9d5ff'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 10px rgba(139, 92, 246, 0.15)';">
+                <i data-lucide="arrow-left" style="width: 18px; height: 18px; margin-right: 8px;"></i>
+                Painel do Admin
+            </a>
+            <a href="{{ route('admin.reservas.create') }}" style="display: inline-flex; align-items: center; padding: 12px 20px; background: linear-gradient(135deg, #8b5cf6, #ec4899); color: white; border: 3px solid #8b5cf6; border-radius: 12px; font-size: 14px; font-weight: 700; text-decoration: none; transition: all 0.3s; box-shadow: 0 4px 10px rgba(139, 92, 246, 0.3);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 15px rgba(139, 92, 246, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 10px rgba(139, 92, 246, 0.3)';">
+                <i data-lucide="plus" style="width: 18px; height: 18px; margin-right: 8px;"></i>
+                Nova Reserva
+            </a>
+        </div>
     </div>
-    <a href="{{ route('admin.reservas.create') }}" class="inline-flex items-center px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors font-medium">
-        <i data-lucide="plus" class="w-5 h-5 mr-2"></i>
-        Nova Reserva
-    </a>
 </div>
 
-<div class="bg-white rounded-lg shadow-md border border-slate-200">
-    <div class="p-6 border-b border-slate-200">
-        <form method="GET" action="{{ route('admin.reservas.index') }}" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+<!-- Filtros -->
+<div style="background: white; border-radius: 20px; padding: 32px; border: 3px solid #fbcfe8; box-shadow: 0 10px 30px rgba(236, 72, 153, 0.15); margin-bottom: 24px; position: relative; overflow: hidden;">
+    <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(236, 72, 153, 0.05); border-radius: 50%; filter: blur(60px); z-index: 0;"></div>
+    <div style="position: relative; z-index: 1;">
+        <h3 style="font-size: 20px; font-weight: 900; color: #1f2937; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
+            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #ec4899, #f97316); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                <i data-lucide="filter" style="width: 20px; height: 20px; color: white;"></i>
+            </div>
+            Filtros
+        </h3>
+        <form method="GET" action="{{ route('admin.reservas.index') }}" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
             <div>
-                <label for="search" class="block text-sm font-medium text-slate-700 mb-2">Buscar</label>
+                <label for="search" style="display: block; font-size: 14px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">Buscar</label>
                 <input
                     type="text"
                     name="search"
                     id="search"
                     value="{{ request('search') }}"
                     placeholder="Usuário, livro..."
-                    class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+                    style="width: 100%; padding: 12px 16px; border: 2px solid #fbcfe8; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #fdf2f8, #ffffff); box-sizing: border-box;"
+                    onfocus="this.style.borderColor='#ec4899'; this.style.boxShadow='0 0 0 3px rgba(236, 72, 153, 0.1)';"
+                    onblur="this.style.borderColor='#fbcfe8'; this.style.boxShadow='none';"
                 >
             </div>
             <div>
-                <label for="usuario_id" class="block text-sm font-medium text-slate-700 mb-2">Usuário</label>
+                <label for="usuario_id" style="display: block; font-size: 14px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">Usuário</label>
                 <select
                     name="usuario_id"
                     id="usuario_id"
-                    class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+                    style="width: 100%; padding: 12px 16px; border: 2px solid #fbcfe8; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #fdf2f8, #ffffff); cursor: pointer; box-sizing: border-box;"
+                    onfocus="this.style.borderColor='#ec4899'; this.style.boxShadow='0 0 0 3px rgba(236, 72, 153, 0.1)';"
+                    onblur="this.style.borderColor='#fbcfe8'; this.style.boxShadow='none';"
                 >
                     <option value="">Todos</option>
                     @foreach($users as $user)
@@ -44,11 +64,13 @@
                 </select>
             </div>
             <div>
-                <label for="livro_id" class="block text-sm font-medium text-slate-700 mb-2">Livro</label>
+                <label for="livro_id" style="display: block; font-size: 14px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">Livro</label>
                 <select
                     name="livro_id"
                     id="livro_id"
-                    class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+                    style="width: 100%; padding: 12px 16px; border: 2px solid #fbcfe8; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #fdf2f8, #ffffff); cursor: pointer; box-sizing: border-box;"
+                    onfocus="this.style.borderColor='#ec4899'; this.style.boxShadow='0 0 0 3px rgba(236, 72, 153, 0.1)';"
+                    onblur="this.style.borderColor='#fbcfe8'; this.style.boxShadow='none';"
                 >
                     <option value="">Todos</option>
                     @foreach($books as $book)
@@ -59,11 +81,13 @@
                 </select>
             </div>
             <div>
-                <label for="status" class="block text-sm font-medium text-slate-700 mb-2">Status</label>
+                <label for="status" style="display: block; font-size: 14px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">Status</label>
                 <select
                     name="status"
                     id="status"
-                    class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+                    style="width: 100%; padding: 12px 16px; border: 2px solid #fbcfe8; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #fdf2f8, #ffffff); cursor: pointer; box-sizing: border-box;"
+                    onfocus="this.style.borderColor='#ec4899'; this.style.boxShadow='0 0 0 3px rgba(236, 72, 153, 0.1)';"
+                    onblur="this.style.borderColor='#fbcfe8'; this.style.boxShadow='none';"
                 >
                     <option value="">Todos</option>
                     @foreach($statuses as $status)
@@ -73,95 +97,148 @@
                     @endforeach
                 </select>
             </div>
-            <div class="flex items-end md:col-span-4">
-                <button type="submit" class="w-full px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-800 transition-colors font-medium">
+            <div style="display: flex; align-items: flex-end;">
+                <button type="submit" style="width: 100%; padding: 12px 20px; background: linear-gradient(135deg, #ec4899, #f97316); color: white; border: 3px solid #ec4899; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 10px rgba(236, 72, 153, 0.3);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 15px rgba(236, 72, 153, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 10px rgba(236, 72, 153, 0.3)';">
+                    <i data-lucide="search" style="width: 18px; height: 18px; margin-right: 8px; display: inline-block; vertical-align: middle;"></i>
                     Filtrar
                 </button>
             </div>
         </form>
     </div>
-
-    <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-slate-200">
-            <thead class="bg-slate-50">
-                <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Usuário</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Livro</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Reservado em</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Expira em</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Status</th>
-                    <th class="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase tracking-wider">Ações</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-slate-200">
-                @forelse($reservations as $reservation)
-                    <tr class="hover:bg-slate-50">
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm font-medium text-slate-900">{{ $reservation->user->name }}</div>
-                            <div class="text-sm text-slate-500">{{ $reservation->user->email }}</div>
-                        </td>
-                        <td class="px-6 py-4">
-                            <div class="text-sm font-medium text-slate-900">{{ $reservation->book->titulo }}</div>
-                            <div class="text-sm text-slate-500">{{ $reservation->book->author->nome }}</div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm text-slate-900">{{ $reservation->reservado_em->format('d/m/Y H:i') }}</div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm text-slate-900">{{ $reservation->expira_em->format('d/m/Y H:i') }}</div>
-                            @if($reservation->isExpired())
-                                <div class="text-xs text-red-600 mt-1">Expirada</div>
-                            @endif
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            @php
-                                $statusColors = [
-                                    'pendente' => 'bg-yellow-100 text-yellow-800',
-                                    'confirmada' => 'bg-green-100 text-green-800',
-                                    'cancelada' => 'bg-red-100 text-red-800',
-                                    'expirada' => 'bg-gray-100 text-gray-800',
-                                ];
-                                $color = $statusColors[$reservation->status->value] ?? 'bg-slate-100 text-slate-800';
-                            @endphp
-                            <span class="px-2 py-1 text-xs font-semibold rounded-full {{ $color }}">
-                                {{ $reservation->status->label() }}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <div class="flex justify-end space-x-2">
-                                <a href="{{ route('admin.reservas.show', $reservation) }}" class="text-cyan-600 hover:text-cyan-800" title="Ver">
-                                    <i data-lucide="eye" class="w-5 h-5"></i>
-                                </a>
-                                <a href="{{ route('admin.reservas.edit', $reservation) }}" class="text-slate-600 hover:text-slate-800" title="Editar">
-                                    <i data-lucide="edit" class="w-5 h-5"></i>
-                                </a>
-                                <form action="{{ route('admin.reservas.destroy', $reservation) }}" method="POST" class="inline" onsubmit="return confirm('Tem certeza que deseja excluir esta reserva?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-800" title="Excluir">
-                                        <i data-lucide="trash-2" class="w-5 h-5"></i>
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="6" class="px-6 py-12 text-center">
-                            <i data-lucide="clock" class="mx-auto h-12 w-12 text-slate-400"></i>
-                            <p class="mt-4 text-sm text-slate-500">Nenhuma reserva encontrada.</p>
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
-
-    @if($reservations->hasPages())
-        <div class="px-6 py-4 border-t border-slate-200">
-            {{ $reservations->links() }}
-        </div>
-    @endif
 </div>
-@endsection
 
+<!-- Tabela de Reservas -->
+<div style="background: white; border-radius: 20px; padding: 32px; border: 3px solid #fbcfe8; box-shadow: 0 10px 30px rgba(236, 72, 153, 0.15); position: relative; overflow: hidden;">
+    <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(236, 72, 153, 0.05); border-radius: 50%; filter: blur(60px); z-index: 0;"></div>
+    <div style="position: relative; z-index: 1;">
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="border-bottom: 3px solid #fbcfe8;">
+                        <th style="padding: 16px; text-align: left; font-size: 13px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px;">Usuário</th>
+                        <th style="padding: 16px; text-align: left; font-size: 13px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px;">Livro</th>
+                        <th style="padding: 16px; text-align: left; font-size: 13px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px;">Reservado em</th>
+                        <th style="padding: 16px; text-align: left; font-size: 13px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px;">Expira em</th>
+                        <th style="padding: 16px; text-align: left; font-size: 13px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px;">Status</th>
+                        <th style="padding: 16px; text-align: right; font-size: 13px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px;">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($reservations as $reservation)
+                        <tr style="border-bottom: 2px solid #fce7f3; transition: all 0.3s;" onmouseover="this.style.background='linear-gradient(135deg, #fdf2f8, #fce7f3)';" onmouseout="this.style.background='transparent';">
+                            <td style="padding: 16px;">
+                                <div style="font-size: 15px; font-weight: 700; color: #1f2937; margin-bottom: 4px;">{{ $reservation->user->name }}</div>
+                                <div style="font-size: 13px; color: #9ca3af;">{{ $reservation->user->email }}</div>
+                            </td>
+                            <td style="padding: 16px;">
+                                <div style="font-size: 15px; font-weight: 700; color: #1f2937; margin-bottom: 4px;">{{ $reservation->book->titulo }}</div>
+                                <div style="font-size: 13px; color: #9ca3af; font-weight: 500;">{{ $reservation->book->author->nome }}</div>
+                            </td>
+                            <td style="padding: 16px;">
+                                <div style="font-size: 14px; color: #4b5563; font-weight: 600;">{{ $reservation->reservado_em->format('d/m/Y H:i') }}</div>
+                            </td>
+                            <td style="padding: 16px;">
+                                <div style="font-size: 14px; color: #4b5563; font-weight: 600; margin-bottom: 4px;">{{ $reservation->expira_em->format('d/m/Y H:i') }}</div>
+                                @if($reservation->isExpired())
+                                    <span style="display: inline-block; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; background: linear-gradient(135deg, #fee2e2, #fef2f2); color: #991b1b; border: 2px solid #fca5a5;">
+                                        Expirada
+                                    </span>
+                                @endif
+                            </td>
+                            <td style="padding: 16px;">
+                                @php
+                                    $statusStyles = [
+                                        'pendente' => 'background: linear-gradient(135deg, #fef3c7, #fffbeb); color: #92400e; border: 2px solid #fde047;',
+                                        'confirmada' => 'background: linear-gradient(135deg, #dcfce7, #f0fdf4); color: #166534; border: 2px solid #86efac;',
+                                        'cancelada' => 'background: linear-gradient(135deg, #fee2e2, #fef2f2); color: #991b1b; border: 2px solid #fca5a5;',
+                                        'expirada' => 'background: linear-gradient(135deg, #f3f4f6, #ffffff); color: #6b7280; border: 2px solid #e5e7eb;',
+                                    ];
+                                    $statusStyle = $statusStyles[$reservation->status->value] ?? 'background: linear-gradient(135deg, #f3f4f6, #ffffff); color: #6b7280; border: 2px solid #e5e7eb;';
+                                @endphp
+                                <span style="display: inline-block; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; {{ $statusStyle }}">
+                                    {{ $reservation->status->label() }}
+                                </span>
+                            </td>
+                            <td style="padding: 16px; text-align: right;">
+                                <div style="display: flex; justify-content: flex-end; gap: 8px;">
+                                    <a href="{{ route('admin.reservas.show', $reservation) }}" style="display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: linear-gradient(135deg, #e0f2fe, #f0f9ff); color: #0ea5e9; border: 2px solid #bae6fd; border-radius: 10px; text-decoration: none; transition: all 0.3s; box-shadow: 0 2px 5px rgba(14, 165, 233, 0.15);" onmouseover="this.style.background='linear-gradient(135deg, #0ea5e9, #38bdf8)'; this.style.color='white'; this.style.borderColor='#0ea5e9'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 10px rgba(14, 165, 233, 0.3)';" onmouseout="this.style.background='linear-gradient(135deg, #e0f2fe, #f0f9ff)'; this.style.color='#0ea5e9'; this.style.borderColor='#bae6fd'; this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 5px rgba(14, 165, 233, 0.15)';" title="Ver">
+                                        <i data-lucide="eye" style="width: 18px; height: 18px;"></i>
+                                    </a>
+                                    <a href="{{ route('admin.reservas.edit', $reservation) }}" style="display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: linear-gradient(135deg, #f3e8ff, #faf5ff); color: #8b5cf6; border: 2px solid #e9d5ff; border-radius: 10px; text-decoration: none; transition: all 0.3s; box-shadow: 0 2px 5px rgba(139, 92, 246, 0.15);" onmouseover="this.style.background='linear-gradient(135deg, #8b5cf6, #a855f7)'; this.style.color='white'; this.style.borderColor='#8b5cf6'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 10px rgba(139, 92, 246, 0.3)';" onmouseout="this.style.background='linear-gradient(135deg, #f3e8ff, #faf5ff)'; this.style.color='#8b5cf6'; this.style.borderColor='#e9d5ff'; this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 5px rgba(139, 92, 246, 0.15)';" title="Editar">
+                                        <i data-lucide="edit" style="width: 18px; height: 18px;"></i>
+                                    </a>
+                                    <button type="button" onclick="openDeleteModal('delete-reservation-{{ $reservation->id }}')" style="display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: linear-gradient(135deg, #fee2e2, #fef2f2); color: #ef4444; border: 2px solid #fca5a5; border-radius: 10px; cursor: pointer; transition: all 0.3s; box-shadow: 0 2px 5px rgba(239, 68, 68, 0.15);" onmouseover="this.style.background='linear-gradient(135deg, #ef4444, #f87171)'; this.style.color='white'; this.style.borderColor='#ef4444'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 10px rgba(239, 68, 68, 0.3)';" onmouseout="this.style.background='linear-gradient(135deg, #fee2e2, #fef2f2)'; this.style.color='#ef4444'; this.style.borderColor='#fca5a5'; this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 5px rgba(239, 68, 68, 0.15)';" title="Excluir">
+                                        <i data-lucide="trash-2" style="width: 18px; height: 18px;"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="6" style="padding: 48px; text-align: center;">
+                                <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #fce7f3, #fff1f2); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                                    <i data-lucide="clock" style="width: 40px; height: 40px; color: #ec4899;"></i>
+                                </div>
+                                <p style="font-size: 16px; color: #6b7280; font-weight: 500;">Nenhuma reserva encontrada.</p>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        @if($reservations->hasPages())
+            <div style="margin-top: 24px; padding-top: 24px; border-top: 2px solid #fce7f3;">
+                {{ $reservations->links() }}
+            </div>
+        @endif
+    </div>
+</div>
+
+<!-- Modais de Exclusão -->
+@foreach($reservations as $reservation)
+    @php
+        $reservationName = 'Reserva de ' . $reservation->book->titulo . ' por ' . $reservation->user->name;
+    @endphp
+    <x-delete-modal
+        id="delete-reservation-{{ $reservation->id }}"
+        title="Confirmar Exclusão"
+        message="Tem certeza que deseja excluir esta reserva? Esta ação não pode ser desfeita."
+        :action="route('admin.reservas.destroy', $reservation)"
+        :itemName="$reservationName"
+    />
+@endforeach
+
+<script>
+    function openDeleteModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.style.display = 'block';
+            // Inicializar Alpine.js se necessário
+            if (typeof Alpine !== 'undefined') {
+                Alpine.initTree(modal);
+                const alpineData = Alpine.$data(modal);
+                if (alpineData) {
+                    alpineData.open = true;
+                }
+            }
+        }
+    }
+    
+    // Fechar modal ao clicar no backdrop
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('modal-backdrop')) {
+            e.target.style.display = 'none';
+            if (typeof Alpine !== 'undefined') {
+                const alpineData = Alpine.$data(e.target);
+                if (alpineData) {
+                    alpineData.open = false;
+                }
+            }
+        }
+    });
+</script>
+<style>
+    [x-cloak] { display: none !important; }
+</style>
+@endsection
