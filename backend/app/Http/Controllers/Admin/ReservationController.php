@@ -42,7 +42,7 @@ class ReservationController extends Controller
         );
 
         $users = User::orderBy('name')->get();
-        $books = Book::orderBy('titulo')->get();
+        $books = Book::with('author')->orderBy('titulo')->get();
         $statuses = ReservationStatus::cases();
 
         return view('admin.reservas.index', compact('reservations', 'users', 'books', 'statuses'));
@@ -51,7 +51,7 @@ class ReservationController extends Controller
     public function create(): View
     {
         $users = User::orderBy('name')->get();
-        $books = Book::orderBy('titulo')->get();
+        $books = Book::with('author')->orderBy('titulo')->get();
         $statuses = ReservationStatus::cases();
 
         return view('admin.reservas.create', compact('users', 'books', 'statuses'));
@@ -87,7 +87,7 @@ class ReservationController extends Controller
     {
         $reserva->load(['user', 'book']);
         $users = User::orderBy('name')->get();
-        $books = Book::orderBy('titulo')->get();
+        $books = Book::with('author')->orderBy('titulo')->get();
         $statuses = ReservationStatus::cases();
 
         return view('admin.reservas.edit', compact('reserva', 'users', 'books', 'statuses'));
