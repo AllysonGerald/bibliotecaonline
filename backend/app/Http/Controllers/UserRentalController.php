@@ -71,7 +71,8 @@ class UserRentalController extends Controller
         $existingRental = $this->rentalService->getByUser($user->id)
             ->where('livro_id', $livro->id)
             ->where('status', RentalStatus::ATIVO)
-            ->first();
+            ->first()
+        ;
 
         if ($existingRental) {
             return redirect()->back()

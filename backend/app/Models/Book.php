@@ -124,9 +124,6 @@ class Book extends Model
         ;
 
         // Verificar se há exemplares disponíveis
-        // A quantidade já reflete os aluguéis (foi decrementada), então comparamos diretamente
-        $quantidadeDisponivel = $this->quantidade - $alugueisAtivos;
-
-        return $quantidadeDisponivel > 0;
+        return $this->quantidade > 0;
     }
 }
