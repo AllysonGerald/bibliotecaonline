@@ -3,247 +3,294 @@
 @section('title', 'Novo Livro')
 
 @section('content')
-<div class="mb-6">
-    <a href="{{ route('admin.livros.index') }}" class="inline-flex items-center text-slate-600 hover:text-cyan-600 mb-4">
-        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-        </svg>
-        Voltar
-    </a>
-    <h2 class="text-2xl font-bold text-slate-900">Novo Livro</h2>
+<div style="margin-bottom: 32px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+        <div>
+            <h1 style="font-size: 36px; font-weight: 900; color: #1f2937; margin-bottom: 8px;">Novo Livro</h1>
+            <p style="font-size: 18px; color: #6b7280; font-weight: 500;">Crie um novo livro no catálogo</p>
+        </div>
+        <a href="{{ route('admin.livros.index') }}" style="display: inline-flex; align-items: center; padding: 12px 20px; background: linear-gradient(135deg, #f3e8ff, #faf5ff); color: #8b5cf6; border: 3px solid #e9d5ff; border-radius: 12px; font-size: 14px; font-weight: 700; text-decoration: none; transition: all 0.3s; box-shadow: 0 4px 10px rgba(139, 92, 246, 0.15);" onmouseover="this.style.background='linear-gradient(135deg, #8b5cf6, #a855f7)'; this.style.color='white'; this.style.borderColor='#8b5cf6'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 15px rgba(139, 92, 246, 0.3)';" onmouseout="this.style.background='linear-gradient(135deg, #f3e8ff, #faf5ff)'; this.style.color='#8b5cf6'; this.style.borderColor='#e9d5ff'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 10px rgba(139, 92, 246, 0.15)';">
+            <i data-lucide="arrow-left" style="width: 18px; height: 18px; margin-right: 8px;"></i>
+            Voltar
+        </a>
+    </div>
 </div>
 
-<div class="bg-white rounded-lg shadow-md border border-slate-200 p-6">
-    <form method="POST" action="{{ route('admin.livros.store') }}" enctype="multipart/form-data">
-        @csrf
+<div style="background: white; border-radius: 20px; padding: 32px; border: 3px solid #fed7aa; box-shadow: 0 10px 30px rgba(249, 115, 22, 0.15); position: relative; overflow: hidden;">
+    <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(249, 115, 22, 0.05); border-radius: 50%; filter: blur(60px); z-index: 0;"></div>
+    <div style="position: relative; z-index: 1;">
+        <form method="POST" action="{{ route('admin.livros.store') }}" enctype="multipart/form-data">
+            @csrf
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="md:col-span-2">
-                <label for="titulo" class="block text-sm font-medium text-slate-700 mb-2">Título *</label>
-                <input
-                    type="text"
-                    name="titulo"
-                    id="titulo"
-                    value="{{ old('titulo') }}"
-                    required
-                    class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 @error('titulo') border-red-500 @enderror"
-                >
-                @error('titulo')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;">
+                <!-- Título (ocupa 2 colunas) -->
+                <div style="grid-column: 1 / -1;">
+                    <label for="titulo" style="display: block; font-size: 14px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">Título *</label>
+                    <input
+                        type="text"
+                        name="titulo"
+                        id="titulo"
+                        value="{{ old('titulo') }}"
+                        required
+                        style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('titulo') ? '#ef4444' : '#fed7aa' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #fff7ed, #ffffff); box-sizing: border-box;"
+                        onfocus="this.style.borderColor='#f97316'; this.style.boxShadow='0 0 0 3px rgba(249, 115, 22, 0.1)';"
+                        onblur="this.style.borderColor='{{ $errors->has('titulo') ? '#ef4444' : '#fed7aa' }}'; this.style.boxShadow='none';"
+                    >
+                    @error('titulo')
+                        <p style="margin-top: 8px; font-size: 13px; color: #ef4444; font-weight: 600;">{{ $message }}</p>
+                    @enderror
+                </div>
 
-            <div class="md:col-span-2">
-                <label for="descricao" class="block text-sm font-medium text-slate-700 mb-2">Descrição *</label>
-                <textarea
-                    name="descricao"
-                    id="descricao"
-                    rows="4"
-                    required
-                    class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 @error('descricao') border-red-500 @enderror"
-                >{{ old('descricao') }}</textarea>
-                @error('descricao')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
+                <!-- Descrição (ocupa 2 colunas) -->
+                <div style="grid-column: 1 / -1;">
+                    <label for="descricao" style="display: block; font-size: 14px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">Descrição *</label>
+                    <textarea
+                        name="descricao"
+                        id="descricao"
+                        rows="4"
+                        required
+                        style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('descricao') ? '#ef4444' : '#fed7aa' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #fff7ed, #ffffff); box-sizing: border-box; resize: vertical; font-family: inherit;"
+                        onfocus="this.style.borderColor='#f97316'; this.style.boxShadow='0 0 0 3px rgba(249, 115, 22, 0.1)';"
+                        onblur="this.style.borderColor='{{ $errors->has('descricao') ? '#ef4444' : '#fed7aa' }}'; this.style.boxShadow='none';"
+                    >{{ old('descricao') }}</textarea>
+                    @error('descricao')
+                        <p style="margin-top: 8px; font-size: 13px; color: #ef4444; font-weight: 600;">{{ $message }}</p>
+                    @enderror
+                </div>
 
-            <div>
-                <label for="autor_id" class="block text-sm font-medium text-slate-700 mb-2">Autor *</label>
-                <select
-                    name="autor_id"
-                    id="autor_id"
-                    required
-                    class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 @error('autor_id') border-red-500 @enderror"
-                >
-                    <option value="">Selecione um autor</option>
-                    @foreach($authors as $author)
-                        <option value="{{ $author->id }}" {{ old('autor_id') == $author->id ? 'selected' : '' }}>
-                            {{ $author->nome }}
-                        </option>
-                    @endforeach
-                </select>
-                @error('autor_id')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
+                <!-- Autor e Categoria -->
+                <div>
+                    <label for="autor_id" style="display: block; font-size: 14px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">Autor *</label>
+                    <select
+                        name="autor_id"
+                        id="autor_id"
+                        required
+                        style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('autor_id') ? '#ef4444' : '#fed7aa' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #fff7ed, #ffffff); cursor: pointer; box-sizing: border-box;"
+                        onfocus="this.style.borderColor='#f97316'; this.style.boxShadow='0 0 0 3px rgba(249, 115, 22, 0.1)';"
+                        onblur="this.style.borderColor='{{ $errors->has('autor_id') ? '#ef4444' : '#fed7aa' }}'; this.style.boxShadow='none';"
+                    >
+                        <option value="">Selecione um autor</option>
+                        @foreach($authors as $author)
+                            <option value="{{ $author->id }}" {{ old('autor_id') == $author->id ? 'selected' : '' }}>
+                                {{ $author->nome }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('autor_id')
+                        <p style="margin-top: 8px; font-size: 13px; color: #ef4444; font-weight: 600;">{{ $message }}</p>
+                    @enderror
+                </div>
 
-            <div>
-                <label for="categoria_id" class="block text-sm font-medium text-slate-700 mb-2">Categoria *</label>
-                <select
-                    name="categoria_id"
-                    id="categoria_id"
-                    required
-                    class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 @error('categoria_id') border-red-500 @enderror"
-                >
-                    <option value="">Selecione uma categoria</option>
-                    @foreach($categories as $category)
-                        <option value="{{ $category->id }}" {{ old('categoria_id') == $category->id ? 'selected' : '' }}>
-                            {{ $category->nome }}
-                        </option>
-                    @endforeach
-                </select>
-                @error('categoria_id')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
+                <div>
+                    <label for="categoria_id" style="display: block; font-size: 14px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">Categoria *</label>
+                    <select
+                        name="categoria_id"
+                        id="categoria_id"
+                        required
+                        style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('categoria_id') ? '#ef4444' : '#fed7aa' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #fff7ed, #ffffff); cursor: pointer; box-sizing: border-box;"
+                        onfocus="this.style.borderColor='#f97316'; this.style.boxShadow='0 0 0 3px rgba(249, 115, 22, 0.1)';"
+                        onblur="this.style.borderColor='{{ $errors->has('categoria_id') ? '#ef4444' : '#fed7aa' }}'; this.style.boxShadow='none';"
+                    >
+                        <option value="">Selecione uma categoria</option>
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}" {{ old('categoria_id') == $category->id ? 'selected' : '' }}>
+                                {{ $category->nome }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('categoria_id')
+                        <p style="margin-top: 8px; font-size: 13px; color: #ef4444; font-weight: 600;">{{ $message }}</p>
+                    @enderror
+                </div>
 
-            <div>
-                <label for="isbn" class="block text-sm font-medium text-slate-700 mb-2">ISBN *</label>
-                <input
-                    type="text"
-                    name="isbn"
-                    id="isbn"
-                    value="{{ old('isbn') }}"
-                    required
-                    class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 @error('isbn') border-red-500 @enderror"
-                >
-                @error('isbn')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
+                <!-- ISBN e Editora -->
+                <div>
+                    <label for="isbn" style="display: block; font-size: 14px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">ISBN *</label>
+                    <input
+                        type="text"
+                        name="isbn"
+                        id="isbn"
+                        value="{{ old('isbn') }}"
+                        required
+                        style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('isbn') ? '#ef4444' : '#fed7aa' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #fff7ed, #ffffff); box-sizing: border-box;"
+                        onfocus="this.style.borderColor='#f97316'; this.style.boxShadow='0 0 0 3px rgba(249, 115, 22, 0.1)';"
+                        onblur="this.style.borderColor='{{ $errors->has('isbn') ? '#ef4444' : '#fed7aa' }}'; this.style.boxShadow='none';"
+                    >
+                    @error('isbn')
+                        <p style="margin-top: 8px; font-size: 13px; color: #ef4444; font-weight: 600;">{{ $message }}</p>
+                    @enderror
+                </div>
 
-            <div>
-                <label for="editora" class="block text-sm font-medium text-slate-700 mb-2">Editora *</label>
-                <input
-                    type="text"
-                    name="editora"
-                    id="editora"
-                    value="{{ old('editora') }}"
-                    required
-                    class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 @error('editora') border-red-500 @enderror"
-                >
-                @error('editora')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
+                <div>
+                    <label for="editora" style="display: block; font-size: 14px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">Editora *</label>
+                    <input
+                        type="text"
+                        name="editora"
+                        id="editora"
+                        value="{{ old('editora') }}"
+                        required
+                        style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('editora') ? '#ef4444' : '#fed7aa' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #fff7ed, #ffffff); box-sizing: border-box;"
+                        onfocus="this.style.borderColor='#f97316'; this.style.boxShadow='0 0 0 3px rgba(249, 115, 22, 0.1)';"
+                        onblur="this.style.borderColor='{{ $errors->has('editora') ? '#ef4444' : '#fed7aa' }}'; this.style.boxShadow='none';"
+                    >
+                    @error('editora')
+                        <p style="margin-top: 8px; font-size: 13px; color: #ef4444; font-weight: 600;">{{ $message }}</p>
+                    @enderror
+                </div>
 
-            <div>
-                <label for="ano_publicacao" class="block text-sm font-medium text-slate-700 mb-2">Ano de Publicação *</label>
-                <input
-                    type="number"
-                    name="ano_publicacao"
-                    id="ano_publicacao"
-                    value="{{ old('ano_publicacao') }}"
-                    required
-                    min="1000"
-                    max="{{ date('Y') }}"
-                    class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 @error('ano_publicacao') border-red-500 @enderror"
-                >
-                @error('ano_publicacao')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
+                <!-- Ano de Publicação e Páginas -->
+                <div>
+                    <label for="ano_publicacao" style="display: block; font-size: 14px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">Ano de Publicação *</label>
+                    <input
+                        type="number"
+                        name="ano_publicacao"
+                        id="ano_publicacao"
+                        value="{{ old('ano_publicacao') }}"
+                        required
+                        min="1000"
+                        max="{{ date('Y') }}"
+                        style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('ano_publicacao') ? '#ef4444' : '#fed7aa' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #fff7ed, #ffffff); box-sizing: border-box;"
+                        onfocus="this.style.borderColor='#f97316'; this.style.boxShadow='0 0 0 3px rgba(249, 115, 22, 0.1)';"
+                        onblur="this.style.borderColor='{{ $errors->has('ano_publicacao') ? '#ef4444' : '#fed7aa' }}'; this.style.boxShadow='none';"
+                    >
+                    @error('ano_publicacao')
+                        <p style="margin-top: 8px; font-size: 13px; color: #ef4444; font-weight: 600;">{{ $message }}</p>
+                    @enderror
+                </div>
 
-            <div>
-                <label for="paginas" class="block text-sm font-medium text-slate-700 mb-2">Páginas *</label>
-                <input
-                    type="number"
-                    name="paginas"
-                    id="paginas"
-                    value="{{ old('paginas') }}"
-                    required
-                    min="1"
-                    class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 @error('paginas') border-red-500 @enderror"
-                >
-                @error('paginas')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
+                <div>
+                    <label for="paginas" style="display: block; font-size: 14px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">Páginas *</label>
+                    <input
+                        type="number"
+                        name="paginas"
+                        id="paginas"
+                        value="{{ old('paginas') }}"
+                        required
+                        min="1"
+                        style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('paginas') ? '#ef4444' : '#fed7aa' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #fff7ed, #ffffff); box-sizing: border-box;"
+                        onfocus="this.style.borderColor='#f97316'; this.style.boxShadow='0 0 0 3px rgba(249, 115, 22, 0.1)';"
+                        onblur="this.style.borderColor='{{ $errors->has('paginas') ? '#ef4444' : '#fed7aa' }}'; this.style.boxShadow='none';"
+                    >
+                    @error('paginas')
+                        <p style="margin-top: 8px; font-size: 13px; color: #ef4444; font-weight: 600;">{{ $message }}</p>
+                    @enderror
+                </div>
 
-            <div>
-                <label for="preco" class="block text-sm font-medium text-slate-700 mb-2">Preço *</label>
-                <input
-                    type="number"
-                    name="preco"
-                    id="preco"
-                    value="{{ old('preco') }}"
-                    required
-                    step="0.01"
-                    min="0"
-                    class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 @error('preco') border-red-500 @enderror"
-                >
-                @error('preco')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
+                <!-- Preço e Quantidade -->
+                <div>
+                    <label for="preco" style="display: block; font-size: 14px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">Preço *</label>
+                    <input
+                        type="number"
+                        name="preco"
+                        id="preco"
+                        value="{{ old('preco') }}"
+                        required
+                        step="0.01"
+                        min="0"
+                        placeholder="0.00"
+                        style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('preco') ? '#ef4444' : '#fed7aa' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #fff7ed, #ffffff); box-sizing: border-box;"
+                        onfocus="this.style.borderColor='#f97316'; this.style.boxShadow='0 0 0 3px rgba(249, 115, 22, 0.1)';"
+                        onblur="this.style.borderColor='{{ $errors->has('preco') ? '#ef4444' : '#fed7aa' }}'; this.style.boxShadow='none';"
+                    >
+                    @error('preco')
+                        <p style="margin-top: 8px; font-size: 13px; color: #ef4444; font-weight: 600;">{{ $message }}</p>
+                    @enderror
+                </div>
 
-            <div>
-                <label for="quantidade" class="block text-sm font-medium text-slate-700 mb-2">Quantidade *</label>
-                <input
-                    type="number"
-                    name="quantidade"
-                    id="quantidade"
-                    value="{{ old('quantidade', 1) }}"
-                    required
-                    min="0"
-                    class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 @error('quantidade') border-red-500 @enderror"
-                >
-                @error('quantidade')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
+                <div>
+                    <label for="quantidade" style="display: block; font-size: 14px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">Quantidade *</label>
+                    <input
+                        type="number"
+                        name="quantidade"
+                        id="quantidade"
+                        value="{{ old('quantidade', 1) }}"
+                        required
+                        min="0"
+                        style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('quantidade') ? '#ef4444' : '#fed7aa' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #fff7ed, #ffffff); box-sizing: border-box;"
+                        onfocus="this.style.borderColor='#f97316'; this.style.boxShadow='0 0 0 3px rgba(249, 115, 22, 0.1)';"
+                        onblur="this.style.borderColor='{{ $errors->has('quantidade') ? '#ef4444' : '#fed7aa' }}'; this.style.boxShadow='none';"
+                    >
+                    @error('quantidade')
+                        <p style="margin-top: 8px; font-size: 13px; color: #ef4444; font-weight: 600;">{{ $message }}</p>
+                    @enderror
+                </div>
 
-            <div>
-                <label for="status" class="block text-sm font-medium text-slate-700 mb-2">Status *</label>
-                <select
-                    name="status"
-                    id="status"
-                    required
-                    class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 @error('status') border-red-500 @enderror"
-                >
-                    @foreach(\App\Enums\BookStatus::cases() as $status)
-                        <option value="{{ $status->value }}" {{ old('status') == $status->value ? 'selected' : '' }}>
-                            {{ $status->label() }}
-                        </option>
-                    @endforeach
-                </select>
-                @error('status')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
+                <!-- Status e Imagem da Capa -->
+                <div>
+                    <label for="status" style="display: block; font-size: 14px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">Status *</label>
+                    <select
+                        name="status"
+                        id="status"
+                        required
+                        style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('status') ? '#ef4444' : '#fed7aa' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #fff7ed, #ffffff); cursor: pointer; box-sizing: border-box;"
+                        onfocus="this.style.borderColor='#f97316'; this.style.boxShadow='0 0 0 3px rgba(249, 115, 22, 0.1)';"
+                        onblur="this.style.borderColor='{{ $errors->has('status') ? '#ef4444' : '#fed7aa' }}'; this.style.boxShadow='none';"
+                    >
+                        @foreach(\App\Enums\BookStatus::cases() as $status)
+                            <option value="{{ $status->value }}" {{ old('status') == $status->value ? 'selected' : '' }}>
+                                {{ $status->label() }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('status')
+                        <p style="margin-top: 8px; font-size: 13px; color: #ef4444; font-weight: 600;">{{ $message }}</p>
+                    @enderror
+                </div>
 
-            <div>
-                <label for="imagem_capa" class="block text-sm font-medium text-slate-700 mb-2">Imagem da Capa</label>
-                <input
-                    type="file"
-                    name="imagem_capa"
-                    id="imagem_capa"
-                    accept="image/*"
-                    class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 @error('imagem_capa') border-red-500 @enderror"
-                >
-                @error('imagem_capa')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
+                <div>
+                    <label for="imagem_capa" style="display: block; font-size: 14px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">Imagem da Capa</label>
+                    <input
+                        type="file"
+                        name="imagem_capa"
+                        id="imagem_capa"
+                        accept="image/*"
+                        style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('imagem_capa') ? '#ef4444' : '#fed7aa' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #fff7ed, #ffffff); box-sizing: border-box; cursor: pointer;"
+                        onfocus="this.style.borderColor='#f97316'; this.style.boxShadow='0 0 0 3px rgba(249, 115, 22, 0.1)';"
+                        onblur="this.style.borderColor='{{ $errors->has('imagem_capa') ? '#ef4444' : '#fed7aa' }}'; this.style.boxShadow='none';"
+                    >
+                    @error('imagem_capa')
+                        <p style="margin-top: 8px; font-size: 13px; color: #ef4444; font-weight: 600;">{{ $message }}</p>
+                    @enderror
+                </div>
 
-            <div class="md:col-span-2">
-                <label class="block text-sm font-medium text-slate-700 mb-2">Tags</label>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                    @foreach($tags as $tag)
-                        <label class="flex items-center">
-                            <input
-                                type="checkbox"
-                                name="tags[]"
-                                value="{{ $tag->id }}"
-                                {{ in_array($tag->id, old('tags', [])) ? 'checked' : '' }}
-                                class="h-4 w-4 text-cyan-600 focus:ring-cyan-500 border-slate-300 rounded"
-                            >
-                            <span class="ml-2 text-sm text-slate-700">{{ $tag->nome }}</span>
-                        </label>
-                    @endforeach
+                <!-- Tags (ocupa 2 colunas) -->
+                <div style="grid-column: 1 / -1;">
+                    <label style="display: block; font-size: 14px; font-weight: 700; color: #6b7280; margin-bottom: 12px;">Tags</label>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; padding: 20px; background: linear-gradient(135deg, #fff7ed, #fff1f2); border: 2px solid #fed7aa; border-radius: 12px;">
+                        @foreach($tags as $tag)
+                            <label style="display: flex; align-items: center; cursor: pointer; padding: 8px; border-radius: 8px; transition: all 0.3s;" onmouseover="this.style.background='rgba(249, 115, 22, 0.1)';" onmouseout="this.style.background='transparent';">
+                                <input
+                                    type="checkbox"
+                                    name="tags[]"
+                                    value="{{ $tag->id }}"
+                                    {{ in_array($tag->id, old('tags', [])) ? 'checked' : '' }}
+                                    style="width: 18px; height: 18px; accent-color: #f97316; cursor: pointer; flex-shrink: 0;"
+                                >
+                                <span style="margin-left: 10px; font-size: 14px; font-weight: 600; color: #6b7280;">{{ $tag->nome }}</span>
+                            </label>
+                        @endforeach
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="mt-6 flex justify-end space-x-3">
-            <a href="{{ route('admin.livros.index') }}" class="px-6 py-2 border border-slate-300 rounded-lg text-slate-700 hover:bg-slate-50 transition-colors font-medium">
-                Cancelar
-            </a>
-            <button type="submit" class="px-6 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors font-medium">
-                Criar Livro
-            </button>
-        </div>
-    </form>
+            <div style="margin-top: 32px; display: flex; justify-content: flex-end; gap: 12px; flex-wrap: wrap;">
+                <a href="{{ route('admin.livros.index') }}" style="display: inline-flex; align-items: center; padding: 12px 24px; background: linear-gradient(135deg, #fff1f2, #fff7ed); color: #f97316; border: 3px solid #fed7aa; border-radius: 12px; font-size: 14px; font-weight: 700; text-decoration: none; transition: all 0.3s; box-shadow: 0 4px 10px rgba(249, 115, 22, 0.15);" onmouseover="this.style.background='linear-gradient(135deg, #f97316, #fb923c)'; this.style.color='white'; this.style.borderColor='#f97316'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 15px rgba(249, 115, 22, 0.3)';" onmouseout="this.style.background='linear-gradient(135deg, #fff1f2, #fff7ed)'; this.style.color='#f97316'; this.style.borderColor='#fed7aa'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 10px rgba(249, 115, 22, 0.15)';">
+                    Cancelar
+                </a>
+                <button type="submit" style="display: inline-flex; align-items: center; padding: 12px 24px; background: linear-gradient(135deg, #f97316, #fb923c); color: white; border: 3px solid #f97316; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 10px rgba(249, 115, 22, 0.3);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 15px rgba(249, 115, 22, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 10px rgba(249, 115, 22, 0.3)';">
+                    <i data-lucide="book-plus" style="width: 18px; height: 18px; margin-right: 8px;"></i>
+                    Criar Livro
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
-@endsection
 
+<style>
+    @media (max-width: 768px) {
+        .form-grid {
+            grid-template-columns: 1fr !important;
+        }
+    }
+</style>
+@endsection
