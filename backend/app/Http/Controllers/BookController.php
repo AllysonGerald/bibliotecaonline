@@ -40,6 +40,15 @@ class BookController extends Controller
         $averageRating = $livro->averageRating();
         $reviewsCount = $livro->reviews->count();
 
-        return view('livros.show', compact('livro', 'averageRating', 'reviewsCount'));
+        // Verificar se o usuário autenticado já avaliou este livro
+        $userReview = null;
+        if (auth()->check()) {
+            $userReview = $livro->reviews()
+                ->where('usuario_id', auth()->id())
+                ->first()
+            ;
+        }
+
+        return view('livros.show', compact('livro', 'averageRating', 'reviewsCount', 'userReview'));
     }
 }

@@ -22,4 +22,9 @@ Route::middleware('auth')->group(function (): void {
     Route::get('/lista-desejos', [App\Http\Controllers\WishlistController::class, 'index'])->name('lista-desejos');
     Route::post('/lista-desejos/{livro}', [App\Http\Controllers\WishlistController::class, 'store'])->name('lista-desejos.store');
     Route::delete('/lista-desejos/{wishlist}', [App\Http\Controllers\WishlistController::class, 'destroy'])->name('lista-desejos.destroy');
+
+    // Rotas de Avaliações
+    Route::post('/livros/{livro}/avaliacoes', [App\Http\Controllers\ReviewController::class, 'store'])->name('avaliacoes.store');
+    Route::put('/avaliacoes/{review}', [App\Http\Controllers\ReviewController::class, 'update'])->name('avaliacoes.update');
+    Route::delete('/avaliacoes/{review}', [App\Http\Controllers\ReviewController::class, 'destroy'])->name('avaliacoes.destroy');
 });
