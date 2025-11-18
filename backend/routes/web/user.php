@@ -19,9 +19,9 @@ Route::middleware('auth')->group(function (): void {
     Route::get('/perfil', [App\Http\Controllers\ProfileController::class, 'show'])->name('perfil');
     Route::put('/perfil', [App\Http\Controllers\ProfileController::class, 'update'])->name('perfil.update');
 
-    Route::get('/lista-desejos', function () {
-        return view('user.wishlist');
-    })->name('lista-desejos');
+    Route::get('/lista-desejos', [App\Http\Controllers\WishlistController::class, 'index'])->name('lista-desejos');
+    Route::post('/lista-desejos/{livro}', [App\Http\Controllers\WishlistController::class, 'store'])->name('lista-desejos.store');
+    Route::delete('/lista-desejos/{wishlist}', [App\Http\Controllers\WishlistController::class, 'destroy'])->name('lista-desejos.destroy');
 
     Route::get('/contato', function () {
         return view('contato');

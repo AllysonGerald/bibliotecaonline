@@ -46,10 +46,13 @@
                         Reservar Livro
                     </button>
 
-                    <button style="width: 100%; padding: 14px 24px; background: linear-gradient(135deg, #fff1f2, #fff7ed); color: #ec4899; border: 3px solid #fbcfe8; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='linear-gradient(135deg, #ec4899, #f472b6)'; this.style.color='white'; this.style.borderColor='#ec4899';" onmouseout="this.style.background='linear-gradient(135deg, #fff1f2, #fff7ed)'; this.style.color='#ec4899'; this.style.borderColor='#fbcfe8';">
-                        <i data-lucide="heart" style="width: 18px; height: 18px; display: inline-block; margin-right: 8px; vertical-align: middle;"></i>
-                        Adicionar à Lista de Desejos
-                    </button>
+                    <form method="POST" action="{{ route('lista-desejos.store', $livro) }}" style="width: 100%;">
+                        @csrf
+                        <button type="submit" style="width: 100%; padding: 14px 24px; background: linear-gradient(135deg, #fff1f2, #fff7ed); color: #ec4899; border: 3px solid #fbcfe8; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='linear-gradient(135deg, #ec4899, #f472b6)'; this.style.color='white'; this.style.borderColor='#ec4899';" onmouseout="this.style.background='linear-gradient(135deg, #fff1f2, #fff7ed)'; this.style.color='#ec4899'; this.style.borderColor='#fbcfe8';">
+                            <i data-lucide="heart" style="width: 18px; height: 18px; display: inline-block; margin-right: 8px; vertical-align: middle;"></i>
+                            Adicionar à Lista de Desejos
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
