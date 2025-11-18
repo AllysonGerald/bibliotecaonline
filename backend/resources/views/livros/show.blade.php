@@ -218,16 +218,12 @@
                                 </div>
                                 @if($isUserReview)
                                     <div style="display: flex; gap: 8px; margin-left: 16px;">
-                                        <button @click="editing = true" style="padding: 8px; background: linear-gradient(135deg, #0ea5e9, #0284c7); color: white; border-radius: 8px; border: none; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center;" title="Editar avaliação" onmouseover="this.style.transform='scale(1.1)'; this.style.boxShadow='0 4px 12px rgba(14, 165, 233, 0.4)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none';">
+                                        <button @click="editing = true" style="padding: 8px; background: linear-gradient(135deg, #8b5cf6, #a855f7); color: white; border-radius: 8px; border: none; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center;" title="Editar avaliação" onmouseover="this.style.transform='scale(1.1)'; this.style.boxShadow='0 4px 12px rgba(139, 92, 246, 0.4)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none';">
                                             <i data-lucide="edit" style="width: 16px; height: 16px;"></i>
                                         </button>
-                                        <form method="POST" action="{{ route('avaliacoes.destroy', $review) }}" style="display: inline;" onsubmit="return confirm('Tem certeza que deseja remover sua avaliação?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" style="padding: 8px; background: linear-gradient(135deg, #ef4444, #dc2626); color: white; border: none; border-radius: 8px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center;" title="Remover avaliação" onmouseover="this.style.transform='scale(1.1)'; this.style.boxShadow='0 4px 12px rgba(239, 68, 68, 0.4)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none';">
-                                                <i data-lucide="trash-2" style="width: 16px; height: 16px;"></i>
-                                            </button>
-                                        </form>
+                                        <button type="button" onclick="openDeleteModal('delete-review-{{ $review->id }}')" style="padding: 8px; background: linear-gradient(135deg, #ef4444, #dc2626); color: white; border: none; border-radius: 8px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center;" title="Remover avaliação" onmouseover="this.style.transform='scale(1.1)'; this.style.boxShadow='0 4px 12px rgba(239, 68, 68, 0.4)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none';">
+                                            <i data-lucide="trash-2" style="width: 16px; height: 16px;"></i>
+                                        </button>
                                     </div>
                                 @endif
                             </div>
@@ -299,6 +295,36 @@
         @endif
     </div>
 </div>
+
+<!-- Modais de Exclusão de Avaliações -->
+@if($livro->reviews->count() > 0)
+    @foreach($livro->reviews->take(5) as $review)
+        @php
+            $isUserReview = auth()->check() && $userReview && $review->id === $userReview->id;
+        @endphp
+        @if($isUserReview)
+            <x-delete-modal
+                id="delete-review-{{ $review->id }}"
+                title="Remover Avaliação"
+                message="Tem certeza que deseja remover sua avaliação? Esta ação não pode ser desfeita."
+                action="{{ route('avaliacoes.destroy', $review) }}"
+            />
+        @endif
+    @endforeach
+@endif
+
+<script>
+    function openDeleteModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.style.display = 'block';
+            const alpineData = Alpine.$data(modal.querySelector('[x-data]'));
+            if (alpineData) {
+                alpineData.open = true;
+            }
+        }
+    }
+</script>
 
 <script>
     // Inicializar com o valor antigo (após validação) ou o valor da avaliação existente
