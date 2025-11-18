@@ -134,74 +134,57 @@
             @endif
         </div>
 
-        <!-- Formulário de Avaliação -->
+        <!-- Formulário de Nova Avaliação -->
         @auth
-            <div style="background: white; border-radius: 20px; padding: 32px; border: 3px solid #e9d5ff; box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15); margin-bottom: 24px;">
-                <h3 style="font-size: 24px; font-weight: 900; color: #1f2937; margin-bottom: 24px;">
-                    @if($userReview)
-                        Editar sua Avaliação
-                    @else
-                        Avaliar este Livro
-                    @endif
-                </h3>
-                
-                <form method="POST" action="{{ $userReview ? route('avaliacoes.update', $userReview) : route('avaliacoes.store', $livro) }}">
-                    @csrf
-                    @if($userReview)
-                        @method('PUT')
-                    @endif
+            @if(!$userReview)
+                <div style="background: white; border-radius: 20px; padding: 32px; border: 3px solid #e9d5ff; box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15); margin-bottom: 24px;">
+                    <h3 style="font-size: 24px; font-weight: 900; color: #1f2937; margin-bottom: 24px;">Avaliar este Livro</h3>
+                    
+                    <form method="POST" action="{{ route('avaliacoes.store', $livro) }}">
+                        @csrf
 
-                    <div style="display: flex; flex-direction: column; gap: 20px;">
-                        <div>
-                            <label style="display: block; font-size: 14px; font-weight: 600; color: #4b5563; margin-bottom: 12px;">Sua Nota *</label>
-                            <div style="display: flex; gap: 8px; align-items: center;">
-                                @for($i = 1; $i <= 5; $i++)
-                                    <label style="cursor: pointer;">
-                                        <input type="radio" name="nota" value="{{ $i }}" {{ old('nota', $userReview?->nota) == $i ? 'checked' : '' }} required style="display: none;" onchange="updateStars({{ $i }})">
-                                        <i data-lucide="star" id="star-{{ $i }}" style="width: 32px; height: 32px; color: {{ old('nota', $userReview?->nota) >= $i ? '#f97316' : '#d1d5db' }}; {{ old('nota', $userReview?->nota) >= $i ? 'fill: #f97316;' : '' }}; transition: all 0.2s;" onmouseover="hoverStar({{ $i }})" onmouseout="resetStars()"></i>
-                                    </label>
-                                @endfor
+                        <div style="display: flex; flex-direction: column; gap: 20px;">
+                            <div>
+                                <label style="display: block; font-size: 14px; font-weight: 600; color: #4b5563; margin-bottom: 12px;">Sua Nota *</label>
+                                <div style="display: flex; gap: 8px; align-items: center;">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        <label style="cursor: pointer;">
+                                            <input type="radio" name="nota" value="{{ $i }}" {{ old('nota') == $i ? 'checked' : '' }} required style="display: none;" onchange="updateStars({{ $i }})">
+                                            <i data-lucide="star" id="star-{{ $i }}" style="width: 32px; height: 32px; color: {{ old('nota') >= $i ? '#f97316' : '#d1d5db' }}; {{ old('nota') >= $i ? 'fill: #f97316;' : '' }}; transition: all 0.2s;" onmouseover="hoverStar({{ $i }})" onmouseout="resetStars()"></i>
+                                        </label>
+                                    @endfor
+                                </div>
+                                @error('nota')
+                                    <p style="margin-top: 8px; font-size: 13px; color: #ef4444; font-weight: 600;">{{ $message }}</p>
+                                @enderror
                             </div>
-                            @error('nota')
-                                <p style="margin-top: 8px; font-size: 13px; color: #ef4444; font-weight: 600;">{{ $message }}</p>
-                            @enderror
-                        </div>
 
-                        <div>
-                            <label for="comentario" style="display: block; font-size: 14px; font-weight: 600; color: #4b5563; margin-bottom: 8px;">Comentário (opcional)</label>
-                            <textarea
-                                name="comentario"
-                                id="comentario"
-                                rows="4"
-                                style="width: 100%; padding: 12px 16px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 14px; font-family: inherit; resize: vertical; transition: all 0.3s; @error('comentario') border-color: #ef4444; @enderror"
-                                onfocus="this.style.borderColor='#8b5cf6'; this.style.boxShadow='0 0 0 3px rgba(139, 92, 246, 0.1)';"
-                                onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='none';"
-                                placeholder="Compartilhe sua opinião sobre este livro..."
-                            >{{ old('comentario', $userReview?->comentario) }}</textarea>
-                            @error('comentario')
-                                <p style="margin-top: 8px; font-size: 13px; color: #ef4444; font-weight: 600;">{{ $message }}</p>
-                            @enderror
-                        </div>
+                            <div>
+                                <label for="comentario" style="display: block; font-size: 14px; font-weight: 600; color: #4b5563; margin-bottom: 8px;">Comentário (opcional)</label>
+                                <textarea
+                                    name="comentario"
+                                    id="comentario"
+                                    rows="4"
+                                    style="width: 100%; padding: 12px 16px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 14px; font-family: inherit; resize: vertical; transition: all 0.3s; @error('comentario') border-color: #ef4444; @enderror"
+                                    onfocus="this.style.borderColor='#8b5cf6'; this.style.boxShadow='0 0 0 3px rgba(139, 92, 246, 0.1)';"
+                                    onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='none';"
+                                    placeholder="Compartilhe sua opinião sobre este livro..."
+                                >{{ old('comentario') }}</textarea>
+                                @error('comentario')
+                                    <p style="margin-top: 8px; font-size: 13px; color: #ef4444; font-weight: 600;">{{ $message }}</p>
+                                @enderror
+                            </div>
 
-                        <div style="display: flex; gap: 12px;">
-                            <button type="submit" style="flex: 1; padding: 14px 24px; background: linear-gradient(135deg, #8b5cf6, #ec4899); color: white; border-radius: 12px; font-size: 16px; font-weight: 700; border: none; cursor: pointer; box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3); transition: all 0.3s;" onmouseover="this.style.transform='scale(1.02)'; this.style.boxShadow='0 10px 25px rgba(139, 92, 246, 0.4)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 8px 20px rgba(139, 92, 246, 0.3)';">
-                                <i data-lucide="star" style="width: 18px; height: 18px; display: inline-block; margin-right: 8px; vertical-align: middle;"></i>
-                                {{ $userReview ? 'Atualizar Avaliação' : 'Enviar Avaliação' }}
-                            </button>
-                            @if($userReview)
-                                <form method="POST" action="{{ route('avaliacoes.destroy', $userReview) }}" style="display: inline;" onsubmit="return confirm('Tem certeza que deseja remover sua avaliação?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" style="padding: 14px 24px; background: linear-gradient(135deg, #fee2e2, #fef2f2); color: #991b1b; border: 3px solid #fca5a5; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='linear-gradient(135deg, #ef4444, #dc2626)'; this.style.color='white'; this.style.borderColor='#ef4444';" onmouseout="this.style.background='linear-gradient(135deg, #fee2e2, #fef2f2)'; this.style.color='#991b1b'; this.style.borderColor='#fca5a5';">
-                                        <i data-lucide="trash-2" style="width: 18px; height: 18px; display: inline-block; margin-right: 8px; vertical-align: middle;"></i>
-                                        Remover
-                                    </button>
-                                </form>
-                            @endif
+                            <div>
+                                <button type="submit" style="width: 100%; padding: 14px 24px; background: linear-gradient(135deg, #8b5cf6, #ec4899); color: white; border-radius: 12px; font-size: 16px; font-weight: 700; border: none; cursor: pointer; box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3); transition: all 0.3s;" onmouseover="this.style.transform='scale(1.02)'; this.style.boxShadow='0 10px 25px rgba(139, 92, 246, 0.4)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 8px 20px rgba(139, 92, 246, 0.3)';">
+                                    <i data-lucide="star" style="width: 18px; height: 18px; display: inline-block; margin-right: 8px; vertical-align: middle;"></i>
+                                    Enviar Avaliação
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                </form>
-            </div>
+                    </form>
+                </div>
+            @endif
         @endauth
 
         <!-- Avaliações -->
@@ -210,7 +193,10 @@
                 <h3 style="font-size: 24px; font-weight: 900; color: #1f2937; margin-bottom: 24px;">Avaliações ({{ $reviewsCount }})</h3>
                 <div style="display: flex; flex-direction: column; gap: 20px;">
                     @foreach($livro->reviews->take(5) as $review)
-                        <div style="padding: 20px; background: linear-gradient(135deg, #faf5ff, #f3e8ff); border-radius: 16px; border: 2px solid #e9d5ff;">
+                        @php
+                            $isUserReview = auth()->check() && $userReview && $review->id === $userReview->id;
+                        @endphp
+                        <div style="padding: 20px; background: linear-gradient(135deg, #faf5ff, #f3e8ff); border-radius: 16px; border: 2px solid #e9d5ff;" x-data="{ editing: false }">
                             <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
                                 <div>
                                     <p style="font-size: 16px; font-weight: 900; color: #1f2937; margin-bottom: 4px;">{{ $review->user->name }}</p>
@@ -220,10 +206,84 @@
                                         @endfor
                                     </div>
                                 </div>
-                                <span style="font-size: 12px; color: #6b7280;">{{ $review->created_at->format('d/m/Y') }}</span>
+                                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+                                    @if($isUserReview)
+                                        <div style="display: flex; gap: 8px;">
+                                            <button @click="editing = true" style="padding: 8px; background: linear-gradient(135deg, #8b5cf6, #ec4899); color: white; border-radius: 8px; border: none; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center;" title="Editar avaliação" onmouseover="this.style.transform='scale(1.1)';" onmouseout="this.style.transform='scale(1)';">
+                                                <i data-lucide="edit" style="width: 16px; height: 16px;"></i>
+                                            </button>
+                                            <form method="POST" action="{{ route('avaliacoes.destroy', $review) }}" style="display: inline;" onsubmit="return confirm('Tem certeza que deseja remover sua avaliação?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" style="padding: 8px; background: linear-gradient(135deg, #fee2e2, #fef2f2); color: #991b1b; border: 2px solid #fca5a5; border-radius: 8px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center;" title="Remover avaliação" onmouseover="this.style.background='linear-gradient(135deg, #ef4444, #dc2626)'; this.style.color='white'; this.style.borderColor='#ef4444';" onmouseout="this.style.background='linear-gradient(135deg, #fee2e2, #fef2f2)'; this.style.color='#991b1b'; this.style.borderColor='#fca5a5';">
+                                                    <i data-lucide="trash-2" style="width: 16px; height: 16px;"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    @endif
+                                    <span style="font-size: 12px; color: #6b7280;">{{ $review->created_at->format('d/m/Y') }}</span>
+                                </div>
                             </div>
-                            @if($review->comentario)
-                                <p style="font-size: 14px; color: #4b5563; line-height: 1.6;">{{ $review->comentario }}</p>
+                            
+                            <!-- Modo Visualização -->
+                            <div x-show="!editing">
+                                @if($review->comentario)
+                                    <p style="font-size: 14px; color: #4b5563; line-height: 1.6;">{{ $review->comentario }}</p>
+                                @endif
+                            </div>
+
+                            <!-- Modo Edição -->
+                            @if($isUserReview)
+                                <div x-show="editing" x-cloak style="margin-top: 16px;">
+                                    <form method="POST" action="{{ route('avaliacoes.update', $review) }}" @submit="editing = false">
+                                        @csrf
+                                        @method('PUT')
+
+                                        <div style="display: flex; flex-direction: column; gap: 16px;">
+                                            <div>
+                                                <label style="display: block; font-size: 13px; font-weight: 600; color: #4b5563; margin-bottom: 8px;">Sua Nota *</label>
+                                                <div style="display: flex; gap: 6px; align-items: center;">
+                                                    @for($i = 1; $i <= 5; $i++)
+                                                        <label style="cursor: pointer;">
+                                                            <input type="radio" name="nota" value="{{ $i }}" {{ old('nota', $review->nota) == $i ? 'checked' : '' }} required style="display: none;" onchange="updateStarsEdit({{ $i }}, '{{ $review->id }}')">
+                                                            <i data-lucide="star" id="star-edit-{{ $review->id }}-{{ $i }}" style="width: 24px; height: 24px; color: {{ old('nota', $review->nota) >= $i ? '#f97316' : '#d1d5db' }}; {{ old('nota', $review->nota) >= $i ? 'fill: #f97316;' : '' }}; transition: all 0.2s;" onmouseover="hoverStarEdit({{ $i }}, '{{ $review->id }}')" onmouseout="resetStarsEdit('{{ $review->id }}')"></i>
+                                                        </label>
+                                                    @endfor
+                                                </div>
+                                                @error('nota')
+                                                    <p style="margin-top: 6px; font-size: 12px; color: #ef4444; font-weight: 600;">{{ $message }}</p>
+                                                @enderror
+                                            </div>
+
+                                            <div>
+                                                <label for="comentario-edit-{{ $review->id }}" style="display: block; font-size: 13px; font-weight: 600; color: #4b5563; margin-bottom: 6px;">Comentário (opcional)</label>
+                                                <textarea
+                                                    name="comentario"
+                                                    id="comentario-edit-{{ $review->id }}"
+                                                    rows="3"
+                                                    style="width: 100%; padding: 10px 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 13px; font-family: inherit; resize: vertical; transition: all 0.3s; @error('comentario') border-color: #ef4444; @enderror"
+                                                    onfocus="this.style.borderColor='#8b5cf6'; this.style.boxShadow='0 0 0 3px rgba(139, 92, 246, 0.1)';"
+                                                    onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='none';"
+                                                    placeholder="Compartilhe sua opinião sobre este livro..."
+                                                >{{ old('comentario', $review->comentario) }}</textarea>
+                                                @error('comentario')
+                                                    <p style="margin-top: 6px; font-size: 12px; color: #ef4444; font-weight: 600;">{{ $message }}</p>
+                                                @enderror
+                                            </div>
+
+                                            <div style="display: flex; gap: 8px;">
+                                                <button type="submit" style="flex: 1; padding: 10px 16px; background: linear-gradient(135deg, #8b5cf6, #ec4899); color: white; border-radius: 10px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.transform='scale(1.02)';" onmouseout="this.style.transform='scale(1)';">
+                                                    <i data-lucide="check" style="width: 14px; height: 14px; display: inline-block; margin-right: 6px; vertical-align: middle;"></i>
+                                                    Salvar
+                                                </button>
+                                                <button type="button" @click="editing = false" style="padding: 10px 16px; background: linear-gradient(135deg, #f3f4f6, #e5e7eb); color: #4b5563; border: 2px solid #d1d5db; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='linear-gradient(135deg, #e5e7eb, #d1d5db)';" onmouseout="this.style.background='linear-gradient(135deg, #f3f4f6, #e5e7eb)';">
+                                                    <i data-lucide="x" style="width: 14px; height: 14px; display: inline-block; margin-right: 6px; vertical-align: middle;"></i>
+                                                    Cancelar
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                             @endif
                         </div>
                     @endforeach
@@ -242,8 +302,14 @@
         if (selectedRating > 0) {
             updateStars(selectedRating);
         }
+        // Inicializar ratings de edição para cada avaliação do usuário
+        @if($userReview)
+            selectedRatingsEdit['{{ $userReview->id }}'] = {{ $userReview->nota }};
+            updateStarsEdit({{ $userReview->nota }}, '{{ $userReview->id }}');
+        @endif
     });
 
+    // Funções para formulário de nova avaliação
     function updateStars(rating) {
         selectedRating = rating;
         for (let i = 1; i <= 5; i++) {
@@ -277,6 +343,46 @@
 
     function resetStars() {
         updateStars(selectedRating);
+    }
+
+    // Funções para formulário de edição (suporta múltiplas avaliações)
+    let selectedRatingsEdit = {};
+
+    function updateStarsEdit(rating, reviewId) {
+        selectedRatingsEdit[reviewId] = rating;
+        for (let i = 1; i <= 5; i++) {
+            const star = document.getElementById('star-edit-' + reviewId + '-' + i);
+            if (star) {
+                if (i <= rating) {
+                    star.style.color = '#f97316';
+                    star.style.fill = '#f97316';
+                } else {
+                    star.style.color = '#d1d5db';
+                    star.style.fill = 'none';
+                }
+            }
+        }
+    }
+
+    function hoverStarEdit(rating, reviewId) {
+        for (let i = 1; i <= 5; i++) {
+            const star = document.getElementById('star-edit-' + reviewId + '-' + i);
+            if (star) {
+                if (i <= rating) {
+                    star.style.color = '#f97316';
+                    star.style.fill = '#f97316';
+                } else {
+                    star.style.color = '#d1d5db';
+                    star.style.fill = 'none';
+                }
+            }
+        }
+    }
+
+    function resetStarsEdit(reviewId) {
+        if (selectedRatingsEdit[reviewId]) {
+            updateStarsEdit(selectedRatingsEdit[reviewId], reviewId);
+        }
     }
 </script>
 @endsection
