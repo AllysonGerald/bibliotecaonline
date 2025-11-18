@@ -105,16 +105,13 @@ class UserRentalController extends Controller
         // Atualizar a quantidade do livro (decrementar)
         if ($livro->quantidade !== null && $livro->quantidade > 0) {
             $livro->decrement('quantidade');
+            // Recarregar para ter o valor atualizado
+            $livro->refresh();
         }
 
         // Verificar se ainda há exemplares disponíveis após este aluguel
-        // Agora temos alugueisAtivos + 1 (o novo aluguel criado)
-        $quantidadeDisponivel = $livro->quantidade === null
-            ? null
-            : max(0, $livro->quantidade - ($alugueisAtivos + 1));
-
-        // Só atualizar o status para ALUGADO se não houver mais exemplares disponíveis
-        if ($livro->quantidade !== null && $quantidadeDisponivel <= 0) {
+        // Se quantidade chegou a 0, não há mais exemplares disponíveis
+        if ($livro->quantidade !== null && $livro->quantidade <= 0) {
             $livro->update(['status' => \App\Enums\BookStatus::ALUGADO]);
         }
 
