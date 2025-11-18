@@ -31,8 +31,7 @@ class SecurityHeaders
 
         // Content-Security-Policy: Política de segurança de conteúdo
         // Permite CDNs necessários para Alpine.js e Lucide Icons
-        // Usando política mais permissiva para permitir scripts externos
-        $csp = "default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com https:; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https:; img-src 'self' data: https:; font-src 'self' data: https:; connect-src 'self' https:;";
+        $csp = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; img-src 'self' data: https:; font-src 'self' data: https://cdn.jsdelivr.net https://unpkg.com; connect-src 'self';";
         $response->headers->set('Content-Security-Policy', $csp);
 
         return $response;
