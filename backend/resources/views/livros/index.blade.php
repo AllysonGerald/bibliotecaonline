@@ -118,7 +118,7 @@
     <!-- Paginação -->
     @if($books->hasPages())
         <div style="display: flex; justify-content: center; margin-top: 32px;">
-            {{ $books->links() }}
+            {{ $books->links('components.pagination') }}
         </div>
     @endif
 @else
