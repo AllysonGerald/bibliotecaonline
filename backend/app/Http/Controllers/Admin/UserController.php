@@ -58,7 +58,7 @@ class UserController extends Controller
             email: $validated['email'],
             password: $validated['password'],
             papel: UserRole::from($validated['papel']),
-            ativo: $validated['ativo'] ?? true,
+            ativo: isset($validated['ativo']) ? (bool) $validated['ativo'] : true,
             telefone: $validated['telefone'] ?? null,
         );
 
@@ -92,7 +92,7 @@ class UserController extends Controller
             email: $validated['email'],
             password: $validated['password'] ?? null,
             papel: UserRole::from($validated['papel']),
-            ativo: $validated['ativo'] ?? $usuario->ativo,
+            ativo: isset($validated['ativo']) ? (bool) $validated['ativo'] : $usuario->ativo,
             telefone: $validated['telefone'] ?? null,
         );
 
