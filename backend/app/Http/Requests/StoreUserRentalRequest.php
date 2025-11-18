@@ -15,17 +15,11 @@ class StoreUserRentalRequest extends FormRequest
 
     public function rules(): array
     {
-        return [
-            'livro_id' => ['required', 'integer', 'exists:livros,id'],
-        ];
+        return [];
     }
 
     public function messages(): array
     {
-        return [
-            'livro_id.required' => 'O livro é obrigatório.',
-            'livro_id.integer' => 'O livro deve ser um número inteiro.',
-            'livro_id.exists' => 'O livro selecionado não existe.',
-        ];
+        return [];
     }
 }

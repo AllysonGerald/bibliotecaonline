@@ -57,6 +57,9 @@ class UserRentalController extends Controller
     {
         $user = auth()->user();
 
+        // Recarregar o livro para garantir que temos os dados atualizados
+        $livro->refresh();
+
         // Verificar se o livro está disponível
         if (!$livro->isAvailable()) {
             return redirect()->back()
