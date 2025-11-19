@@ -138,6 +138,14 @@
     </script>
     <style>
         [x-cloak] { display: none !important; }
+        
+        /* Remove outline padrão preto do navegador e aplica cor de focus do projeto */
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none !important;
+        }
+        /* A cor de focus específica será aplicada pelos estilos inline onfocus, mas garantimos que não há outline preto */
 
         /* Custom select styling - Remove native arrow and add custom one with proper spacing */
         select {
