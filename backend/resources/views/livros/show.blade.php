@@ -195,34 +195,37 @@
                     @foreach($livro->reviews->take(5) as $review)
                         @php
                             $isUserReview = auth()->check() && $userReview && $review->id === $userReview->id;
+                            $wasEdited = $review->created_at->ne($review->updated_at);
                         @endphp
                         <div style="padding: 20px; background: linear-gradient(135deg, #faf5ff, #f3e8ff); border-radius: 16px; border: 2px solid #e9d5ff;" x-data="{ editing: false }">
                             <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
-                                <div>
-                                    <p style="font-size: 16px; font-weight: 900; color: #1f2937; margin-bottom: 4px;">{{ $review->user->name }}</p>
+                                <div style="flex: 1;">
+                                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 4px;">
+                                        <p style="font-size: 16px; font-weight: 900; color: #1f2937; margin: 0;">{{ $review->user->name }}</p>
+                                        <span style="font-size: 12px; color: #6b7280;">{{ $review->created_at->format('d/m/Y') }}</span>
+                                        @if($wasEdited)
+                                            <span style="font-size: 11px; color: #0ea5e9; font-weight: 600; display: flex; align-items: center; gap: 4px;">
+                                                <i data-lucide="edit-2" style="width: 12px; height: 12px;"></i>
+                                                Editado
+                                            </span>
+                                        @endif
+                                    </div>
                                     <div style="display: flex; gap: 4px;">
                                         @for($i = 1; $i <= 5; $i++)
                                             <i data-lucide="star" style="width: 16px; height: 16px; color: {{ $i <= $review->nota ? '#f97316' : '#d1d5db' }}; {{ $i <= $review->nota ? 'fill: #f97316;' : '' }}"></i>
                                         @endfor
                                     </div>
                                 </div>
-                                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
-                                    @if($isUserReview)
-                                        <div style="display: flex; gap: 8px;">
-                                            <button @click="editing = true" style="padding: 8px; background: linear-gradient(135deg, #8b5cf6, #ec4899); color: white; border-radius: 8px; border: none; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center;" title="Editar avaliação" onmouseover="this.style.transform='scale(1.1)';" onmouseout="this.style.transform='scale(1)';">
-                                                <i data-lucide="edit" style="width: 16px; height: 16px;"></i>
-                                            </button>
-                                            <form method="POST" action="{{ route('avaliacoes.destroy', $review) }}" style="display: inline;" onsubmit="return confirm('Tem certeza que deseja remover sua avaliação?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" style="padding: 8px; background: linear-gradient(135deg, #fee2e2, #fef2f2); color: #991b1b; border: 2px solid #fca5a5; border-radius: 8px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center;" title="Remover avaliação" onmouseover="this.style.background='linear-gradient(135deg, #ef4444, #dc2626)'; this.style.color='white'; this.style.borderColor='#ef4444';" onmouseout="this.style.background='linear-gradient(135deg, #fee2e2, #fef2f2)'; this.style.color='#991b1b'; this.style.borderColor='#fca5a5';">
-                                                    <i data-lucide="trash-2" style="width: 16px; height: 16px;"></i>
-                                                </button>
-                                            </form>
-                                        </div>
-                                    @endif
-                                    <span style="font-size: 12px; color: #6b7280;">{{ $review->created_at->format('d/m/Y') }}</span>
-                                </div>
+                                @if($isUserReview)
+                                    <div style="display: flex; gap: 8px; margin-left: 16px;">
+                                        <button @click="editing = true" style="padding: 8px; background: linear-gradient(135deg, #8b5cf6, #a855f7); color: white; border-radius: 8px; border: none; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center;" title="Editar avaliação" onmouseover="this.style.transform='scale(1.1)'; this.style.boxShadow='0 4px 12px rgba(139, 92, 246, 0.4)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none';">
+                                            <i data-lucide="edit" style="width: 16px; height: 16px;"></i>
+                                        </button>
+                                        <button type="button" onclick="openDeleteModal('delete-review-{{ $review->id }}')" style="padding: 8px; background: linear-gradient(135deg, #ef4444, #dc2626); color: white; border: none; border-radius: 8px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center;" title="Remover avaliação" onmouseover="this.style.transform='scale(1.1)'; this.style.boxShadow='0 4px 12px rgba(239, 68, 68, 0.4)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none';">
+                                            <i data-lucide="trash-2" style="width: 16px; height: 16px;"></i>
+                                        </button>
+                                    </div>
+                                @endif
                             </div>
                             
                             <!-- Modo Visualização -->
@@ -293,9 +296,42 @@
     </div>
 </div>
 
+<!-- Modais de Exclusão de Avaliações -->
+@if($livro->reviews->count() > 0)
+    @foreach($livro->reviews->take(5) as $review)
+        @php
+            $isUserReview = auth()->check() && $userReview && $review->id === $userReview->id;
+        @endphp
+        @if($isUserReview)
+            <x-delete-modal
+                id="delete-review-{{ $review->id }}"
+                title="Remover Avaliação"
+                message="Tem certeza que deseja remover sua avaliação? Esta ação não pode ser desfeita."
+                action="{{ route('avaliacoes.destroy', $review) }}"
+            />
+        @endif
+    @endforeach
+@endif
+
+<script>
+    function openDeleteModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.style.display = 'block';
+            const alpineData = Alpine.$data(modal.querySelector('[x-data]'));
+            if (alpineData) {
+                alpineData.open = true;
+            }
+        }
+    }
+</script>
+
 <script>
     // Inicializar com o valor antigo (após validação) ou o valor da avaliação existente
     let selectedRating = {{ old('nota', $userReview?->nota ?? 0) }};
+
+    // Funções para formulário de edição (suporta múltiplas avaliações)
+    let selectedRatingsEdit = {};
 
     // Inicializar estrelas quando a página carregar
     document.addEventListener('DOMContentLoaded', function() {
@@ -346,8 +382,6 @@
     }
 
     // Funções para formulário de edição (suporta múltiplas avaliações)
-    let selectedRatingsEdit = {};
-
     function updateStarsEdit(rating, reviewId) {
         selectedRatingsEdit[reviewId] = rating;
         for (let i = 1; i <= 5; i++) {
