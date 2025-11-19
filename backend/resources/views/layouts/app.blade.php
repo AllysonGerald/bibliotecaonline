@@ -188,6 +188,15 @@
     </script>
     <style>
         [x-cloak] { display: none !important; }
+        
+        /* Remove outline padrão preto do navegador e aplica cor de focus do projeto */
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none !important;
+            border-color: #8b5cf6 !important;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1) !important;
+        }
     </style>
 </body>
 </html>

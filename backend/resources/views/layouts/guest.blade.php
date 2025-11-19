@@ -67,5 +67,15 @@
             });
         });
     </script>
+    <style>
+        /* Remove outline padrão preto do navegador e aplica cor de focus do projeto */
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none !important;
+            border-color: #ec4899 !important;
+            box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1) !important;
+        }
+    </style>
 </body>
 </html>
