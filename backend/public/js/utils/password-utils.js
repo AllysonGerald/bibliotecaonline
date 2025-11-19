@@ -189,8 +189,19 @@ class PasswordUtils {
                 const paddingValue = parseInt(currentPadding) || 12;
                 passwordInput.style.paddingRight = `${paddingValue + 32}px`;
 
-                // Adicionar indicador de força de senha (apenas para campo principal de senha, não confirmação)
-                if (!inputId.includes('confirmation') && !inputId.includes('confirm')) {
+                // Verificar se é um campo de login (não deve mostrar indicador de força)
+                const form = passwordInput.closest('form');
+                const formAction = form ? (form.action || form.getAttribute('action') || '') : '';
+                const currentPath = window.location.pathname || '';
+                const isLoginField = (
+                    formAction.includes('/login') || 
+                    formAction.includes('login') ||
+                    currentPath.includes('/login') ||
+                    currentPath.endsWith('/login')
+                );
+
+                // Adicionar indicador de força de senha (apenas para campo principal de senha, não confirmação e não login)
+                if (!inputId.includes('confirmation') && !inputId.includes('confirm') && !isLoginField) {
                     const strengthIndicator = document.createElement('div');
                     strengthIndicator.id = `${inputId}_strength`;
                     strengthIndicator.style.cssText = `
