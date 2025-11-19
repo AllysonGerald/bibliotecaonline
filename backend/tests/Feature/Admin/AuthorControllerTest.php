@@ -82,6 +82,84 @@ class AuthorControllerTest extends TestCase
         $response->assertSessionHasErrors(['nome']);
     }
 
+    public function testAdminCanCreateAuthorViaAjax(): void
+    {
+        $response = $this->actingAs($this->admin)
+            ->withHeaders([
+                'X-Requested-With' => 'XMLHttpRequest',
+                'Accept' => 'application/json',
+            ])
+            ->post(route('admin.autores.store'), [
+                'nome' => 'Autor AJAX',
+                'biografia' => 'Biografia do autor via AJAX',
+            ])
+        ;
+
+        $response->assertStatus(201);
+        $response->assertJson([
+            'success' => true,
+            'message' => 'Autor criado com sucesso!',
+        ]);
+        $response->assertJsonStructure([
+            'success',
+            'message',
+            'author' => [
+                'id',
+                'nome',
+            ],
+        ]);
+
+        $this->assertDatabaseHas('autores', [
+            'nome' => 'Autor AJAX',
+        ]);
+    }
+
+    public function testAdminCannotCreateAuthorViaAjaxWithInvalidData(): void
+    {
+        $response = $this->actingAs($this->admin)
+            ->withHeaders([
+                'X-Requested-With' => 'XMLHttpRequest',
+                'Accept' => 'application/json',
+            ])
+            ->post(route('admin.autores.store'), [
+                'nome' => '',
+            ])
+        ;
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['nome']);
+    }
+
+    public function testRegularUserCannotCreateAuthorViaAjax(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)
+            ->withHeaders([
+                'X-Requested-With' => 'XMLHttpRequest',
+                'Accept' => 'application/json',
+            ])
+            ->post(route('admin.autores.store'), [
+                'nome' => 'Autor Não Autorizado',
+            ])
+        ;
+
+        $response->assertStatus(403);
+    }
+
+    public function testGuestCannotCreateAuthorViaAjax(): void
+    {
+        $response = $this->withHeaders([
+            'X-Requested-With' => 'XMLHttpRequest',
+            'Accept' => 'application/json',
+        ])->post(route('admin.autores.store'), [
+            'nome' => 'Autor Não Autenticado',
+        ]);
+
+        $response->assertStatus(401);
+    }
+
     public function testAdminCanAccessEditAuthorPage(): void
     {
         $author = Author::factory()->create();

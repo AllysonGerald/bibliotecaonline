@@ -11,7 +11,7 @@ final readonly class BookDTO
     public function __construct(
         public string $titulo,
         public string $descricao,
-        public int $autorId,
+        public ?int $autorId,
         public int $categoriaId,
         public string $isbn,
         public string $editora,

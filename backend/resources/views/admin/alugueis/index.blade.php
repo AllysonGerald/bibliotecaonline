@@ -73,7 +73,7 @@
                             </td>
                             <td style="padding: 16px;">
                                 <div style="font-size: 14px; font-weight: 700; color: #1f2937; margin-bottom: 4px;">{{ $rental->book->titulo }}</div>
-                                <div style="font-size: 13px; color: #6b7280;">{{ $rental->book->author->nome }}</div>
+                                <div style="font-size: 13px; color: #6b7280;">{{ $rental->book->author?->nome ?? 'Autor desconhecido' }}</div>
                             </td>
                             <td style="padding: 16px;">
                                 <div style="font-size: 14px; color: #1f2937; font-weight: 600;">{{ $rental->alugado_em->format('d/m/Y H:i') }}</div>

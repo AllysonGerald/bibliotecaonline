@@ -62,7 +62,7 @@ class BookController extends Controller
         $dto = new BookDTO(
             titulo: $validated['titulo'],
             descricao: $validated['descricao'],
-            autorId: (int) $validated['autor_id'],
+            autorId: isset($validated['autor_id']) ? (int) $validated['autor_id'] : null,
             categoriaId: (int) $validated['categoria_id'],
             isbn: $validated['isbn'],
             editora: $validated['editora'],
@@ -106,7 +106,7 @@ class BookController extends Controller
         $dto = new BookDTO(
             titulo: $validated['titulo'],
             descricao: $validated['descricao'],
-            autorId: (int) $validated['autor_id'],
+            autorId: isset($validated['autor_id']) ? (int) $validated['autor_id'] : null,
             categoriaId: (int) $validated['categoria_id'],
             isbn: $validated['isbn'],
             editora: $validated['editora'],

@@ -101,7 +101,7 @@
             <div style="display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 24px;">
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <i data-lucide="user" style="width: 18px; height: 18px; color: #8b5cf6;"></i>
-                    <span style="font-size: 16px; color: #4b5563; font-weight: 600;">{{ $livro->author->nome }}</span>
+                    <span style="font-size: 16px; color: #4b5563; font-weight: 600;">{{ $livro->author?->nome ?? 'Autor desconhecido' }}</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <i data-lucide="tag" style="width: 18px; height: 18px; color: #ec4899;"></i>

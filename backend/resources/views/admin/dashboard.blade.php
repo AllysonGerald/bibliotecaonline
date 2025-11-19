@@ -212,7 +212,7 @@
                         </div>
                         <div style="flex: 1; min-width: 0;">
                             <h4 style="font-size: 16px; font-weight: 900; color: #1f2937; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $book->titulo }}</h4>
-                            <p style="font-size: 14px; color: #6b7280; font-weight: 600; margin-bottom: 4px;">{{ $book->author->nome }}</p>
+                            <p style="font-size: 14px; color: #6b7280; font-weight: 600; margin-bottom: 4px;">{{ $book->author?->nome ?? 'Autor desconhecido' }}</p>
                             <p style="font-size: 12px; color: #9ca3af;">{{ $book->category->nome }}</p>
                         </div>
                     </a>

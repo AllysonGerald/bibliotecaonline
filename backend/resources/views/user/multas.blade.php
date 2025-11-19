@@ -79,7 +79,7 @@
                     <!-- Informações da Multa -->
                     <div style="flex: 1;">
                         <h3 style="font-size: 22px; font-weight: 900; color: #1f2937; margin-bottom: 8px;">{{ $fine->rental->book->titulo }}</h3>
-                        <p style="font-size: 16px; color: #6b7280; font-weight: 600; margin-bottom: 16px;">{{ $fine->rental->book->author->nome }}</p>
+                        <p style="font-size: 16px; color: #6b7280; font-weight: 600; margin-bottom: 16px;">{{ $fine->rental->book->author?->nome ?? 'Autor desconhecido' }}</p>
                         
                         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 16px;">
                             <div>
