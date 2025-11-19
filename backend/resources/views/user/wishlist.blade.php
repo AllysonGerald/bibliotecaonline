@@ -29,7 +29,7 @@
                     <!-- Informações do Livro -->
                     <div style="margin-bottom: 12px;">
                         <h3 style="font-size: 18px; font-weight: 900; color: #1f2937; margin-bottom: 8px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">{{ $wishlist->book->titulo }}</h3>
-                        <p style="font-size: 14px; color: #6b7280; font-weight: 600; margin-bottom: 4px;">{{ $wishlist->book->author->nome }}</p>
+                        <p style="font-size: 14px; color: #6b7280; font-weight: 600; margin-bottom: 4px;">{{ $wishlist->book->author?->nome ?? 'Autor desconhecido' }}</p>
                         <p style="font-size: 12px; color: #9ca3af;">{{ $wishlist->book->category->nome }}</p>
                     </div>
 

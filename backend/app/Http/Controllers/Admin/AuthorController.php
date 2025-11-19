@@ -13,6 +13,7 @@ use App\Http\Requests\Admin\StoreAuthorRequest;
 use App\Http\Requests\Admin\UpdateAuthorRequest;
 use App\Models\Author;
 use App\Services\AuthorService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -42,7 +43,7 @@ class AuthorController extends Controller
         return view('admin.autores.create');
     }
 
-    public function store(StoreAuthorRequest $request): RedirectResponse
+    public function store(StoreAuthorRequest $request): RedirectResponse|JsonResponse
     {
         $validated = $request->validated();
 
@@ -53,7 +54,19 @@ class AuthorController extends Controller
             foto: $validated['foto'] ?? null,
         );
 
-        $this->createAuthorAction->execute($dto);
+        $author = $this->createAuthorAction->execute($dto);
+
+        // Se for requisição AJAX, retorna JSON
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Autor criado com sucesso!',
+                'author' => [
+                    'id' => $author->id,
+                    'nome' => $author->nome,
+                ],
+            ], 201);
+        }
 
         return redirect()->route('admin.autores.index')
             ->with('success', 'Autor criado com sucesso!')

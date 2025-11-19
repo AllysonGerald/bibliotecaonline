@@ -132,7 +132,7 @@
                             </td>
                             <td style="padding: 16px;">
                                 <div style="font-size: 15px; font-weight: 700; color: #1f2937; margin-bottom: 4px;">{{ $reservation->book->titulo }}</div>
-                                <div style="font-size: 13px; color: #9ca3af; font-weight: 500;">{{ $reservation->book->author->nome }}</div>
+                                <div style="font-size: 13px; color: #9ca3af; font-weight: 500;">{{ $reservation->book->author?->nome ?? 'Autor desconhecido' }}</div>
                             </td>
                             <td style="padding: 16px;">
                                 <div style="font-size: 14px; color: #4b5563; font-weight: 600;">{{ $reservation->reservado_em->format('d/m/Y H:i') }}</div>

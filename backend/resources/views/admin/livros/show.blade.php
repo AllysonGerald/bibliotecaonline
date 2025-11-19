@@ -43,7 +43,7 @@
                 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
                     <div>
                         <label style="display: block; font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Autor</label>
-                        <p style="font-size: 16px; font-weight: 700; color: #1f2937;">{{ $livro->author->nome }}</p>
+                        <p style="font-size: 16px; font-weight: 700; color: #1f2937;">{{ $livro->author?->nome ?? 'Autor desconhecido' }}</p>
                     </div>
                     <div>
                         <label style="display: block; font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Categoria</label>

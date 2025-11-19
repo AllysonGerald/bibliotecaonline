@@ -53,7 +53,7 @@
                     @foreach($categoria->books as $book)
                         <a href="{{ route('admin.livros.show', $book) }}" class="block p-3 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
                             <div class="font-medium text-slate-900">{{ $book->titulo }}</div>
-                            <div class="text-sm text-slate-500">{{ $book->author->nome }}</div>
+                            <div class="text-sm text-slate-500">{{ $book->author?->nome ?? 'Autor desconhecido' }}</div>
                         </a>
                     @endforeach
                 </div>

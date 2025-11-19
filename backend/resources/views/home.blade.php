@@ -155,7 +155,7 @@
                                 @endif
                             </div>
                             <h4 style="font-size: 14px; font-weight: 900; color: #1f2937; margin-bottom: 6px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">{{ $book->titulo }}</h4>
-                            <p style="font-size: 12px; color: #6b7280; font-weight: 600; margin-bottom: 4px;">{{ $book->author->nome ?? 'Autor desconhecido' }}</p>
+                            <p style="font-size: 12px; color: #6b7280; font-weight: 600; margin-bottom: 4px;">{{ $book->author?->nome ?? 'Autor desconhecido' }}</p>
                             <p style="font-size: 11px; color: #9ca3af;">{{ $book->category->nome ?? 'Sem categoria' }}</p>
                         </div>
                     </a>

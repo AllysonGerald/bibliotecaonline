@@ -116,7 +116,7 @@
                                 @endif
                             </td>
                             <td style="padding: 16px;">
-                                <div style="font-size: 14px; color: #4b5563; font-weight: 600;">{{ $book->author->nome }}</div>
+                                <div style="font-size: 14px; color: #4b5563; font-weight: 600;">{{ $book->author?->nome ?? 'Autor desconhecido' }}</div>
                             </td>
                             <td style="padding: 16px;">
                                 <div style="font-size: 14px; color: #4b5563; font-weight: 600;">{{ $book->category->nome }}</div>

@@ -44,7 +44,7 @@
                     <div>
                         <p style="font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Livro</p>
                         <p style="font-size: 16px; font-weight: 700; color: #1f2937; margin-bottom: 4px;">{{ $aluguel->book->titulo }}</p>
-                        <p style="font-size: 14px; color: #6b7280;">{{ $aluguel->book->author->nome }}</p>
+                        <p style="font-size: 14px; color: #6b7280;">{{ $aluguel->book->author?->nome ?? 'Autor desconhecido' }}</p>
                     </div>
                     <div>
                         <p style="font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Alugado em</p>
