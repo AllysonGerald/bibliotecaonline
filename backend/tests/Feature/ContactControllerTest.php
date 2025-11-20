@@ -23,14 +23,6 @@ class ContactControllerTest extends TestCase
         $response->assertSee('Entre em Contato');
     }
 
-    public function testGuestCanAccessContactPage(): void
-    {
-        $response = $this->get(route('contato'));
-
-        $response->assertStatus(200);
-        $response->assertSee('Entre em Contato');
-    }
-
     public function testAuthenticatedUserCanSubmitContactForm(): void
     {
         /** @var User $user */
@@ -45,26 +37,6 @@ class ContactControllerTest extends TestCase
 
         $response->assertRedirect(route('contato'));
         $response->assertSessionHas('success', 'Sua mensagem foi enviada com sucesso! Entraremos em contato em breve.');
-    }
-
-    public function testGuestCanSubmitContactForm(): void
-    {
-        $response = $this->post(route('contato.store'), [
-            'nome' => 'Maria Santos',
-            'email' => 'maria@example.com',
-            'assunto' => 'Sugestão de livro',
-            'mensagem' => 'Gostaria de sugerir a adição de novos livros ao acervo.',
-        ]);
-
-        $response->assertRedirect(route('contato'));
-        $response->assertSessionHas('success', 'Sua mensagem foi enviada com sucesso! Entraremos em contato em breve.');
-    }
-
-    public function testContactFormValidatesRequiredFields(): void
-    {
-        $response = $this->post(route('contato.store'), []);
-
-        $response->assertSessionHasErrors(['nome', 'email', 'assunto', 'mensagem']);
     }
 
     public function testContactFormValidatesEmailFormat(): void
@@ -87,6 +59,13 @@ class ContactControllerTest extends TestCase
             'assunto' => str_repeat('a', 256), // Excede 255 caracteres
             'mensagem' => str_repeat('a', 5001), // Excede 5000 caracteres
         ]);
+
+        $response->assertSessionHasErrors(['nome', 'email', 'assunto', 'mensagem']);
+    }
+
+    public function testContactFormValidatesRequiredFields(): void
+    {
+        $response = $this->post(route('contato.store'), []);
 
         $response->assertSessionHasErrors(['nome', 'email', 'assunto', 'mensagem']);
     }
@@ -114,5 +93,26 @@ class ContactControllerTest extends TestCase
         $response->assertSee('Informações de Contato');
         $response->assertSee('contato@biblioteca.com');
         $response->assertSee('(11) 1234-5678');
+    }
+
+    public function testGuestCanAccessContactPage(): void
+    {
+        $response = $this->get(route('contato'));
+
+        $response->assertStatus(200);
+        $response->assertSee('Entre em Contato');
+    }
+
+    public function testGuestCanSubmitContactForm(): void
+    {
+        $response = $this->post(route('contato.store'), [
+            'nome' => 'Maria Santos',
+            'email' => 'maria@example.com',
+            'assunto' => 'Sugestão de livro',
+            'mensagem' => 'Gostaria de sugerir a adição de novos livros ao acervo.',
+        ]);
+
+        $response->assertRedirect(route('contato'));
+        $response->assertSessionHas('success', 'Sua mensagem foi enviada com sucesso! Entraremos em contato em breve.');
     }
 }

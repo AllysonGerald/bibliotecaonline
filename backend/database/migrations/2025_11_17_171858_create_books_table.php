@@ -7,9 +7,14 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
+    public function down(): void
+    {
+        Schema::dropIfExists('livros');
+    }
+
     public function up(): void
     {
-        Schema::create('livros', function (Blueprint $table): void {
+        Schema::create('livros', static function (Blueprint $table): void {
             $table->id();
             $table->string('titulo');
             $table->text('descricao');
@@ -26,10 +31,5 @@ return new class extends Migration {
             $table->timestamps();
             $table->softDeletes();
         });
-    }
-
-    public function down(): void
-    {
-        Schema::dropIfExists('livros');
     }
 };

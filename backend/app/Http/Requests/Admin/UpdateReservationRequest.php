@@ -15,17 +15,6 @@ class UpdateReservationRequest extends FormRequest
         return auth()->check() && auth()->user()->isAdmin();
     }
 
-    public function rules(): array
-    {
-        return [
-            'usuario_id' => ['required', 'integer', 'exists:users,id'],
-            'livro_id' => ['required', 'integer', 'exists:livros,id'],
-            'reservado_em' => ['required', 'date'],
-            'expira_em' => ['required', 'date', 'after:reservado_em'],
-            'status' => ['required', new Enum(ReservationStatus::class)],
-        ];
-    }
-
     public function messages(): array
     {
         return [
@@ -39,6 +28,17 @@ class UpdateReservationRequest extends FormRequest
             'expira_em.date' => 'A data de expiração deve ser uma data válida.',
             'expira_em.after' => 'A data de expiração deve ser posterior à data de reserva.',
             'status.required' => 'O campo status é obrigatório.',
+        ];
+    }
+
+    public function rules(): array
+    {
+        return [
+            'usuario_id' => ['required', 'integer', 'exists:users,id'],
+            'livro_id' => ['required', 'integer', 'exists:livros,id'],
+            'reservado_em' => ['required', 'date'],
+            'expira_em' => ['required', 'date', 'after:reservado_em'],
+            'status' => ['required', new Enum(ReservationStatus::class)],
         ];
     }
 }

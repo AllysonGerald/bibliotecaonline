@@ -13,7 +13,11 @@ class Reservation extends Model
 {
     use HasFactory;
 
-    protected $table = 'reservas';
+    protected $casts = [
+        'reservado_em' => 'datetime',
+        'expira_em' => 'datetime',
+        'status' => ReservationStatus::class,
+    ];
 
     protected $fillable = [
         'usuario_id',
@@ -23,20 +27,17 @@ class Reservation extends Model
         'status',
     ];
 
-    protected $casts = [
-        'reservado_em' => 'datetime',
-        'expira_em' => 'datetime',
-        'status' => ReservationStatus::class,
-    ];
-
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'usuario_id');
-    }
+    protected $table = 'reservas';
 
     public function book(): BelongsTo
     {
         return $this->belongsTo(Book::class, 'livro_id');
+    }
+
+    public function isExpired(): bool
+    {
+        return $this->status === ReservationStatus::PENDENTE
+            && $this->expira_em->isPast();
     }
 
     public function scopeActive($query)
@@ -53,9 +54,8 @@ class Reservation extends Model
         ;
     }
 
-    public function isExpired(): bool
+    public function user(): BelongsTo
     {
-        return $this->status === ReservationStatus::PENDENTE
-            && $this->expira_em->isPast();
+        return $this->belongsTo(User::class, 'usuario_id');
     }
 }

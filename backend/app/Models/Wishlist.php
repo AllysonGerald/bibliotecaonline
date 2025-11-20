@@ -12,20 +12,20 @@ class Wishlist extends Model
 {
     use HasFactory;
 
-    protected $table = 'lista_desejos';
-
     protected $fillable = [
         'usuario_id',
         'livro_id',
     ];
 
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'usuario_id');
-    }
+    protected $table = 'lista_desejos';
 
     public function book(): BelongsTo
     {
         return $this->belongsTo(Book::class, 'livro_id');
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'usuario_id');
     }
 }

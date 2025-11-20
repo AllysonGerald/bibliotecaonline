@@ -7,17 +7,8 @@ namespace App\Enums;
 enum RentalStatus: string
 {
     case ATIVO = 'ativo';
-    case DEVOLVIDO = 'devolvido';
     case ATRASADO = 'atrasado';
-
-    public function label(): string
-    {
-        return match ($this) {
-            self::ATIVO => 'Ativo',
-            self::DEVOLVIDO => 'Devolvido',
-            self::ATRASADO => 'Atrasado',
-        };
-    }
+    case DEVOLVIDO = 'devolvido';
 
     public function color(): string
     {
@@ -25,6 +16,15 @@ enum RentalStatus: string
             self::ATIVO => 'blue',
             self::DEVOLVIDO => 'green',
             self::ATRASADO => 'red',
+        };
+    }
+
+    public function label(): string
+    {
+        return match ($this) {
+            self::ATIVO => 'Ativo',
+            self::DEVOLVIDO => 'Devolvido',
+            self::ATRASADO => 'Atrasado',
         };
     }
 }

@@ -13,12 +13,12 @@ class StoreUserRentalRequest extends FormRequest
         return true;
     }
 
-    public function rules(): array
+    public function messages(): array
     {
         return [];
     }
 
-    public function messages(): array
+    public function rules(): array
     {
         return [];
     }

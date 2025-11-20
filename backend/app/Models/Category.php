@@ -12,13 +12,13 @@ class Category extends Model
 {
     use HasFactory;
 
-    protected $table = 'categorias';
-
     protected $fillable = [
         'nome',
         'descricao',
         'icone',
     ];
+
+    protected $table = 'categorias';
 
     public function books(): HasMany
     {

@@ -14,7 +14,9 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens;
+
     use HasFactory;
+
     use Notifiable;
 
     protected $fillable = [
@@ -31,6 +33,21 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function fines(): HasMany
+    {
+        return $this->hasMany(Fine::class, 'usuario_id');
+    }
+
+    public function isActive(): bool
+    {
+        return $this->ativo === true;
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->papel === UserRole::ADMIN;
+    }
+
     public function rentals(): HasMany
     {
         return $this->hasMany(Rental::class, 'usuario_id');
@@ -46,24 +63,9 @@ class User extends Authenticatable
         return $this->hasMany(Review::class, 'usuario_id');
     }
 
-    public function fines(): HasMany
-    {
-        return $this->hasMany(Fine::class, 'usuario_id');
-    }
-
     public function wishlists(): HasMany
     {
         return $this->hasMany(Wishlist::class, 'usuario_id');
-    }
-
-    public function isAdmin(): bool
-    {
-        return $this->papel === UserRole::ADMIN;
-    }
-
-    public function isActive(): bool
-    {
-        return $this->ativo === true;
     }
 
     protected function casts(): array

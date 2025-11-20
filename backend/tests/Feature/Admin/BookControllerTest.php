@@ -36,29 +36,22 @@ class BookControllerTest extends TestCase
         $response->assertSee('Gerenciar Livros');
     }
 
-    public function testRegularUserCannotAccessBooksIndexPage(): void
-    {
-        /** @var User $user */
-        $user = User::factory()->create();
-
-        $response = $this->actingAs($user)->get(route('admin.livros.index'));
-
-        $response->assertStatus(403);
-    }
-
-    public function testGuestCannotAccessBooksIndexPage(): void
-    {
-        $response = $this->get(route('admin.livros.index'));
-
-        $response->assertRedirect(route('login'));
-    }
-
     public function testAdminCanAccessCreateBookPage(): void
     {
         $response = $this->actingAs($this->admin)->get(route('admin.livros.create'));
 
         $response->assertStatus(200);
         $response->assertSee('Novo Livro');
+    }
+
+    public function testAdminCanAccessEditBookPage(): void
+    {
+        $book = Book::factory()->create();
+
+        $response = $this->actingAs($this->admin)->get(route('admin.livros.edit', $book));
+
+        $response->assertStatus(200);
+        $response->assertSee('Editar Livro');
     }
 
     public function testAdminCanCreateBook(): void
@@ -91,6 +84,51 @@ class BookControllerTest extends TestCase
         ]);
     }
 
+    public function testAdminCanDeleteBook(): void
+    {
+        $book = Book::factory()->create();
+
+        $response = $this->actingAs($this->admin)->delete(route('admin.livros.destroy', $book));
+
+        $response->assertRedirect(route('admin.livros.index'));
+        $response->assertSessionHas('success');
+
+        $this->assertSoftDeleted('livros', [
+            'id' => $book->id,
+        ]);
+    }
+
+    public function testAdminCanFilterBooksByAuthor(): void
+    {
+        $author1 = Author::factory()->create();
+        $author2 = Author::factory()->create();
+
+        Book::factory()->create(['autor_id' => $author1->id]);
+        Book::factory()->create(['autor_id' => $author2->id]);
+
+        $response = $this->actingAs($this->admin)->get(route('admin.livros.index', [
+            'autor_id' => $author1->id,
+        ]));
+
+        $response->assertStatus(200);
+    }
+
+    public function testAdminCanFilterBooksByCategory(): void
+    {
+        $category1 = Category::factory()->create();
+        $category2 = Category::factory()->create();
+
+        Book::factory()->create(['categoria_id' => $category1->id]);
+        Book::factory()->create(['categoria_id' => $category2->id]);
+
+        $response = $this->actingAs($this->admin)->get(route('admin.livros.index', [
+            'categoria_id' => $category1->id,
+        ]));
+
+        $response->assertStatus(200);
+        $response->assertSee($category1->nome);
+    }
+
     public function testAdminCannotCreateBookWithInvalidData(): void
     {
         $response = $this->actingAs($this->admin)->post(route('admin.livros.store'), [
@@ -100,24 +138,17 @@ class BookControllerTest extends TestCase
         $response->assertSessionHasErrors(['titulo', 'descricao', 'autor_id', 'categoria_id', 'isbn']);
     }
 
-    public function testAdminCanViewBook(): void
+    public function testAdminCanSearchBooks(): void
     {
-        $book = Book::factory()->create();
+        Book::factory()->create(['titulo' => 'Livro de Busca']);
+        Book::factory()->create(['titulo' => 'Outro Livro']);
 
-        $response = $this->actingAs($this->admin)->get(route('admin.livros.show', $book));
+        $response = $this->actingAs($this->admin)->get(route('admin.livros.index', [
+            'search' => 'Busca',
+        ]));
 
         $response->assertStatus(200);
-        $response->assertSee($book->titulo);
-    }
-
-    public function testAdminCanAccessEditBookPage(): void
-    {
-        $book = Book::factory()->create();
-
-        $response = $this->actingAs($this->admin)->get(route('admin.livros.edit', $book));
-
-        $response->assertStatus(200);
-        $response->assertSee('Editar Livro');
+        $response->assertSee('Livro de Busca');
     }
 
     public function testAdminCanUpdateBook(): void
@@ -152,61 +183,30 @@ class BookControllerTest extends TestCase
         ]);
     }
 
-    public function testAdminCanDeleteBook(): void
+    public function testAdminCanViewBook(): void
     {
         $book = Book::factory()->create();
 
-        $response = $this->actingAs($this->admin)->delete(route('admin.livros.destroy', $book));
-
-        $response->assertRedirect(route('admin.livros.index'));
-        $response->assertSessionHas('success');
-
-        $this->assertSoftDeleted('livros', [
-            'id' => $book->id,
-        ]);
-    }
-
-    public function testAdminCanFilterBooksByCategory(): void
-    {
-        $category1 = Category::factory()->create();
-        $category2 = Category::factory()->create();
-
-        Book::factory()->create(['categoria_id' => $category1->id]);
-        Book::factory()->create(['categoria_id' => $category2->id]);
-
-        $response = $this->actingAs($this->admin)->get(route('admin.livros.index', [
-            'categoria_id' => $category1->id,
-        ]));
+        $response = $this->actingAs($this->admin)->get(route('admin.livros.show', $book));
 
         $response->assertStatus(200);
-        $response->assertSee($category1->nome);
+        $response->assertSee($book->titulo);
     }
 
-    public function testAdminCanFilterBooksByAuthor(): void
+    public function testGuestCannotAccessBooksIndexPage(): void
     {
-        $author1 = Author::factory()->create();
-        $author2 = Author::factory()->create();
+        $response = $this->get(route('admin.livros.index'));
 
-        Book::factory()->create(['autor_id' => $author1->id]);
-        Book::factory()->create(['autor_id' => $author2->id]);
-
-        $response = $this->actingAs($this->admin)->get(route('admin.livros.index', [
-            'autor_id' => $author1->id,
-        ]));
-
-        $response->assertStatus(200);
+        $response->assertRedirect(route('login'));
     }
 
-    public function testAdminCanSearchBooks(): void
+    public function testRegularUserCannotAccessBooksIndexPage(): void
     {
-        Book::factory()->create(['titulo' => 'Livro de Busca']);
-        Book::factory()->create(['titulo' => 'Outro Livro']);
+        /** @var User $user */
+        $user = User::factory()->create();
 
-        $response = $this->actingAs($this->admin)->get(route('admin.livros.index', [
-            'search' => 'Busca',
-        ]));
+        $response = $this->actingAs($user)->get(route('admin.livros.index'));
 
-        $response->assertStatus(200);
-        $response->assertSee('Livro de Busca');
+        $response->assertStatus(403);
     }
 }

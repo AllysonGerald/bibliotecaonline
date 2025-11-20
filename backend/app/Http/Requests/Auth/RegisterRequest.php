@@ -14,16 +14,6 @@ class RegisterRequest extends FormRequest
         return true;
     }
 
-    public function rules(): array
-    {
-        return [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'confirmed', Password::defaults()],
-            'telefone' => ['nullable', 'string', 'max:20'],
-        ];
-    }
-
     public function messages(): array
     {
         return [
@@ -33,6 +23,16 @@ class RegisterRequest extends FormRequest
             'email.unique' => 'Este e-mail já está cadastrado.',
             'password.required' => 'O campo senha é obrigatório.',
             'password.confirmed' => 'A confirmação de senha não confere.',
+        ];
+    }
+
+    public function rules(): array
+    {
+        return [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'confirmed', Password::defaults()],
+            'telefone' => ['nullable', 'string', 'max:20'],
         ];
     }
 }

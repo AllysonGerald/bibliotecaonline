@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth')->group(function (): void {
-    Route::get('/home', function () {
+Route::middleware('auth')->group(static function (): void {
+    Route::get('/home', static function () {
         return view('home');
     })->name('home');
 

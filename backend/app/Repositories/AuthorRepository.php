@@ -11,9 +11,24 @@ use Illuminate\Database\Eloquent\Collection;
 
 class AuthorRepository implements AuthorRepositoryInterface
 {
+    public function create(array $data): Author
+    {
+        return Author::create($data);
+    }
+
+    public function delete(Author $author): bool
+    {
+        return (bool) $author->delete();
+    }
+
     public function findAll(): Collection
     {
         return Author::with('books')->get();
+    }
+
+    public function findById(int $id): ?Author
+    {
+        return Author::with('books')->find($id);
     }
 
     public function findPaginated(int $perPage = 15): LengthAwarePaginator
@@ -22,11 +37,6 @@ class AuthorRepository implements AuthorRepositoryInterface
             ->latest()
             ->paginate($perPage)
         ;
-    }
-
-    public function findById(int $id): ?Author
-    {
-        return Author::with('books')->find($id);
     }
 
     public function search(string $term): Collection
@@ -38,18 +48,8 @@ class AuthorRepository implements AuthorRepositoryInterface
         ;
     }
 
-    public function create(array $data): Author
-    {
-        return Author::create($data);
-    }
-
     public function update(Author $author, array $data): bool
     {
         return $author->update($data);
-    }
-
-    public function delete(Author $author): bool
-    {
-        return (bool) $author->delete();
     }
 }

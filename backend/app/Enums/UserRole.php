@@ -6,8 +6,13 @@ namespace App\Enums;
 
 enum UserRole: string
 {
-    case USUARIO = 'usuario';
     case ADMIN = 'admin';
+    case USUARIO = 'usuario';
+
+    public function isAdmin(): bool
+    {
+        return $this === self::ADMIN;
+    }
 
     public function label(): string
     {
@@ -15,10 +20,5 @@ enum UserRole: string
             self::USUARIO => 'Usuário',
             self::ADMIN => 'Administrador',
         };
-    }
-
-    public function isAdmin(): bool
-    {
-        return $this === self::ADMIN;
     }
 }

@@ -13,11 +13,6 @@ use Illuminate\View\View;
 
 class LoginController extends Controller
 {
-    public function showLoginForm(): View
-    {
-        return view('auth.login');
-    }
-
     public function login(LoginRequest $request): RedirectResponse
     {
         $credentials = $request->validated();
@@ -56,5 +51,10 @@ class LoginController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('welcome')->with('success', 'Logout realizado com sucesso!');
+    }
+
+    public function showLoginForm(): View
+    {
+        return view('auth.login');
     }
 }

@@ -10,14 +10,6 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthService
 {
-    public function register(RegisterUserDTO $dto): User
-    {
-        $data = $dto->toArray();
-        $data['password'] = Hash::make($dto->password);
-
-        return User::create($data);
-    }
-
     public function attemptLogin(string $email, string $password, bool $remember = false): bool
     {
         return auth()->attempt([
@@ -29,5 +21,13 @@ class AuthService
     public function logout(): void
     {
         auth()->logout();
+    }
+
+    public function register(RegisterUserDTO $dto): User
+    {
+        $data = $dto->toArray();
+        $data['password'] = Hash::make($dto->password);
+
+        return User::create($data);
     }
 }

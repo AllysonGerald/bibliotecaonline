@@ -21,6 +21,13 @@ use Illuminate\Support\ServiceProvider;
 class AppServiceProvider extends ServiceProvider
 {
     /**
+     * Bootstrap any application services.
+     */
+    public function boot(): void
+    {
+    }
+
+    /**
      * Register any application services.
      */
     public function register(): void
@@ -31,12 +38,5 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(RentalRepositoryInterface::class, RentalRepository::class);
         $this->app->bind(ReservationRepositoryInterface::class, ReservationRepository::class);
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
-    }
-
-    /**
-     * Bootstrap any application services.
-     */
-    public function boot(): void
-    {
     }
 }

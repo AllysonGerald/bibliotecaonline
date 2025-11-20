@@ -14,7 +14,13 @@ class Rental extends Model
 {
     use HasFactory;
 
-    protected $table = 'alugueis';
+    protected $casts = [
+        'alugado_em' => 'datetime',
+        'data_devolucao' => 'datetime',
+        'devolvido_em' => 'datetime',
+        'taxa_atraso' => 'decimal:2',
+        'status' => RentalStatus::class,
+    ];
 
     protected $fillable = [
         'usuario_id',
@@ -26,27 +32,31 @@ class Rental extends Model
         'status',
     ];
 
-    protected $casts = [
-        'alugado_em' => 'datetime',
-        'data_devolucao' => 'datetime',
-        'devolvido_em' => 'datetime',
-        'taxa_atraso' => 'decimal:2',
-        'status' => RentalStatus::class,
-    ];
-
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'usuario_id');
-    }
+    protected $table = 'alugueis';
 
     public function book(): BelongsTo
     {
         return $this->belongsTo(Book::class, 'livro_id');
     }
 
+    public function daysOverdue(): int
+    {
+        if (!$this->isOverdue()) {
+            return 0;
+        }
+
+        return (int) now()->diffInDays($this->data_devolucao);
+    }
+
     public function fine(): HasOne
     {
         return $this->hasOne(Fine::class, 'aluguel_id');
+    }
+
+    public function isOverdue(): bool
+    {
+        return $this->status === RentalStatus::ATIVO
+            && $this->data_devolucao->isPast();
     }
 
     public function scopeActive($query)
@@ -57,7 +67,7 @@ class Rental extends Model
     public function scopeOverdue($query)
     {
         return $query->where('status', RentalStatus::ATRASADO)
-            ->orWhere(function ($q): void {
+            ->orWhere(static function ($q): void {
                 $q->where('status', RentalStatus::ATIVO)
                     ->where('data_devolucao', '<', now())
                 ;
@@ -65,18 +75,8 @@ class Rental extends Model
         ;
     }
 
-    public function isOverdue(): bool
+    public function user(): BelongsTo
     {
-        return $this->status === RentalStatus::ATIVO
-            && $this->data_devolucao->isPast();
-    }
-
-    public function daysOverdue(): int
-    {
-        if (!$this->isOverdue()) {
-            return 0;
-        }
-
-        return (int) now()->diffInDays($this->data_devolucao);
+        return $this->belongsTo(User::class, 'usuario_id');
     }
 }

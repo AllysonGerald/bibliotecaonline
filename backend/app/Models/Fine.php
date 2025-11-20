@@ -12,7 +12,11 @@ class Fine extends Model
 {
     use HasFactory;
 
-    protected $table = 'multas';
+    protected $casts = [
+        'valor' => 'decimal:2',
+        'paga' => 'boolean',
+        'paga_em' => 'datetime',
+    ];
 
     protected $fillable = [
         'aluguel_id',
@@ -22,26 +26,7 @@ class Fine extends Model
         'paga_em',
     ];
 
-    protected $casts = [
-        'valor' => 'decimal:2',
-        'paga' => 'boolean',
-        'paga_em' => 'datetime',
-    ];
-
-    public function rental(): BelongsTo
-    {
-        return $this->belongsTo(Rental::class, 'aluguel_id');
-    }
-
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'usuario_id');
-    }
-
-    public function scopeUnpaid($query)
-    {
-        return $query->where('paga', false);
-    }
+    protected $table = 'multas';
 
     public function markAsPaid(): void
     {
@@ -49,5 +34,20 @@ class Fine extends Model
             'paga' => true,
             'paga_em' => now(),
         ]);
+    }
+
+    public function rental(): BelongsTo
+    {
+        return $this->belongsTo(Rental::class, 'aluguel_id');
+    }
+
+    public function scopeUnpaid($query)
+    {
+        return $query->where('paga', false);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'usuario_id');
     }
 }

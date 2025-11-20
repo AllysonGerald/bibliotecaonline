@@ -31,6 +31,34 @@ class BookController extends Controller
     ) {
     }
 
+    public function create(): View
+    {
+        $authors = Author::orderBy('nome')->get();
+        $categories = Category::orderBy('nome')->get();
+        $tags = Tag::orderBy('nome')->get();
+
+        return view('admin.livros.create', compact('authors', 'categories', 'tags'));
+    }
+
+    public function destroy(Book $livro): RedirectResponse
+    {
+        $this->deleteBookAction->execute($livro);
+
+        return redirect()->route('admin.livros.index')
+            ->with('success', 'Livro excluído com sucesso!')
+        ;
+    }
+
+    public function edit(Book $livro): View
+    {
+        $livro->load('tags');
+        $authors = Author::orderBy('nome')->get();
+        $categories = Category::orderBy('nome')->get();
+        $tags = Tag::orderBy('nome')->get();
+
+        return view('admin.livros.edit', compact('livro', 'authors', 'categories', 'tags'));
+    }
+
     public function index(Request $request): View
     {
         $books = $this->bookService->getAllPaginated(
@@ -46,13 +74,11 @@ class BookController extends Controller
         return view('admin.livros.index', compact('books', 'categories', 'authors'));
     }
 
-    public function create(): View
+    public function show(Book $livro): View
     {
-        $authors = Author::orderBy('nome')->get();
-        $categories = Category::orderBy('nome')->get();
-        $tags = Tag::orderBy('nome')->get();
+        $livro->load(['author', 'category', 'tags', 'reviews.user']);
 
-        return view('admin.livros.create', compact('authors', 'categories', 'tags'));
+        return view('admin.livros.show', compact('livro'));
     }
 
     public function store(StoreBookRequest $request): RedirectResponse
@@ -82,23 +108,6 @@ class BookController extends Controller
         ;
     }
 
-    public function show(Book $livro): View
-    {
-        $livro->load(['author', 'category', 'tags', 'reviews.user']);
-
-        return view('admin.livros.show', compact('livro'));
-    }
-
-    public function edit(Book $livro): View
-    {
-        $livro->load('tags');
-        $authors = Author::orderBy('nome')->get();
-        $categories = Category::orderBy('nome')->get();
-        $tags = Tag::orderBy('nome')->get();
-
-        return view('admin.livros.edit', compact('livro', 'authors', 'categories', 'tags'));
-    }
-
     public function update(UpdateBookRequest $request, Book $livro): RedirectResponse
     {
         $validated = $request->validated();
@@ -123,15 +132,6 @@ class BookController extends Controller
 
         return redirect()->route('admin.livros.index')
             ->with('success', 'Livro atualizado com sucesso!')
-        ;
-    }
-
-    public function destroy(Book $livro): RedirectResponse
-    {
-        $this->deleteBookAction->execute($livro);
-
-        return redirect()->route('admin.livros.index')
-            ->with('success', 'Livro excluído com sucesso!')
         ;
     }
 }

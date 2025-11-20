@@ -15,11 +15,6 @@ use Illuminate\View\View;
 
 class RegisterController extends Controller
 {
-    public function showRegistrationForm(): View
-    {
-        return view('auth.register');
-    }
-
     public function register(RegisterRequest $request): RedirectResponse
     {
         $validated = $request->validated();
@@ -38,5 +33,10 @@ class RegisterController extends Controller
         $request->session()->regenerate();
 
         return redirect()->route('home')->with('success', 'Conta criada com sucesso! Bem-vindo!');
+    }
+
+    public function showRegistrationForm(): View
+    {
+        return view('auth.register');
     }
 }

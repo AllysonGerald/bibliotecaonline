@@ -18,6 +18,21 @@ class RentalService
     ) {
     }
 
+    public function create(RentalDTO $dto): Rental
+    {
+        return $this->rentalRepository->create($dto->toArray());
+    }
+
+    public function delete(Rental $rental): bool
+    {
+        return $this->rentalRepository->delete($rental);
+    }
+
+    public function getActive(): Collection
+    {
+        return $this->rentalRepository->findActive();
+    }
+
     public function getAllPaginated(
         int $perPage = 15,
         ?string $search = null,
@@ -25,12 +40,12 @@ class RentalService
         $query = Rental::with(['user', 'book.author', 'book.category']);
 
         if ($search !== null) {
-            $query->whereHas('user', function ($q) use ($search): void {
+            $query->whereHas('user', static function ($q) use ($search): void {
                 $q->where('name', 'like', "%{$search}%")
                     ->orWhere('email', 'like', "%{$search}%")
                 ;
             })
-                ->orWhereHas('book', function ($q) use ($search): void {
+                ->orWhereHas('book', static function ($q) use ($search): void {
                     $q->where('titulo', 'like', "%{$search}%");
                 })
             ;
@@ -39,24 +54,14 @@ class RentalService
         return $query->latest('alugado_em')->paginate($perPage);
     }
 
+    public function getByBook(int $bookId): Collection
+    {
+        return $this->rentalRepository->findByBook($bookId);
+    }
+
     public function getById(int $id): ?Rental
     {
         return $this->rentalRepository->findById($id);
-    }
-
-    public function search(string $term): Collection
-    {
-        return $this->rentalRepository->search($term);
-    }
-
-    public function getActive(): Collection
-    {
-        return $this->rentalRepository->findActive();
-    }
-
-    public function getOverdue(): Collection
-    {
-        return $this->rentalRepository->findOverdue();
     }
 
     public function getByUser(int $userId): Collection
@@ -64,14 +69,14 @@ class RentalService
         return $this->rentalRepository->findByUser($userId);
     }
 
-    public function getByBook(int $bookId): Collection
+    public function getOverdue(): Collection
     {
-        return $this->rentalRepository->findByBook($bookId);
+        return $this->rentalRepository->findOverdue();
     }
 
-    public function create(RentalDTO $dto): Rental
+    public function search(string $term): Collection
     {
-        return $this->rentalRepository->create($dto->toArray());
+        return $this->rentalRepository->search($term);
     }
 
     public function update(Rental $rental, RentalDTO $dto): Rental
@@ -83,10 +88,5 @@ class RentalService
         }
 
         return $rental->fresh(['user', 'book.author', 'book.category', 'fine']) ?? $rental;
-    }
-
-    public function delete(Rental $rental): bool
-    {
-        return $this->rentalRepository->delete($rental);
     }
 }

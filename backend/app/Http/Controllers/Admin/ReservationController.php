@@ -31,6 +31,34 @@ class ReservationController extends Controller
     ) {
     }
 
+    public function create(): View
+    {
+        $users = User::orderBy('name')->get();
+        $books = Book::with('author')->orderBy('titulo')->get();
+        $statuses = ReservationStatus::cases();
+
+        return view('admin.reservas.create', compact('users', 'books', 'statuses'));
+    }
+
+    public function destroy(Reservation $reserva): RedirectResponse
+    {
+        $this->deleteReservationAction->execute($reserva);
+
+        return redirect()->route('admin.reservas.index')
+            ->with('success', 'Reserva excluída com sucesso!')
+        ;
+    }
+
+    public function edit(Reservation $reserva): View
+    {
+        $reserva->load(['user', 'book']);
+        $users = User::orderBy('name')->get();
+        $books = Book::with('author')->orderBy('titulo')->get();
+        $statuses = ReservationStatus::cases();
+
+        return view('admin.reservas.edit', compact('reserva', 'users', 'books', 'statuses'));
+    }
+
     public function index(Request $request): View
     {
         $reservations = $this->reservationService->getAllPaginated(
@@ -48,13 +76,11 @@ class ReservationController extends Controller
         return view('admin.reservas.index', compact('reservations', 'users', 'books', 'statuses'));
     }
 
-    public function create(): View
+    public function show(Reservation $reserva): View
     {
-        $users = User::orderBy('name')->get();
-        $books = Book::with('author')->orderBy('titulo')->get();
-        $statuses = ReservationStatus::cases();
+        $reserva->load(['user', 'book.author', 'book.category']);
 
-        return view('admin.reservas.create', compact('users', 'books', 'statuses'));
+        return view('admin.reservas.show', compact('reserva'));
     }
 
     public function store(StoreReservationRequest $request): RedirectResponse
@@ -76,23 +102,6 @@ class ReservationController extends Controller
         ;
     }
 
-    public function show(Reservation $reserva): View
-    {
-        $reserva->load(['user', 'book.author', 'book.category']);
-
-        return view('admin.reservas.show', compact('reserva'));
-    }
-
-    public function edit(Reservation $reserva): View
-    {
-        $reserva->load(['user', 'book']);
-        $users = User::orderBy('name')->get();
-        $books = Book::with('author')->orderBy('titulo')->get();
-        $statuses = ReservationStatus::cases();
-
-        return view('admin.reservas.edit', compact('reserva', 'users', 'books', 'statuses'));
-    }
-
     public function update(UpdateReservationRequest $request, Reservation $reserva): RedirectResponse
     {
         $validated = $request->validated();
@@ -109,15 +118,6 @@ class ReservationController extends Controller
 
         return redirect()->route('admin.reservas.index')
             ->with('success', 'Reserva atualizada com sucesso!')
-        ;
-    }
-
-    public function destroy(Reservation $reserva): RedirectResponse
-    {
-        $this->deleteReservationAction->execute($reserva);
-
-        return redirect()->route('admin.reservas.index')
-            ->with('success', 'Reserva excluída com sucesso!')
         ;
     }
 }

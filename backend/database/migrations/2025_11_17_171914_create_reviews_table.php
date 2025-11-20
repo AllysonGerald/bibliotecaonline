@@ -7,9 +7,14 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
+    public function down(): void
+    {
+        Schema::dropIfExists('avaliacoes');
+    }
+
     public function up(): void
     {
-        Schema::create('avaliacoes', function (Blueprint $table): void {
+        Schema::create('avaliacoes', static function (Blueprint $table): void {
             $table->id();
             $table->foreignId('usuario_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('livro_id')->constrained('livros')->onDelete('cascade');
@@ -19,10 +24,5 @@ return new class extends Migration {
 
             $table->unique(['usuario_id', 'livro_id']);
         });
-    }
-
-    public function down(): void
-    {
-        Schema::dropIfExists('avaliacoes');
     }
 };

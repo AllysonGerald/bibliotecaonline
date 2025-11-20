@@ -34,6 +34,91 @@ class UserRentalControllerTest extends TestCase
         $response->assertRedirect(route('login'));
     }
 
+    public function testRentalsPageDisplaysRentalInformation(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+        $book = Book::factory()->create();
+
+        $rental = Rental::factory()->create([
+            'usuario_id' => $user->id,
+            'livro_id' => $book->id,
+            'status' => RentalStatus::ATIVO,
+        ]);
+
+        $response = $this->actingAs($user)->get(route('meus-alugueis'));
+
+        $response->assertStatus(200);
+        $response->assertSee($rental->book->titulo);
+        $response->assertSee($rental->book->author->nome);
+        $response->assertSee($rental->alugado_em->format('d/m/Y'));
+        $response->assertSee($rental->data_devolucao->format('d/m/Y'));
+    }
+
+    public function testRentalsPageShowsActiveRentals(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+        $book = Book::factory()->create();
+
+        Rental::factory()->create([
+            'usuario_id' => $user->id,
+            'livro_id' => $book->id,
+            'status' => RentalStatus::ATIVO,
+        ]);
+
+        $response = $this->actingAs($user)->get(route('meus-alugueis', ['status' => 'ativo']));
+
+        $response->assertStatus(200);
+    }
+
+    public function testRentalsPageShowsEmptyStateWhenNoRentals(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->get(route('meus-alugueis'));
+
+        $response->assertStatus(200);
+        $response->assertSee('Nenhum aluguel encontrado');
+    }
+
+    public function testRentalsPageShowsOverdueRentals(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+        $book = Book::factory()->create();
+
+        Rental::factory()->create([
+            'usuario_id' => $user->id,
+            'livro_id' => $book->id,
+            'status' => RentalStatus::ATRASADO,
+            'data_devolucao' => now()->subDays(5),
+        ]);
+
+        $response = $this->actingAs($user)->get(route('meus-alugueis', ['status' => 'atrasado']));
+
+        $response->assertStatus(200);
+    }
+
+    public function testRentalsPageShowsReturnedRentals(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+        $book = Book::factory()->create();
+
+        Rental::factory()->create([
+            'usuario_id' => $user->id,
+            'livro_id' => $book->id,
+            'status' => RentalStatus::DEVOLVIDO,
+            'devolvido_em' => now(),
+        ]);
+
+        $response = $this->actingAs($user)->get(route('meus-alugueis', ['status' => 'devolvido']));
+
+        $response->assertStatus(200);
+    }
+
     public function testUserCanSeeOnlyTheirOwnRentals(): void
     {
         /** @var User $user1 */
@@ -58,90 +143,5 @@ class UserRentalControllerTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee($rental1->book->titulo);
         $response->assertDontSee($rental2->book->titulo);
-    }
-
-    public function testRentalsPageShowsActiveRentals(): void
-    {
-        /** @var User $user */
-        $user = User::factory()->create();
-        $book = Book::factory()->create();
-
-        Rental::factory()->create([
-            'usuario_id' => $user->id,
-            'livro_id' => $book->id,
-            'status' => RentalStatus::ATIVO,
-        ]);
-
-        $response = $this->actingAs($user)->get(route('meus-alugueis', ['status' => 'ativo']));
-
-        $response->assertStatus(200);
-    }
-
-    public function testRentalsPageShowsReturnedRentals(): void
-    {
-        /** @var User $user */
-        $user = User::factory()->create();
-        $book = Book::factory()->create();
-
-        Rental::factory()->create([
-            'usuario_id' => $user->id,
-            'livro_id' => $book->id,
-            'status' => RentalStatus::DEVOLVIDO,
-            'devolvido_em' => now(),
-        ]);
-
-        $response = $this->actingAs($user)->get(route('meus-alugueis', ['status' => 'devolvido']));
-
-        $response->assertStatus(200);
-    }
-
-    public function testRentalsPageShowsOverdueRentals(): void
-    {
-        /** @var User $user */
-        $user = User::factory()->create();
-        $book = Book::factory()->create();
-
-        Rental::factory()->create([
-            'usuario_id' => $user->id,
-            'livro_id' => $book->id,
-            'status' => RentalStatus::ATRASADO,
-            'data_devolucao' => now()->subDays(5),
-        ]);
-
-        $response = $this->actingAs($user)->get(route('meus-alugueis', ['status' => 'atrasado']));
-
-        $response->assertStatus(200);
-    }
-
-    public function testRentalsPageShowsEmptyStateWhenNoRentals(): void
-    {
-        /** @var User $user */
-        $user = User::factory()->create();
-
-        $response = $this->actingAs($user)->get(route('meus-alugueis'));
-
-        $response->assertStatus(200);
-        $response->assertSee('Nenhum aluguel encontrado');
-    }
-
-    public function testRentalsPageDisplaysRentalInformation(): void
-    {
-        /** @var User $user */
-        $user = User::factory()->create();
-        $book = Book::factory()->create();
-
-        $rental = Rental::factory()->create([
-            'usuario_id' => $user->id,
-            'livro_id' => $book->id,
-            'status' => RentalStatus::ATIVO,
-        ]);
-
-        $response = $this->actingAs($user)->get(route('meus-alugueis'));
-
-        $response->assertStatus(200);
-        $response->assertSee($rental->book->titulo);
-        $response->assertSee($rental->book->author->nome);
-        $response->assertSee($rental->alugado_em->format('d/m/Y'));
-        $response->assertSee($rental->data_devolucao->format('d/m/Y'));
     }
 }

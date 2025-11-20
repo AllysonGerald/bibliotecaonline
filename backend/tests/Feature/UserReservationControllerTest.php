@@ -34,6 +34,107 @@ class UserReservationControllerTest extends TestCase
         $response->assertRedirect(route('login'));
     }
 
+    public function testReservationsPageDisplaysReservationInformation(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+        $book = Book::factory()->create();
+
+        $reservation = Reservation::factory()->create([
+            'usuario_id' => $user->id,
+            'livro_id' => $book->id,
+            'status' => ReservationStatus::PENDENTE,
+        ]);
+
+        $response = $this->actingAs($user)->get(route('minhas-reservas'));
+
+        $response->assertStatus(200);
+        $response->assertSee($reservation->book->titulo);
+        $response->assertSee($reservation->book->author->nome);
+        $response->assertSee($reservation->reservado_em->format('d/m/Y'));
+        $response->assertSee($reservation->expira_em->format('d/m/Y'));
+    }
+
+    public function testReservationsPageShowsCancelledReservations(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+        $book = Book::factory()->create();
+
+        Reservation::factory()->create([
+            'usuario_id' => $user->id,
+            'livro_id' => $book->id,
+            'status' => ReservationStatus::CANCELADA,
+        ]);
+
+        $response = $this->actingAs($user)->get(route('minhas-reservas', ['status' => 'cancelada']));
+
+        $response->assertStatus(200);
+    }
+
+    public function testReservationsPageShowsConfirmedReservations(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+        $book = Book::factory()->create();
+
+        Reservation::factory()->create([
+            'usuario_id' => $user->id,
+            'livro_id' => $book->id,
+            'status' => ReservationStatus::CONFIRMADA,
+        ]);
+
+        $response = $this->actingAs($user)->get(route('minhas-reservas', ['status' => 'confirmada']));
+
+        $response->assertStatus(200);
+    }
+
+    public function testReservationsPageShowsEmptyStateWhenNoReservations(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->get(route('minhas-reservas'));
+
+        $response->assertStatus(200);
+        $response->assertSee('Nenhuma reserva encontrada');
+    }
+
+    public function testReservationsPageShowsExpiredReservations(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+        $book = Book::factory()->create();
+
+        Reservation::factory()->create([
+            'usuario_id' => $user->id,
+            'livro_id' => $book->id,
+            'status' => ReservationStatus::PENDENTE,
+            'expira_em' => now()->subDays(5),
+        ]);
+
+        $response = $this->actingAs($user)->get(route('minhas-reservas'));
+
+        $response->assertStatus(200);
+    }
+
+    public function testReservationsPageShowsPendingReservations(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+        $book = Book::factory()->create();
+
+        Reservation::factory()->create([
+            'usuario_id' => $user->id,
+            'livro_id' => $book->id,
+            'status' => ReservationStatus::PENDENTE,
+        ]);
+
+        $response = $this->actingAs($user)->get(route('minhas-reservas', ['status' => 'pendente']));
+
+        $response->assertStatus(200);
+    }
+
     public function testUserCanSeeOnlyTheirOwnReservations(): void
     {
         /** @var User $user1 */
@@ -58,106 +159,5 @@ class UserReservationControllerTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee($reservation1->book->titulo);
         $response->assertDontSee($reservation2->book->titulo);
-    }
-
-    public function testReservationsPageShowsPendingReservations(): void
-    {
-        /** @var User $user */
-        $user = User::factory()->create();
-        $book = Book::factory()->create();
-
-        Reservation::factory()->create([
-            'usuario_id' => $user->id,
-            'livro_id' => $book->id,
-            'status' => ReservationStatus::PENDENTE,
-        ]);
-
-        $response = $this->actingAs($user)->get(route('minhas-reservas', ['status' => 'pendente']));
-
-        $response->assertStatus(200);
-    }
-
-    public function testReservationsPageShowsConfirmedReservations(): void
-    {
-        /** @var User $user */
-        $user = User::factory()->create();
-        $book = Book::factory()->create();
-
-        Reservation::factory()->create([
-            'usuario_id' => $user->id,
-            'livro_id' => $book->id,
-            'status' => ReservationStatus::CONFIRMADA,
-        ]);
-
-        $response = $this->actingAs($user)->get(route('minhas-reservas', ['status' => 'confirmada']));
-
-        $response->assertStatus(200);
-    }
-
-    public function testReservationsPageShowsCancelledReservations(): void
-    {
-        /** @var User $user */
-        $user = User::factory()->create();
-        $book = Book::factory()->create();
-
-        Reservation::factory()->create([
-            'usuario_id' => $user->id,
-            'livro_id' => $book->id,
-            'status' => ReservationStatus::CANCELADA,
-        ]);
-
-        $response = $this->actingAs($user)->get(route('minhas-reservas', ['status' => 'cancelada']));
-
-        $response->assertStatus(200);
-    }
-
-    public function testReservationsPageShowsEmptyStateWhenNoReservations(): void
-    {
-        /** @var User $user */
-        $user = User::factory()->create();
-
-        $response = $this->actingAs($user)->get(route('minhas-reservas'));
-
-        $response->assertStatus(200);
-        $response->assertSee('Nenhuma reserva encontrada');
-    }
-
-    public function testReservationsPageDisplaysReservationInformation(): void
-    {
-        /** @var User $user */
-        $user = User::factory()->create();
-        $book = Book::factory()->create();
-
-        $reservation = Reservation::factory()->create([
-            'usuario_id' => $user->id,
-            'livro_id' => $book->id,
-            'status' => ReservationStatus::PENDENTE,
-        ]);
-
-        $response = $this->actingAs($user)->get(route('minhas-reservas'));
-
-        $response->assertStatus(200);
-        $response->assertSee($reservation->book->titulo);
-        $response->assertSee($reservation->book->author->nome);
-        $response->assertSee($reservation->reservado_em->format('d/m/Y'));
-        $response->assertSee($reservation->expira_em->format('d/m/Y'));
-    }
-
-    public function testReservationsPageShowsExpiredReservations(): void
-    {
-        /** @var User $user */
-        $user = User::factory()->create();
-        $book = Book::factory()->create();
-
-        Reservation::factory()->create([
-            'usuario_id' => $user->id,
-            'livro_id' => $book->id,
-            'status' => ReservationStatus::PENDENTE,
-            'expira_em' => now()->subDays(5),
-        ]);
-
-        $response = $this->actingAs($user)->get(route('minhas-reservas'));
-
-        $response->assertStatus(200);
     }
 }

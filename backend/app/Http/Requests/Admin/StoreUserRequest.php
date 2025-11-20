@@ -15,18 +15,6 @@ class StoreUserRequest extends FormRequest
         return auth()->check() && auth()->user()->isAdmin();
     }
 
-    public function rules(): array
-    {
-        return [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'papel' => ['required', new Enum(UserRole::class)],
-            'ativo' => ['nullable', 'boolean'],
-            'telefone' => ['nullable', 'string', 'max:20'],
-        ];
-    }
-
     public function messages(): array
     {
         return [
@@ -40,6 +28,18 @@ class StoreUserRequest extends FormRequest
             'password.confirmed' => 'A confirmação de senha não confere.',
             'papel.required' => 'O campo papel é obrigatório.',
             'telefone.max' => 'O telefone não pode ter mais de 20 caracteres.',
+        ];
+    }
+
+    public function rules(): array
+    {
+        return [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'papel' => ['required', new Enum(UserRole::class)],
+            'ativo' => ['nullable', 'boolean'],
+            'telefone' => ['nullable', 'string', 'max:20'],
         ];
     }
 }

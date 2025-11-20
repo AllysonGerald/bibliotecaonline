@@ -18,6 +18,32 @@ class BookService
     ) {
     }
 
+    public function create(BookDTO $dto): Book
+    {
+        $book = $this->bookRepository->create($dto->toArray());
+
+        if ($dto->tags !== null) {
+            $this->bookRepository->syncTags($book, $dto->tags);
+        }
+
+        return $book->load(['author', 'category', 'tags']);
+    }
+
+    public function delete(Book $book): bool
+    {
+        return $this->bookRepository->delete($book);
+    }
+
+    public function filterByAuthor(int $authorId): Collection
+    {
+        return $this->bookRepository->findByAuthor($authorId);
+    }
+
+    public function filterByCategory(int $categoryId): Collection
+    {
+        return $this->bookRepository->findByCategory($categoryId);
+    }
+
     public function getAllPaginated(
         int $perPage = 15,
         ?string $search = null,
@@ -51,27 +77,6 @@ class BookService
         return $this->bookRepository->search($term);
     }
 
-    public function filterByCategory(int $categoryId): Collection
-    {
-        return $this->bookRepository->findByCategory($categoryId);
-    }
-
-    public function filterByAuthor(int $authorId): Collection
-    {
-        return $this->bookRepository->findByAuthor($authorId);
-    }
-
-    public function create(BookDTO $dto): Book
-    {
-        $book = $this->bookRepository->create($dto->toArray());
-
-        if ($dto->tags !== null) {
-            $this->bookRepository->syncTags($book, $dto->tags);
-        }
-
-        return $book->load(['author', 'category', 'tags']);
-    }
-
     public function update(Book $book, BookDTO $dto): Book
     {
         $updated = $this->bookRepository->update($book, $dto->toArray());
@@ -87,10 +92,5 @@ class BookService
         }
 
         return $book->fresh(['author', 'category', 'tags']) ?? $book;
-    }
-
-    public function delete(Book $book): bool
-    {
-        return $this->bookRepository->delete($book);
     }
 }

@@ -26,6 +26,24 @@ class ReservationControllerTest extends TestCase
         $this->admin = $admin;
     }
 
+    public function testAdminCanAccessCreateReservationPage(): void
+    {
+        $response = $this->actingAs($this->admin)->get(route('admin.reservas.create'));
+
+        $response->assertStatus(200);
+        $response->assertSee('Nova Reserva');
+    }
+
+    public function testAdminCanAccessEditReservationPage(): void
+    {
+        $reservation = Reservation::factory()->create();
+
+        $response = $this->actingAs($this->admin)->get(route('admin.reservas.edit', $reservation));
+
+        $response->assertStatus(200);
+        $response->assertSee('Editar Reserva');
+    }
+
     public function testAdminCanAccessReservationsIndexPage(): void
     {
         $response = $this->actingAs($this->admin)->get(route('admin.reservas.index'));
@@ -34,29 +52,14 @@ class ReservationControllerTest extends TestCase
         $response->assertSee('Gerenciar Reservas');
     }
 
-    public function testRegularUserCannotAccessReservationsIndexPage(): void
+    public function testAdminCanAccessShowReservationPage(): void
     {
-        /** @var User $user */
-        $user = User::factory()->create();
+        $reservation = Reservation::factory()->create();
 
-        $response = $this->actingAs($user)->get(route('admin.reservas.index'));
-
-        $response->assertStatus(403);
-    }
-
-    public function testGuestCannotAccessReservationsIndexPage(): void
-    {
-        $response = $this->get(route('admin.reservas.index'));
-
-        $response->assertRedirect(route('login'));
-    }
-
-    public function testAdminCanAccessCreateReservationPage(): void
-    {
-        $response = $this->actingAs($this->admin)->get(route('admin.reservas.create'));
+        $response = $this->actingAs($this->admin)->get(route('admin.reservas.show', $reservation));
 
         $response->assertStatus(200);
-        $response->assertSee('Nova Reserva');
+        $response->assertSee('Detalhes da Reserva');
     }
 
     public function testAdminCanCreateReservation(): void
@@ -82,6 +85,19 @@ class ReservationControllerTest extends TestCase
         ]);
     }
 
+    public function testAdminCanDeleteReservation(): void
+    {
+        $reservation = Reservation::factory()->create();
+
+        $response = $this->actingAs($this->admin)->delete(route('admin.reservas.destroy', $reservation));
+
+        $response->assertRedirect(route('admin.reservas.index'));
+        $response->assertSessionHas('success');
+        $this->assertDatabaseMissing('reservas', [
+            'id' => $reservation->id,
+        ]);
+    }
+
     public function testAdminCannotCreateReservationWithInvalidData(): void
     {
         $response = $this->actingAs($this->admin)->post(route('admin.reservas.store'), []);
@@ -89,14 +105,13 @@ class ReservationControllerTest extends TestCase
         $response->assertSessionHasErrors(['usuario_id', 'livro_id', 'reservado_em', 'expira_em', 'status']);
     }
 
-    public function testAdminCanAccessEditReservationPage(): void
+    public function testAdminCannotUpdateReservationWithInvalidData(): void
     {
         $reservation = Reservation::factory()->create();
 
-        $response = $this->actingAs($this->admin)->get(route('admin.reservas.edit', $reservation));
+        $response = $this->actingAs($this->admin)->put(route('admin.reservas.update', $reservation), []);
 
-        $response->assertStatus(200);
-        $response->assertSee('Editar Reserva');
+        $response->assertSessionHasErrors(['usuario_id', 'livro_id', 'reservado_em', 'expira_em', 'status']);
     }
 
     public function testAdminCanUpdateReservation(): void
@@ -122,36 +137,21 @@ class ReservationControllerTest extends TestCase
         ]);
     }
 
-    public function testAdminCannotUpdateReservationWithInvalidData(): void
+    public function testGuestCannotAccessReservationsIndexPage(): void
     {
-        $reservation = Reservation::factory()->create();
+        $response = $this->get(route('admin.reservas.index'));
 
-        $response = $this->actingAs($this->admin)->put(route('admin.reservas.update', $reservation), []);
-
-        $response->assertSessionHasErrors(['usuario_id', 'livro_id', 'reservado_em', 'expira_em', 'status']);
+        $response->assertRedirect(route('login'));
     }
 
-    public function testAdminCanAccessShowReservationPage(): void
+    public function testRegularUserCannotAccessReservationsIndexPage(): void
     {
-        $reservation = Reservation::factory()->create();
+        /** @var User $user */
+        $user = User::factory()->create();
 
-        $response = $this->actingAs($this->admin)->get(route('admin.reservas.show', $reservation));
+        $response = $this->actingAs($user)->get(route('admin.reservas.index'));
 
-        $response->assertStatus(200);
-        $response->assertSee('Detalhes da Reserva');
-    }
-
-    public function testAdminCanDeleteReservation(): void
-    {
-        $reservation = Reservation::factory()->create();
-
-        $response = $this->actingAs($this->admin)->delete(route('admin.reservas.destroy', $reservation));
-
-        $response->assertRedirect(route('admin.reservas.index'));
-        $response->assertSessionHas('success');
-        $this->assertDatabaseMissing('reservas', [
-            'id' => $reservation->id,
-        ]);
+        $response->assertStatus(403);
     }
 
     public function testReservationIndexPageShowsSearchResults(): void

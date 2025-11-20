@@ -32,29 +32,32 @@ class CategoryControllerTest extends TestCase
         $response->assertSee('Gerenciar Categorias');
     }
 
-    public function testRegularUserCannotAccessCategoriesIndexPage(): void
-    {
-        /** @var User $user */
-        $user = User::factory()->create();
-
-        $response = $this->actingAs($user)->get(route('admin.categorias.index'));
-
-        $response->assertStatus(403);
-    }
-
-    public function testGuestCannotAccessCategoriesIndexPage(): void
-    {
-        $response = $this->get(route('admin.categorias.index'));
-
-        $response->assertRedirect(route('login'));
-    }
-
     public function testAdminCanAccessCreateCategoryPage(): void
     {
         $response = $this->actingAs($this->admin)->get(route('admin.categorias.create'));
 
         $response->assertStatus(200);
         $response->assertSee('Nova Categoria');
+    }
+
+    public function testAdminCanAccessEditCategoryPage(): void
+    {
+        $category = Category::factory()->create();
+
+        $response = $this->actingAs($this->admin)->get(route('admin.categorias.edit', $category));
+
+        $response->assertStatus(200);
+        $response->assertSee('Editar Categoria');
+    }
+
+    public function testAdminCanAccessShowCategoryPage(): void
+    {
+        $category = Category::factory()->create();
+
+        $response = $this->actingAs($this->admin)->get(route('admin.categorias.show', $category));
+
+        $response->assertStatus(200);
+        $response->assertSee($category->nome);
     }
 
     public function testAdminCanCreateCategory(): void
@@ -73,6 +76,20 @@ class CategoryControllerTest extends TestCase
         ]);
     }
 
+    public function testAdminCanDeleteCategory(): void
+    {
+        $category = Category::factory()->create();
+
+        $response = $this->actingAs($this->admin)->delete(route('admin.categorias.destroy', $category));
+
+        $response->assertRedirect(route('admin.categorias.index'));
+        $response->assertSessionHas('success');
+
+        $this->assertDatabaseMissing('categorias', [
+            'id' => $category->id,
+        ]);
+    }
+
     public function testAdminCannotCreateCategoryWithInvalidData(): void
     {
         $response = $this->actingAs($this->admin)->post(route('admin.categorias.store'), [
@@ -82,14 +99,15 @@ class CategoryControllerTest extends TestCase
         $response->assertSessionHasErrors(['nome']);
     }
 
-    public function testAdminCanAccessEditCategoryPage(): void
+    public function testAdminCannotUpdateCategoryWithInvalidData(): void
     {
         $category = Category::factory()->create();
 
-        $response = $this->actingAs($this->admin)->get(route('admin.categorias.edit', $category));
+        $response = $this->actingAs($this->admin)->put(route('admin.categorias.update', $category), [
+            'nome' => '',
+        ]);
 
-        $response->assertStatus(200);
-        $response->assertSee('Editar Categoria');
+        $response->assertSessionHasErrors(['nome']);
     }
 
     public function testAdminCanUpdateCategory(): void
@@ -111,41 +129,6 @@ class CategoryControllerTest extends TestCase
         ]);
     }
 
-    public function testAdminCannotUpdateCategoryWithInvalidData(): void
-    {
-        $category = Category::factory()->create();
-
-        $response = $this->actingAs($this->admin)->put(route('admin.categorias.update', $category), [
-            'nome' => '',
-        ]);
-
-        $response->assertSessionHasErrors(['nome']);
-    }
-
-    public function testAdminCanAccessShowCategoryPage(): void
-    {
-        $category = Category::factory()->create();
-
-        $response = $this->actingAs($this->admin)->get(route('admin.categorias.show', $category));
-
-        $response->assertStatus(200);
-        $response->assertSee($category->nome);
-    }
-
-    public function testAdminCanDeleteCategory(): void
-    {
-        $category = Category::factory()->create();
-
-        $response = $this->actingAs($this->admin)->delete(route('admin.categorias.destroy', $category));
-
-        $response->assertRedirect(route('admin.categorias.index'));
-        $response->assertSessionHas('success');
-
-        $this->assertDatabaseMissing('categorias', [
-            'id' => $category->id,
-        ]);
-    }
-
     public function testCategoryIndexPageShowsSearchResults(): void
     {
         Category::factory()->create(['nome' => 'Categoria Teste']);
@@ -156,5 +139,22 @@ class CategoryControllerTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Categoria Teste');
         $response->assertDontSee('Outra Categoria');
+    }
+
+    public function testGuestCannotAccessCategoriesIndexPage(): void
+    {
+        $response = $this->get(route('admin.categorias.index'));
+
+        $response->assertRedirect(route('login'));
+    }
+
+    public function testRegularUserCannotAccessCategoriesIndexPage(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->get(route('admin.categorias.index'));
+
+        $response->assertStatus(403);
     }
 }

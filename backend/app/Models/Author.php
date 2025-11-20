@@ -12,7 +12,9 @@ class Author extends Model
 {
     use HasFactory;
 
-    protected $table = 'autores';
+    protected $casts = [
+        'data_nascimento' => 'date',
+    ];
 
     protected $fillable = [
         'nome',
@@ -21,9 +23,7 @@ class Author extends Model
         'foto',
     ];
 
-    protected $casts = [
-        'data_nascimento' => 'date',
-    ];
+    protected $table = 'autores';
 
     public function books(): HasMany
     {

@@ -7,19 +7,19 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    public function up(): void
+    public function down(): void
     {
-        Schema::table('users', function (Blueprint $table): void {
-            $table->enum('papel', ['usuario', 'admin'])->default('usuario')->after('email');
-            $table->boolean('ativo')->default(true)->after('papel');
-            $table->string('telefone', 20)->nullable()->after('ativo');
+        Schema::table('users', static function (Blueprint $table): void {
+            $table->dropColumn(['papel', 'ativo', 'telefone']);
         });
     }
 
-    public function down(): void
+    public function up(): void
     {
-        Schema::table('users', function (Blueprint $table): void {
-            $table->dropColumn(['papel', 'ativo', 'telefone']);
+        Schema::table('users', static function (Blueprint $table): void {
+            $table->enum('papel', ['usuario', 'admin'])->default('usuario')->after('email');
+            $table->boolean('ativo')->default(true)->after('papel');
+            $table->string('telefone', 20)->nullable()->after('ativo');
         });
     }
 };

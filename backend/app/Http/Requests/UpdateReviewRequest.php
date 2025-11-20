@@ -13,14 +13,6 @@ class UpdateReviewRequest extends FormRequest
         return true;
     }
 
-    public function rules(): array
-    {
-        return [
-            'nota' => ['required', 'integer', 'min:1', 'max:5'],
-            'comentario' => ['nullable', 'string', 'max:2000'],
-        ];
-    }
-
     public function messages(): array
     {
         return [
@@ -29,6 +21,14 @@ class UpdateReviewRequest extends FormRequest
             'nota.min' => 'A nota mínima é 1.',
             'nota.max' => 'A nota máxima é 5.',
             'comentario.max' => 'O comentário não pode ter mais de 2000 caracteres.',
+        ];
+    }
+
+    public function rules(): array
+    {
+        return [
+            'nota' => ['required', 'integer', 'min:1', 'max:5'],
+            'comentario' => ['nullable', 'string', 'max:2000'],
         ];
     }
 

@@ -18,6 +18,21 @@ class ReservationService
     ) {
     }
 
+    public function create(ReservationDTO $dto): Reservation
+    {
+        return $this->reservationRepository->create($dto->toArray());
+    }
+
+    public function delete(Reservation $reservation): bool
+    {
+        return $this->reservationRepository->delete($reservation);
+    }
+
+    public function getActive(): Collection
+    {
+        return $this->reservationRepository->findActive();
+    }
+
     public function getAllPaginated(
         int $perPage = 15,
         ?string $search = null,
@@ -28,12 +43,12 @@ class ReservationService
         $query = Reservation::with(['user', 'book.author', 'book.category']);
 
         if ($search !== null) {
-            $query->whereHas('user', function ($q) use ($search): void {
+            $query->whereHas('user', static function ($q) use ($search): void {
                 $q->where('name', 'like', "%{$search}%")
                     ->orWhere('email', 'like', "%{$search}%")
                 ;
             })
-                ->orWhereHas('book', function ($q) use ($search): void {
+                ->orWhereHas('book', static function ($q) use ($search): void {
                     $q->where('titulo', 'like', "%{$search}%");
                 })
             ;
@@ -54,24 +69,14 @@ class ReservationService
         return $query->latest('reservado_em')->paginate($perPage);
     }
 
+    public function getByBook(int $bookId): Collection
+    {
+        return $this->reservationRepository->findByBook($bookId);
+    }
+
     public function getById(int $id): ?Reservation
     {
         return $this->reservationRepository->findById($id);
-    }
-
-    public function search(string $term): Collection
-    {
-        return $this->reservationRepository->search($term);
-    }
-
-    public function getActive(): Collection
-    {
-        return $this->reservationRepository->findActive();
-    }
-
-    public function getExpired(): Collection
-    {
-        return $this->reservationRepository->findExpired();
     }
 
     public function getByUser(int $userId): Collection
@@ -79,14 +84,14 @@ class ReservationService
         return $this->reservationRepository->findByUser($userId);
     }
 
-    public function getByBook(int $bookId): Collection
+    public function getExpired(): Collection
     {
-        return $this->reservationRepository->findByBook($bookId);
+        return $this->reservationRepository->findExpired();
     }
 
-    public function create(ReservationDTO $dto): Reservation
+    public function search(string $term): Collection
     {
-        return $this->reservationRepository->create($dto->toArray());
+        return $this->reservationRepository->search($term);
     }
 
     public function update(Reservation $reservation, ReservationDTO $dto): Reservation
@@ -98,10 +103,5 @@ class ReservationService
         }
 
         return $reservation->fresh(['user', 'book.author', 'book.category']) ?? $reservation;
-    }
-
-    public function delete(Reservation $reservation): bool
-    {
-        return $this->reservationRepository->delete($reservation);
     }
 }

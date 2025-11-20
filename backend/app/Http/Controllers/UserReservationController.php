@@ -29,14 +29,14 @@ class UserReservationController extends Controller
 
         // Filtrar por status se fornecido
         if ($request->filled('status')) {
-            $reservations = $reservations->filter(fn ($reservation) => $reservation->status->value === $request->status);
+            $reservations = $reservations->filter(static fn ($reservation) => $reservation->status->value === $request->status);
         }
 
         // Separar em grupos
         $pendingReservations = $reservations->where('status', ReservationStatus::PENDENTE)->values();
         $confirmedReservations = $reservations->where('status', ReservationStatus::CONFIRMADA)->values();
         $cancelledReservations = $reservations->where('status', ReservationStatus::CANCELADA)->values();
-        $expiredReservations = $reservations->filter(fn ($reservation) => $reservation->isExpired())->values();
+        $expiredReservations = $reservations->filter(static fn ($reservation) => $reservation->isExpired())->values();
 
         // Se houver filtro de status, usar apenas o grupo correspondente
         if ($request->filled('status')) {

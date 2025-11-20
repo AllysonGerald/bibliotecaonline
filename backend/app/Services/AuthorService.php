@@ -18,6 +18,16 @@ class AuthorService
     ) {
     }
 
+    public function create(AuthorDTO $dto): Author
+    {
+        return $this->authorRepository->create($dto->toArray());
+    }
+
+    public function delete(Author $author): bool
+    {
+        return $this->authorRepository->delete($author);
+    }
+
     public function getAllPaginated(
         int $perPage = 15,
         ?string $search = null,
@@ -43,11 +53,6 @@ class AuthorService
         return $this->authorRepository->search($term);
     }
 
-    public function create(AuthorDTO $dto): Author
-    {
-        return $this->authorRepository->create($dto->toArray());
-    }
-
     public function update(Author $author, AuthorDTO $dto): Author
     {
         $updated = $this->authorRepository->update($author, $dto->toArray());
@@ -57,10 +62,5 @@ class AuthorService
         }
 
         return $author->fresh('books') ?? $author;
-    }
-
-    public function delete(Author $author): bool
-    {
-        return $this->authorRepository->delete($author);
     }
 }

@@ -6,20 +6,10 @@ namespace App\Enums;
 
 enum ReservationStatus: string
 {
-    case PENDENTE = 'pendente';
-    case CONFIRMADA = 'confirmada';
     case CANCELADA = 'cancelada';
+    case CONFIRMADA = 'confirmada';
     case EXPIRADA = 'expirada';
-
-    public function label(): string
-    {
-        return match ($this) {
-            self::PENDENTE => 'Pendente',
-            self::CONFIRMADA => 'Confirmada',
-            self::CANCELADA => 'Cancelada',
-            self::EXPIRADA => 'Expirada',
-        };
-    }
+    case PENDENTE = 'pendente';
 
     public function color(): string
     {
@@ -28,6 +18,16 @@ enum ReservationStatus: string
             self::CONFIRMADA => 'green',
             self::CANCELADA => 'red',
             self::EXPIRADA => 'gray',
+        };
+    }
+
+    public function label(): string
+    {
+        return match ($this) {
+            self::PENDENTE => 'Pendente',
+            self::CONFIRMADA => 'Confirmada',
+            self::CANCELADA => 'Cancelada',
+            self::EXPIRADA => 'Expirada',
         };
     }
 }

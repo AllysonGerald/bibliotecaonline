@@ -12,7 +12,9 @@ class Review extends Model
 {
     use HasFactory;
 
-    protected $table = 'avaliacoes';
+    protected $casts = [
+        'nota' => 'integer',
+    ];
 
     protected $fillable = [
         'usuario_id',
@@ -21,17 +23,15 @@ class Review extends Model
         'comentario',
     ];
 
-    protected $casts = [
-        'nota' => 'integer',
-    ];
-
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'usuario_id');
-    }
+    protected $table = 'avaliacoes';
 
     public function book(): BelongsTo
     {
         return $this->belongsTo(Book::class, 'livro_id');
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'usuario_id');
     }
 }

@@ -18,6 +18,16 @@ class CategoryService
     ) {
     }
 
+    public function create(CategoryDTO $dto): Category
+    {
+        return $this->categoryRepository->create($dto->toArray());
+    }
+
+    public function delete(Category $category): bool
+    {
+        return $this->categoryRepository->delete($category);
+    }
+
     public function getAllPaginated(
         int $perPage = 15,
         ?string $search = null,
@@ -43,11 +53,6 @@ class CategoryService
         return $this->categoryRepository->search($term);
     }
 
-    public function create(CategoryDTO $dto): Category
-    {
-        return $this->categoryRepository->create($dto->toArray());
-    }
-
     public function update(Category $category, CategoryDTO $dto): Category
     {
         $updated = $this->categoryRepository->update($category, $dto->toArray());
@@ -57,10 +62,5 @@ class CategoryService
         }
 
         return $category->fresh('books') ?? $category;
-    }
-
-    public function delete(Category $category): bool
-    {
-        return $this->categoryRepository->delete($category);
     }
 }

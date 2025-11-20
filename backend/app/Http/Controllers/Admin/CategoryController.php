@@ -27,6 +27,25 @@ class CategoryController extends Controller
     ) {
     }
 
+    public function create(): View
+    {
+        return view('admin.categorias.create');
+    }
+
+    public function destroy(Category $categoria): RedirectResponse
+    {
+        $this->deleteCategoryAction->execute($categoria);
+
+        return redirect()->route('admin.categorias.index')
+            ->with('success', 'Categoria excluída com sucesso!')
+        ;
+    }
+
+    public function edit(Category $categoria): View
+    {
+        return view('admin.categorias.edit', compact('categoria'));
+    }
+
     public function index(Request $request): View
     {
         $categories = $this->categoryService->getAllPaginated(
@@ -37,9 +56,11 @@ class CategoryController extends Controller
         return view('admin.categorias.index', compact('categories'));
     }
 
-    public function create(): View
+    public function show(Category $categoria): View
     {
-        return view('admin.categorias.create');
+        $categoria->load('books');
+
+        return view('admin.categorias.show', compact('categoria'));
     }
 
     public function store(StoreCategoryRequest $request): RedirectResponse
@@ -59,18 +80,6 @@ class CategoryController extends Controller
         ;
     }
 
-    public function show(Category $categoria): View
-    {
-        $categoria->load('books');
-
-        return view('admin.categorias.show', compact('categoria'));
-    }
-
-    public function edit(Category $categoria): View
-    {
-        return view('admin.categorias.edit', compact('categoria'));
-    }
-
     public function update(UpdateCategoryRequest $request, Category $categoria): RedirectResponse
     {
         $validated = $request->validated();
@@ -85,15 +94,6 @@ class CategoryController extends Controller
 
         return redirect()->route('admin.categorias.index')
             ->with('success', 'Categoria atualizada com sucesso!')
-        ;
-    }
-
-    public function destroy(Category $categoria): RedirectResponse
-    {
-        $this->deleteCategoryAction->execute($categoria);
-
-        return redirect()->route('admin.categorias.index')
-            ->with('success', 'Categoria excluída com sucesso!')
         ;
     }
 }
