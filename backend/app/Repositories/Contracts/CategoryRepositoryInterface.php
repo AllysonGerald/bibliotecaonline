@@ -16,6 +16,11 @@ interface CategoryRepositoryInterface
 
     public function findAll(): Collection;
 
+    public function findAllPaginated(
+        int $perPage = 15,
+        ?string $search = null,
+    ): LengthAwarePaginator;
+
     public function findById(int $id): ?Category;
 
     public function findPaginated(int $perPage = 15): LengthAwarePaginator;

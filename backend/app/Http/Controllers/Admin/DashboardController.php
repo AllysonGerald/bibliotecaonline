@@ -13,28 +13,42 @@ use App\Models\Rental;
 use App\Models\Reservation;
 use App\Models\User;
 use App\Services\BookService;
+use App\Services\ContactService;
+use App\Services\RentalService;
+use App\Services\ReservationService;
+use App\Services\UserService;
 use Illuminate\View\View;
 
+/**
+ * Controller responsável pelo dashboard administrativo.
+ */
 class DashboardController extends Controller
 {
     public function __construct(
         private readonly BookService $bookService,
+        private readonly UserService $userService,
+        private readonly RentalService $rentalService,
+        private readonly ReservationService $reservationService,
+        private readonly ContactService $contactService,
     ) {
     }
 
+    /**
+     * Exibe o dashboard administrativo com estatísticas e atividades recentes.
+     *
+     * @return View Dashboard administrativo
+     */
     public function index(): View
     {
         $user = auth()->user();
-        $totalBooks = Book::count();
-        $totalUsers = User::count();
-        $totalRentals = Rental::where('status', \App\Enums\RentalStatus::ATIVO)->count();
-        $totalReservations = Reservation::whereIn('status', [\App\Enums\ReservationStatus::PENDENTE, \App\Enums\ReservationStatus::CONFIRMADA])->count();
-        $totalUnreadContacts = Contact::where('lido', false)->count();
+        $totalBooks = $this->bookService->getTotalCount();
+        $totalUsers = $this->userService->getTotalCount();
+        $totalRentals = $this->rentalService->getActiveCount();
+        $totalReservations = $this->reservationService->getPendingOrConfirmedCount();
+        $totalUnreadContacts = $this->contactService->getUnreadCount();
 
-        // Buscar livros mais alugados (para admin)
         $featuredBooks = $this->bookService->getMostRentedBooks(6);
 
-        // Buscar todas as atividades recentes do sistema
         $activities = collect();
 
         // Aluguéis (criação e atualização)
@@ -148,7 +162,6 @@ class DashboardController extends Controller
             ]);
         }
 
-        // Ordenar por data (mais recente primeiro) e pegar os 5 mais recentes
         $recentActivities = $activities->sortByDesc('date')->take(5)->values();
 
         return view('admin.dashboard', compact(

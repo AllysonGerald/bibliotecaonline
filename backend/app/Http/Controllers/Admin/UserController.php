@@ -18,6 +18,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+/**
+ * Controller responsável pelo gerenciamento de usuários na área administrativa.
+ */
 class UserController extends Controller
 {
     public function __construct(
@@ -28,6 +31,11 @@ class UserController extends Controller
     ) {
     }
 
+    /**
+     * Exibe o formulário de criação de usuário.
+     *
+     * @return View Formulário de criação
+     */
     public function create(): View
     {
         $roles = UserRole::cases();
@@ -35,6 +43,12 @@ class UserController extends Controller
         return view('admin.usuarios.create', compact('roles'));
     }
 
+    /**
+     * Remove um usuário do sistema.
+     *
+     * @param User $usuario Usuário a ser removido
+     * @return RedirectResponse Redirecionamento com mensagem de sucesso
+     */
     public function destroy(User $usuario): RedirectResponse
     {
         $this->deleteUserAction->execute($usuario);
@@ -44,6 +58,12 @@ class UserController extends Controller
         ;
     }
 
+    /**
+     * Exibe o formulário de edição de usuário.
+     *
+     * @param User $usuario Usuário a ser editado
+     * @return View Formulário de edição
+     */
     public function edit(User $usuario): View
     {
         $roles = UserRole::cases();
@@ -51,6 +71,12 @@ class UserController extends Controller
         return view('admin.usuarios.edit', compact('usuario', 'roles'));
     }
 
+    /**
+     * Lista todos os usuários com paginação e filtros.
+     *
+     * @param Request $request Requisição HTTP com parâmetros de busca
+     * @return View Lista de usuários
+     */
     public function index(Request $request): View
     {
         $users = $this->userService->getAllPaginated(
@@ -65,6 +91,12 @@ class UserController extends Controller
         return view('admin.usuarios.index', compact('users', 'roles'));
     }
 
+    /**
+     * Exibe os detalhes de um usuário específico.
+     *
+     * @param User $usuario Usuário a ser exibido
+     * @return View Detalhes do usuário
+     */
     public function show(User $usuario): View
     {
         $usuario->load(['rentals', 'reservations', 'reviews', 'fines', 'wishlists']);
@@ -72,6 +104,12 @@ class UserController extends Controller
         return view('admin.usuarios.show', compact('usuario'));
     }
 
+    /**
+     * Armazena um novo usuário no sistema.
+     *
+     * @param StoreUserRequest $request Dados validados do usuário
+     * @return RedirectResponse Redirecionamento com mensagem de sucesso
+     */
     public function store(StoreUserRequest $request): RedirectResponse
     {
         $validated = $request->validated();
@@ -92,6 +130,13 @@ class UserController extends Controller
         ;
     }
 
+    /**
+     * Atualiza os dados de um usuário existente.
+     *
+     * @param UpdateUserRequest $request Dados validados do usuário
+     * @param User $usuario Usuário a ser atualizado
+     * @return RedirectResponse Redirecionamento com mensagem de sucesso
+     */
     public function update(UpdateUserRequest $request, User $usuario): RedirectResponse
     {
         $validated = $request->validated();

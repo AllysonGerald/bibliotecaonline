@@ -17,6 +17,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+/**
+ * Controller responsável pelo gerenciamento de categorias na área administrativa.
+ */
 class CategoryController extends Controller
 {
     public function __construct(
@@ -27,11 +30,22 @@ class CategoryController extends Controller
     ) {
     }
 
+    /**
+     * Exibe o formulário de criação de categoria.
+     *
+     * @return View Formulário de criação
+     */
     public function create(): View
     {
         return view('admin.categorias.create');
     }
 
+    /**
+     * Remove uma categoria do sistema.
+     *
+     * @param Category $categoria Categoria a ser removida
+     * @return RedirectResponse Redirecionamento com mensagem de sucesso
+     */
     public function destroy(Category $categoria): RedirectResponse
     {
         $this->deleteCategoryAction->execute($categoria);
@@ -41,11 +55,23 @@ class CategoryController extends Controller
         ;
     }
 
+    /**
+     * Exibe o formulário de edição de categoria.
+     *
+     * @param Category $categoria Categoria a ser editada
+     * @return View Formulário de edição
+     */
     public function edit(Category $categoria): View
     {
         return view('admin.categorias.edit', compact('categoria'));
     }
 
+    /**
+     * Lista todas as categorias com paginação e filtros.
+     *
+     * @param Request $request Requisição HTTP com parâmetros de busca
+     * @return View Lista de categorias
+     */
     public function index(Request $request): View
     {
         $categories = $this->categoryService->getAllPaginated(
@@ -56,6 +82,12 @@ class CategoryController extends Controller
         return view('admin.categorias.index', compact('categories'));
     }
 
+    /**
+     * Exibe os detalhes de uma categoria específica.
+     *
+     * @param Category $categoria Categoria a ser exibida
+     * @return View Detalhes da categoria
+     */
     public function show(Category $categoria): View
     {
         $categoria->load('books');
@@ -63,6 +95,12 @@ class CategoryController extends Controller
         return view('admin.categorias.show', compact('categoria'));
     }
 
+    /**
+     * Armazena uma nova categoria no sistema.
+     *
+     * @param StoreCategoryRequest $request Dados validados da categoria
+     * @return RedirectResponse Redirecionamento com mensagem de sucesso
+     */
     public function store(StoreCategoryRequest $request): RedirectResponse
     {
         $validated = $request->validated();
@@ -80,6 +118,13 @@ class CategoryController extends Controller
         ;
     }
 
+    /**
+     * Atualiza os dados de uma categoria existente.
+     *
+     * @param UpdateCategoryRequest $request Dados validados da categoria
+     * @param Category $categoria Categoria a ser atualizada
+     * @return RedirectResponse Redirecionamento com mensagem de sucesso
+     */
     public function update(UpdateCategoryRequest $request, Category $categoria): RedirectResponse
     {
         $validated = $request->validated();

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
+/**
+ * Enum que representa os status possíveis de uma reserva no sistema.
+ */
 enum ReservationStatus: string
 {
     case CANCELADA = 'cancelada';
@@ -11,6 +14,11 @@ enum ReservationStatus: string
     case EXPIRADA = 'expirada';
     case PENDENTE = 'pendente';
 
+    /**
+     * Retorna a cor associada ao status para exibição na interface.
+     *
+     * @return string Nome da cor (yellow, green, red, gray)
+     */
     public function color(): string
     {
         return match ($this) {
@@ -21,6 +29,11 @@ enum ReservationStatus: string
         };
     }
 
+    /**
+     * Retorna o label legível do status.
+     *
+     * @return string Label do status
+     */
     public function label(): string
     {
         return match ($this) {

@@ -7,6 +7,9 @@ namespace App\Http\Controllers;
 use App\Services\BookService;
 use Illuminate\View\View;
 
+/**
+ * Controller responsável pela página inicial do usuário autenticado.
+ */
 class HomeController extends Controller
 {
     public function __construct(
@@ -14,6 +17,11 @@ class HomeController extends Controller
     ) {
     }
 
+    /**
+     * Exibe o dashboard do usuário com estatísticas e atividades recentes.
+     *
+     * @return View Dashboard do usuário
+     */
     public function index(): View
     {
         $user = auth()->user();

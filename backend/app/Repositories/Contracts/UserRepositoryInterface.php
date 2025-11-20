@@ -18,6 +18,13 @@ interface UserRepositoryInterface
 
     public function findAll(): Collection;
 
+    public function findAllPaginated(
+        int $perPage = 15,
+        ?string $search = null,
+        ?string $role = null,
+        ?bool $ativo = null,
+    ): LengthAwarePaginator;
+
     public function findByEmail(string $email): ?User;
 
     public function findById(int $id): ?User;
@@ -27,6 +34,8 @@ interface UserRepositoryInterface
     public function findInactive(): Collection;
 
     public function findPaginated(int $perPage = 15): LengthAwarePaginator;
+
+    public function getTotalCount(): int;
 
     public function search(string $term): Collection;
 

@@ -18,6 +18,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+/**
+ * Controller responsável pelo gerenciamento de autores na área administrativa.
+ */
 class AuthorController extends Controller
 {
     public function __construct(
@@ -28,11 +31,22 @@ class AuthorController extends Controller
     ) {
     }
 
+    /**
+     * Exibe o formulário de criação de autor.
+     *
+     * @return View Formulário de criação
+     */
     public function create(): View
     {
         return view('admin.autores.create');
     }
 
+    /**
+     * Remove um autor do sistema.
+     *
+     * @param Author $autor Autor a ser removido
+     * @return RedirectResponse Redirecionamento com mensagem de sucesso
+     */
     public function destroy(Author $autor): RedirectResponse
     {
         $this->deleteAuthorAction->execute($autor);
@@ -42,11 +56,23 @@ class AuthorController extends Controller
         ;
     }
 
+    /**
+     * Exibe o formulário de edição de autor.
+     *
+     * @param Author $autor Autor a ser editado
+     * @return View Formulário de edição
+     */
     public function edit(Author $autor): View
     {
         return view('admin.autores.edit', compact('autor'));
     }
 
+    /**
+     * Lista todos os autores com paginação e filtros.
+     *
+     * @param Request $request Requisição HTTP com parâmetros de busca
+     * @return View Lista de autores
+     */
     public function index(Request $request): View
     {
         $authors = $this->authorService->getAllPaginated(
@@ -57,6 +83,12 @@ class AuthorController extends Controller
         return view('admin.autores.index', compact('authors'));
     }
 
+    /**
+     * Exibe os detalhes de um autor específico.
+     *
+     * @param Author $autor Autor a ser exibido
+     * @return View Detalhes do autor
+     */
     public function show(Author $autor): View
     {
         $autor->load('books');
@@ -64,6 +96,13 @@ class AuthorController extends Controller
         return view('admin.autores.show', compact('autor'));
     }
 
+    /**
+     * Armazena um novo autor no sistema.
+     * Suporta requisições AJAX para criação dinâmica de autores.
+     *
+     * @param StoreAuthorRequest $request Dados validados do autor
+     * @return JsonResponse|RedirectResponse Redirecionamento ou resposta JSON
+     */
     public function store(StoreAuthorRequest $request): RedirectResponse|JsonResponse
     {
         $validated = $request->validated();
@@ -77,7 +116,6 @@ class AuthorController extends Controller
 
         $author = $this->createAuthorAction->execute($dto);
 
-        // Se for requisição AJAX, retorna JSON
         if ($request->expectsJson() || $request->ajax()) {
             return response()->json([
                 'success' => true,
@@ -94,6 +132,13 @@ class AuthorController extends Controller
         ;
     }
 
+    /**
+     * Atualiza os dados de um autor existente.
+     *
+     * @param UpdateAuthorRequest $request Dados validados do autor
+     * @param Author $autor Autor a ser atualizado
+     * @return RedirectResponse Redirecionamento com mensagem de sucesso
+     */
     public function update(UpdateAuthorRequest $request, Author $autor): RedirectResponse
     {
         $validated = $request->validated();

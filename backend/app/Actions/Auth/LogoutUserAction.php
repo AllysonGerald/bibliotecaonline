@@ -6,6 +6,9 @@ namespace App\Actions\Auth;
 
 use App\Services\AuthService;
 
+/**
+ * Action responsável por realizar logout de um usuário autenticado.
+ */
 final readonly class LogoutUserAction
 {
     public function __construct(
@@ -13,6 +16,9 @@ final readonly class LogoutUserAction
     ) {
     }
 
+    /**
+     * Executa o logout do usuário autenticado.
+     */
     public function execute(): void
     {
         $this->authService->logout();

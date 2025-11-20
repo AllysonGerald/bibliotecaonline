@@ -18,6 +18,11 @@ interface RentalRepositoryInterface
 
     public function findAll(): Collection;
 
+    public function findAllPaginated(
+        int $perPage = 15,
+        ?string $search = null,
+    ): LengthAwarePaginator;
+
     public function findByBook(int $bookId): Collection;
 
     public function findById(int $id): ?Rental;
@@ -27,6 +32,8 @@ interface RentalRepositoryInterface
     public function findOverdue(): Collection;
 
     public function findPaginated(int $perPage = 15): LengthAwarePaginator;
+
+    public function getActiveCount(): int;
 
     public function search(string $term): Collection;
 
