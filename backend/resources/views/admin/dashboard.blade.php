@@ -144,17 +144,17 @@
 </div>
 
 <!-- Cards de Estatísticas -->
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 32px;">
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; margin-bottom: 32px;">
     <!-- Card Aluguéis Ativos -->
     <a href="{{ route('admin.alugueis.index') }}" style="text-decoration: none; display: block;">
-        <div style="background: linear-gradient(135deg, #f3e8ff, #faf5ff, white); border-radius: 16px; padding: 24px; border: 3px solid #e9d5ff; box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15); transition: all 0.3s; cursor: pointer;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 15px 40px rgba(139, 92, 246, 0.25)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 30px rgba(139, 92, 246, 0.15)';">
-            <div style="display: flex; align-items: center; gap: 16px;">
-                <div style="width: 56px; height: 56px; background: linear-gradient(135deg, #8b5cf6, #a855f7); border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);">
-                    <i data-lucide="book" style="width: 28px; height: 28px; color: white;"></i>
+        <div style="background: linear-gradient(135deg, #f3e8ff, #faf5ff, white); border-radius: 16px; padding: 20px; border: 3px solid #e9d5ff; box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15); transition: all 0.3s; cursor: pointer;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 15px 40px rgba(139, 92, 246, 0.25)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 30px rgba(139, 92, 246, 0.15)';">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #8b5cf6, #a855f7); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3); flex-shrink: 0;">
+                    <i data-lucide="book" style="width: 24px; height: 24px; color: white;"></i>
                 </div>
-                <div style="flex: 1;">
-                    <p style="font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Aluguéis Ativos</p>
-                    <p style="font-size: 32px; font-weight: 900; color: #1f2937; margin: 0;">{{ $totalRentals }}</p>
+                <div style="flex: 1; min-width: 0;">
+                    <p style="font-size: 11px; font-weight: 700; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.2;">Aluguéis Ativos</p>
+                    <p style="font-size: 28px; font-weight: 900; color: #1f2937; margin: 0; line-height: 1;">{{ $totalRentals }}</p>
                 </div>
             </div>
         </div>
@@ -162,14 +162,14 @@
 
     <!-- Card Reservas Pendentes -->
     <a href="{{ route('admin.reservas.index') }}" style="text-decoration: none; display: block;">
-        <div style="background: linear-gradient(135deg, #fce7f3, #fdf2f8, white); border-radius: 16px; padding: 24px; border: 3px solid #fbcfe8; box-shadow: 0 10px 30px rgba(236, 72, 153, 0.15); transition: all 0.3s; cursor: pointer;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 15px 40px rgba(236, 72, 153, 0.25)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 30px rgba(236, 72, 153, 0.15)';">
-            <div style="display: flex; align-items: center; gap: 16px;">
-                <div style="width: 56px; height: 56px; background: linear-gradient(135deg, #ec4899, #f472b6); border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(236, 72, 153, 0.3);">
-                    <i data-lucide="clock" style="width: 28px; height: 28px; color: white;"></i>
+        <div style="background: linear-gradient(135deg, #fce7f3, #fdf2f8, white); border-radius: 16px; padding: 20px; border: 3px solid #fbcfe8; box-shadow: 0 10px 30px rgba(236, 72, 153, 0.15); transition: all 0.3s; cursor: pointer;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 15px 40px rgba(236, 72, 153, 0.25)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 30px rgba(236, 72, 153, 0.15)';">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #ec4899, #f472b6); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(236, 72, 153, 0.3); flex-shrink: 0;">
+                    <i data-lucide="clock" style="width: 24px; height: 24px; color: white;"></i>
                 </div>
-                <div style="flex: 1;">
-                    <p style="font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Reservas Pendentes</p>
-                    <p style="font-size: 32px; font-weight: 900; color: #1f2937; margin: 0;">{{ $totalReservations }}</p>
+                <div style="flex: 1; min-width: 0;">
+                    <p style="font-size: 11px; font-weight: 700; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.2;">Reservas Pendentes</p>
+                    <p style="font-size: 28px; font-weight: 900; color: #1f2937; margin: 0; line-height: 1;">{{ $totalReservations }}</p>
                 </div>
             </div>
         </div>
@@ -177,14 +177,14 @@
 
     <!-- Card Total de Livros -->
     <a href="{{ route('admin.livros.index') }}" style="text-decoration: none; display: block;">
-        <div style="background: linear-gradient(135deg, #fff1f2, #fff7ed, white); border-radius: 16px; padding: 24px; border: 3px solid #fed7aa; box-shadow: 0 10px 30px rgba(249, 115, 22, 0.15); transition: all 0.3s; cursor: pointer;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 15px 40px rgba(249, 115, 22, 0.25)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 30px rgba(249, 115, 22, 0.15)';">
-            <div style="display: flex; align-items: center; gap: 16px;">
-                <div style="width: 56px; height: 56px; background: linear-gradient(135deg, #f97316, #fb923c); border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(249, 115, 22, 0.3);">
-                    <i data-lucide="book-open" style="width: 28px; height: 28px; color: white;"></i>
+        <div style="background: linear-gradient(135deg, #fff1f2, #fff7ed, white); border-radius: 16px; padding: 20px; border: 3px solid #fed7aa; box-shadow: 0 10px 30px rgba(249, 115, 22, 0.15); transition: all 0.3s; cursor: pointer;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 15px 40px rgba(249, 115, 22, 0.25)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 30px rgba(249, 115, 22, 0.15)';">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #f97316, #fb923c); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(249, 115, 22, 0.3); flex-shrink: 0;">
+                    <i data-lucide="book-open" style="width: 24px; height: 24px; color: white;"></i>
                 </div>
-                <div style="flex: 1;">
-                    <p style="font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Total de Livros</p>
-                    <p style="font-size: 32px; font-weight: 900; color: #1f2937; margin: 0;">{{ $totalBooks }}</p>
+                <div style="flex: 1; min-width: 0;">
+                    <p style="font-size: 11px; font-weight: 700; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.2;">Total de Livros</p>
+                    <p style="font-size: 28px; font-weight: 900; color: #1f2937; margin: 0; line-height: 1;">{{ $totalBooks }}</p>
                 </div>
             </div>
         </div>
@@ -192,14 +192,14 @@
 
     <!-- Card Total de Usuários -->
     <a href="{{ route('admin.usuarios.index') }}" style="text-decoration: none; display: block;">
-        <div style="background: linear-gradient(135deg, #e0f2fe, #f0f9ff, white); border-radius: 16px; padding: 24px; border: 3px solid #bae6fd; box-shadow: 0 10px 30px rgba(14, 165, 233, 0.15); transition: all 0.3s; cursor: pointer;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 15px 40px rgba(14, 165, 233, 0.25)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 30px rgba(14, 165, 233, 0.15)';">
-            <div style="display: flex; align-items: center; gap: 16px;">
-                <div style="width: 56px; height: 56px; background: linear-gradient(135deg, #0ea5e9, #38bdf8); border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(14, 165, 233, 0.3);">
-                    <i data-lucide="users" style="width: 28px; height: 28px; color: white;"></i>
+        <div style="background: linear-gradient(135deg, #e0f2fe, #f0f9ff, white); border-radius: 16px; padding: 20px; border: 3px solid #bae6fd; box-shadow: 0 10px 30px rgba(14, 165, 233, 0.15); transition: all 0.3s; cursor: pointer;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 15px 40px rgba(14, 165, 233, 0.25)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 30px rgba(14, 165, 233, 0.15)';">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #0ea5e9, #38bdf8); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(14, 165, 233, 0.3); flex-shrink: 0;">
+                    <i data-lucide="users" style="width: 24px; height: 24px; color: white;"></i>
                 </div>
-                <div style="flex: 1;">
-                    <p style="font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Total de Usuários</p>
-                    <p style="font-size: 32px; font-weight: 900; color: #1f2937; margin: 0;">{{ $totalUsers }}</p>
+                <div style="flex: 1; min-width: 0;">
+                    <p style="font-size: 11px; font-weight: 700; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.2;">Total de Usuários</p>
+                    <p style="font-size: 28px; font-weight: 900; color: #1f2937; margin: 0; line-height: 1;">{{ $totalUsers }}</p>
                 </div>
             </div>
         </div>
@@ -207,14 +207,14 @@
 
     <!-- Card Mensagens Não Lidas -->
     <a href="{{ route('admin.contatos.index') }}" style="text-decoration: none; display: block;">
-        <div style="background: linear-gradient(135deg, #d1fae5, #ecfdf5, white); border-radius: 16px; padding: 24px; border: 3px solid #86efac; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.15); transition: all 0.3s; cursor: pointer;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 15px 40px rgba(16, 185, 129, 0.25)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 30px rgba(16, 185, 129, 0.15)';">
-            <div style="display: flex; align-items: center; gap: 16px;">
-                <div style="width: 56px; height: 56px; background: linear-gradient(135deg, #10b981, #34d399); border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);">
-                    <i data-lucide="mail" style="width: 28px; height: 28px; color: white;"></i>
+        <div style="background: linear-gradient(135deg, #d1fae5, #ecfdf5, white); border-radius: 16px; padding: 20px; border: 3px solid #86efac; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.15); transition: all 0.3s; cursor: pointer;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 15px 40px rgba(16, 185, 129, 0.25)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 30px rgba(16, 185, 129, 0.15)';">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #10b981, #34d399); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3); flex-shrink: 0;">
+                    <i data-lucide="mail" style="width: 24px; height: 24px; color: white;"></i>
                 </div>
-                <div style="flex: 1;">
-                    <p style="font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Mensagens Não Lidas</p>
-                    <p style="font-size: 32px; font-weight: 900; color: #1f2937; margin: 0;">{{ $totalUnreadContacts }}</p>
+                <div style="flex: 1; min-width: 0;">
+                    <p style="font-size: 11px; font-weight: 700; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.2;">Mensagens Não Lidas</p>
+                    <p style="font-size: 28px; font-weight: 900; color: #1f2937; margin: 0; line-height: 1;">{{ $totalUnreadContacts }}</p>
                 </div>
             </div>
         </div>
