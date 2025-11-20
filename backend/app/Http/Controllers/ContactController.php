@@ -10,6 +10,9 @@ use App\Http\Requests\ContactRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
+/**
+ * Controller responsável pelo formulário de contato público.
+ */
 class ContactController extends Controller
 {
     public function __construct(
@@ -17,11 +20,22 @@ class ContactController extends Controller
     ) {
     }
 
+    /**
+     * Exibe o formulário de contato.
+     *
+     * @return View Formulário de contato
+     */
     public function show(): View
     {
         return view('contato');
     }
 
+    /**
+     * Processa e armazena uma nova mensagem de contato.
+     *
+     * @param ContactRequest $request Dados validados da mensagem
+     * @return RedirectResponse Redirecionamento com mensagem de sucesso
+     */
     public function store(ContactRequest $request): RedirectResponse
     {
         $dto = new ContactDTO(

@@ -16,6 +16,13 @@ interface BookRepositoryInterface
 
     public function findAll(): Collection;
 
+    public function findAllPaginated(
+        int $perPage = 15,
+        ?string $search = null,
+        ?int $categoryId = null,
+        ?int $authorId = null,
+    ): LengthAwarePaginator;
+
     public function findByAuthor(int $authorId): Collection;
 
     public function findByCategory(int $categoryId): Collection;
@@ -29,6 +36,8 @@ interface BookRepositoryInterface
     public function findPaginated(int $perPage = 15): LengthAwarePaginator;
 
     public function findRandomAvailable(int $limit = 6): Collection;
+
+    public function getTotalCount(): int;
 
     public function search(string $term): Collection;
 

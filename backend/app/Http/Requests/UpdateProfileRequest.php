@@ -7,13 +7,26 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * Request de validação para atualização de perfil de usuário.
+ */
 class UpdateProfileRequest extends FormRequest
 {
+    /**
+     * Determina se o usuário está autorizado a fazer esta requisição.
+     *
+     * @return bool Sempre retorna true (requer autenticação via middleware)
+     */
     public function authorize(): bool
     {
         return true;
     }
 
+    /**
+     * Retorna as mensagens de erro personalizadas para as regras de validação.
+     *
+     * @return array<string, string> Mensagens de erro
+     */
     public function messages(): array
     {
         return [
@@ -28,6 +41,11 @@ class UpdateProfileRequest extends FormRequest
         ];
     }
 
+    /**
+     * Retorna as regras de validação para a requisição.
+     *
+     * @return array<string, array<int, string>> Regras de validação
+     */
     public function rules(): array
     {
         $user = $this->user();

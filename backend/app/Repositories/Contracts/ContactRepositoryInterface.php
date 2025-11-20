@@ -16,9 +16,16 @@ interface ContactRepositoryInterface
 
     public function findAll(): Collection;
 
+    public function findAllPaginated(
+        int $perPage = 15,
+        ?string $search = null,
+    ): LengthAwarePaginator;
+
     public function findById(int $id): ?Contact;
 
     public function findPaginated(int $perPage = 15): LengthAwarePaginator;
+
+    public function getUnreadCount(): int;
 
     public function search(string $term): Collection;
 }

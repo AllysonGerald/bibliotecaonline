@@ -20,17 +20,21 @@ use App\Repositories\ReservationRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * Service Provider responsável pelo registro de serviços e bindings de dependências.
+ */
 class AppServiceProvider extends ServiceProvider
 {
     /**
-     * Bootstrap any application services.
+     * Inicializa serviços da aplicação.
      */
     public function boot(): void
     {
     }
 
     /**
-     * Register any application services.
+     * Registra serviços e bindings de dependências no container.
+     * Mapeia interfaces de repositórios para suas implementações concretas.
      */
     public function register(): void
     {

@@ -6,13 +6,26 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Request de validação para atualização de avaliação de livro.
+ */
 class UpdateReviewRequest extends FormRequest
 {
+    /**
+     * Determina se o usuário está autorizado a fazer esta requisição.
+     *
+     * @return bool Sempre retorna true (requer autenticação via middleware)
+     */
     public function authorize(): bool
     {
         return true;
     }
 
+    /**
+     * Retorna as mensagens de erro personalizadas para as regras de validação.
+     *
+     * @return array<string, string> Mensagens de erro
+     */
     public function messages(): array
     {
         return [
@@ -24,6 +37,11 @@ class UpdateReviewRequest extends FormRequest
         ];
     }
 
+    /**
+     * Retorna as regras de validação para a requisição.
+     *
+     * @return array<string, array<int, string>> Regras de validação
+     */
     public function rules(): array
     {
         return [
@@ -32,9 +50,12 @@ class UpdateReviewRequest extends FormRequest
         ];
     }
 
+    /**
+     * Prepara os dados para validação.
+     * Converte string vazia em null no campo comentário.
+     */
     protected function prepareForValidation(): void
     {
-        // Converter string vazia para null no comentário
         if ($this->has('comentario') && $this->comentario === '') {
             $this->merge([
                 'comentario' => null,

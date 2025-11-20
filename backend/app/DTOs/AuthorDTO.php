@@ -6,8 +6,17 @@ namespace App\DTOs;
 
 use Carbon\Carbon;
 
+/**
+ * DTO (Data Transfer Object) para transferência de dados de autor.
+ */
 final readonly class AuthorDTO
 {
+    /**
+     * @param string $nome Nome do autor
+     * @param string|null $biografia Biografia do autor
+     * @param string|null $dataNascimento Data de nascimento do autor (formato Y-m-d)
+     * @param string|null $foto Caminho da foto do autor
+     */
     public function __construct(
         public string $nome,
         public ?string $biografia = null,
@@ -16,6 +25,11 @@ final readonly class AuthorDTO
     ) {
     }
 
+    /**
+     * Converte o DTO para array associativo.
+     *
+     * @return array<string, mixed> Dados do autor em formato array
+     */
     public function toArray(): array
     {
         $data = [

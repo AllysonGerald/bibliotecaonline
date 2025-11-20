@@ -7,6 +7,9 @@ namespace App\Actions\Users;
 use App\Models\User;
 use App\Services\UserService;
 
+/**
+ * Action responsável por remover um usuário do sistema.
+ */
 final readonly class DeleteUserAction
 {
     public function __construct(
@@ -14,6 +17,12 @@ final readonly class DeleteUserAction
     ) {
     }
 
+    /**
+     * Executa a remoção de um usuário.
+     *
+     * @param User $user Usuário a ser removido
+     * @return bool True se removido com sucesso
+     */
     public function execute(User $user): bool
     {
         return $this->userService->delete($user);

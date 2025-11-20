@@ -8,13 +8,26 @@ use App\Enums\RentalStatus;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 
+/**
+ * Request de validação para atualização de aluguel.
+ */
 class UpdateRentalRequest extends FormRequest
 {
+    /**
+     * Determina se o usuário está autorizado a fazer esta requisição.
+     *
+     * @return bool True se o usuário for administrador
+     */
     public function authorize(): bool
     {
         return auth()->check() && auth()->user()->isAdmin();
     }
 
+    /**
+     * Retorna as mensagens de erro personalizadas para as regras de validação.
+     *
+     * @return array<string, string> Mensagens de erro
+     */
     public function messages(): array
     {
         return [
@@ -35,6 +48,11 @@ class UpdateRentalRequest extends FormRequest
         ];
     }
 
+    /**
+     * Retorna as regras de validação para a requisição.
+     *
+     * @return array<string, array<int, string>> Regras de validação
+     */
     public function rules(): array
     {
         return [

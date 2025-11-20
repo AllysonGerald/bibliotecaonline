@@ -6,8 +6,19 @@ namespace App\DTOs;
 
 use App\Enums\UserRole;
 
+/**
+ * DTO (Data Transfer Object) para transferência de dados de usuário.
+ */
 final readonly class UserDTO
 {
+    /**
+     * @param string $name Nome do usuário
+     * @param string $email Email do usuário
+     * @param string|null $password Senha do usuário (será hasheada no Repository)
+     * @param UserRole $papel Papel do usuário (admin ou usuario)
+     * @param bool $ativo Se o usuário está ativo
+     * @param string|null $telefone Telefone do usuário
+     */
     public function __construct(
         public string $name,
         public string $email,
@@ -18,6 +29,11 @@ final readonly class UserDTO
     ) {
     }
 
+    /**
+     * Converte o DTO para array associativo.
+     *
+     * @return array<string, mixed> Dados do usuário em formato array
+     */
     public function toArray(): array
     {
         $data = [
