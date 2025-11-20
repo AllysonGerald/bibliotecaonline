@@ -37,6 +37,14 @@ class ContactControllerTest extends TestCase
 
         $response->assertRedirect(route('contato'));
         $response->assertSessionHas('success', 'Sua mensagem foi enviada com sucesso! Entraremos em contato em breve.');
+
+        $this->assertDatabaseHas('contacts', [
+            'nome' => 'João Silva',
+            'email' => 'joao@example.com',
+            'assunto' => 'Dúvida sobre aluguel',
+            'mensagem' => 'Gostaria de saber mais informações sobre o processo de aluguel.',
+            'lido' => false,
+        ]);
     }
 
     public function testContactFormValidatesEmailFormat(): void
@@ -114,5 +122,13 @@ class ContactControllerTest extends TestCase
 
         $response->assertRedirect(route('contato'));
         $response->assertSessionHas('success', 'Sua mensagem foi enviada com sucesso! Entraremos em contato em breve.');
+
+        $this->assertDatabaseHas('contacts', [
+            'nome' => 'Maria Santos',
+            'email' => 'maria@example.com',
+            'assunto' => 'Sugestão de livro',
+            'mensagem' => 'Gostaria de sugerir a adição de novos livros ao acervo.',
+            'lido' => false,
+        ]);
     }
 }

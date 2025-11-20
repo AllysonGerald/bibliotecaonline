@@ -86,4 +86,22 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(sta
             'destroy' => 'usuarios.destroy',
         ])
     ;
+
+    // Rotas de Contatos
+    Route::resource('contatos', App\Http\Controllers\Admin\ContactController::class)
+        ->parameters(['contatos' => 'contato'])
+        ->names([
+            'index' => 'contatos.index',
+            'show' => 'contatos.show',
+            'destroy' => 'contatos.destroy',
+        ])
+    ;
+    Route::post('contatos/{contato}/mark-as-read', [App\Http\Controllers\Admin\ContactController::class, 'markAsRead'])
+        ->name('contatos.mark-as-read')
+    ;
+
+    // Rotas de Atividades
+    Route::get('atividades', [App\Http\Controllers\Admin\ActivityController::class, 'index'])
+        ->name('atividades.index')
+    ;
 });

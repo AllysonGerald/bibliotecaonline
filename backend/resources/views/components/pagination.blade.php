@@ -1,3 +1,21 @@
+@php
+    // Ler cores das variáveis compartilhadas ou usar valores padrão
+    $primaryColor = view()->shared('pagination_primaryColor', '#8b5cf6');
+    $primaryColorLight = view()->shared('pagination_primaryColorLight', '#a855f7');
+    $borderColor = view()->shared('pagination_borderColor', '#e9d5ff');
+    $backgroundGradient = view()->shared('pagination_backgroundGradient', 'linear-gradient(135deg, #f3e8ff, #faf5ff)');
+    $backgroundGradientHover = view()->shared('pagination_backgroundGradientHover', 'linear-gradient(135deg, #8b5cf6, #a855f7)');
+    
+    // Cores padrão baseadas na cor primária
+    $currentPageBg = "linear-gradient(135deg, {$primaryColor}, {$primaryColorLight})";
+    $currentPageBorder = $primaryColor;
+    $buttonBg = $backgroundGradient;
+    $buttonBgHover = $backgroundGradientHover;
+    $buttonBorder = $borderColor;
+    $buttonColor = $primaryColor;
+    $buttonColorHover = 'white';
+@endphp
+
 @if ($paginator->hasPages())
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-top: 24px; padding-top: 24px; border-top: 2px solid #e5e7eb;">
         <!-- Informação de resultados -->
@@ -17,7 +35,7 @@
                     <i data-lucide="chevron-left" style="width: 20px; height: 20px;"></i>
                 </span>
             @else
-                <a href="{{ $paginator->previousPageUrl() }}" style="display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: linear-gradient(135deg, #f3e8ff, #faf5ff); color: #8b5cf6; border: 2px solid #e9d5ff; border-radius: 10px; text-decoration: none; transition: all 0.3s; box-shadow: 0 2px 8px rgba(139, 92, 246, 0.1);" onmouseover="this.style.background='linear-gradient(135deg, #8b5cf6, #a855f7)'; this.style.color='white'; this.style.borderColor='#8b5cf6'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(139, 92, 246, 0.2)';" onmouseout="this.style.background='linear-gradient(135deg, #f3e8ff, #faf5ff)'; this.style.color='#8b5cf6'; this.style.borderColor='#e9d5ff'; this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(139, 92, 246, 0.1)';">
+                <a href="{{ $paginator->previousPageUrl() }}" style="display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: {{ $buttonBg }}; color: {{ $buttonColor }}; border: 2px solid {{ $buttonBorder }}; border-radius: 10px; text-decoration: none; transition: all 0.3s; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);" onmouseover="this.style.background='{{ $buttonBgHover }}'; this.style.color='{{ $buttonColorHover }}'; this.style.borderColor='{{ $primaryColor }}'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0, 0, 0, 0.2)';" onmouseout="this.style.background='{{ $buttonBg }}'; this.style.color='{{ $buttonColor }}'; this.style.borderColor='{{ $buttonBorder }}'; this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0, 0, 0, 0.1)';">
                     <i data-lucide="chevron-left" style="width: 20px; height: 20px;"></i>
                 </a>
             @endif
@@ -32,11 +50,11 @@
                     @if (is_array($element))
                         @foreach ($element as $page => $url)
                             @if ($page == $paginator->currentPage())
-                                <span style="display: inline-flex; align-items: center; justify-content: center; min-width: 40px; height: 40px; padding: 0 12px; background: linear-gradient(135deg, #8b5cf6, #a855f7); color: white; border: 2px solid #8b5cf6; border-radius: 10px; font-size: 14px; font-weight: 700; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);">
+                                <span style="display: inline-flex; align-items: center; justify-content: center; min-width: 40px; height: 40px; padding: 0 12px; background: {{ $currentPageBg }}; color: white; border: 2px solid {{ $currentPageBorder }}; border-radius: 10px; font-size: 14px; font-weight: 700; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);">
                                     {{ $page }}
                                 </span>
                             @else
-                                <a href="{{ $url }}" style="display: inline-flex; align-items: center; justify-content: center; min-width: 40px; height: 40px; padding: 0 12px; background: linear-gradient(135deg, #f3e8ff, #faf5ff); color: #8b5cf6; border: 2px solid #e9d5ff; border-radius: 10px; font-size: 14px; font-weight: 600; text-decoration: none; transition: all 0.3s; box-shadow: 0 2px 8px rgba(139, 92, 246, 0.1);" onmouseover="this.style.background='linear-gradient(135deg, #8b5cf6, #a855f7)'; this.style.color='white'; this.style.borderColor='#8b5cf6'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(139, 92, 246, 0.2)';" onmouseout="this.style.background='linear-gradient(135deg, #f3e8ff, #faf5ff)'; this.style.color='#8b5cf6'; this.style.borderColor='#e9d5ff'; this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(139, 92, 246, 0.1)';">
+                                <a href="{{ $url }}" style="display: inline-flex; align-items: center; justify-content: center; min-width: 40px; height: 40px; padding: 0 12px; background: {{ $buttonBg }}; color: {{ $buttonColor }}; border: 2px solid {{ $buttonBorder }}; border-radius: 10px; font-size: 14px; font-weight: 600; text-decoration: none; transition: all 0.3s; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);" onmouseover="this.style.background='{{ $buttonBgHover }}'; this.style.color='{{ $buttonColorHover }}'; this.style.borderColor='{{ $primaryColor }}'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0, 0, 0, 0.2)';" onmouseout="this.style.background='{{ $buttonBg }}'; this.style.color='{{ $buttonColor }}'; this.style.borderColor='{{ $buttonBorder }}'; this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0, 0, 0, 0.1)';">
                                     {{ $page }}
                                 </a>
                             @endif
@@ -47,7 +65,7 @@
 
             <!-- Botão Próximo -->
             @if ($paginator->hasMorePages())
-                <a href="{{ $paginator->nextPageUrl() }}" style="display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: linear-gradient(135deg, #f3e8ff, #faf5ff); color: #8b5cf6; border: 2px solid #e9d5ff; border-radius: 10px; text-decoration: none; transition: all 0.3s; box-shadow: 0 2px 8px rgba(139, 92, 246, 0.1);" onmouseover="this.style.background='linear-gradient(135deg, #8b5cf6, #a855f7)'; this.style.color='white'; this.style.borderColor='#8b5cf6'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(139, 92, 246, 0.2)';" onmouseout="this.style.background='linear-gradient(135deg, #f3e8ff, #faf5ff)'; this.style.color='#8b5cf6'; this.style.borderColor='#e9d5ff'; this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(139, 92, 246, 0.1)';">
+                <a href="{{ $paginator->nextPageUrl() }}" style="display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: {{ $buttonBg }}; color: {{ $buttonColor }}; border: 2px solid {{ $buttonBorder }}; border-radius: 10px; text-decoration: none; transition: all 0.3s; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);" onmouseover="this.style.background='{{ $buttonBgHover }}'; this.style.color='{{ $buttonColorHover }}'; this.style.borderColor='{{ $primaryColor }}'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0, 0, 0, 0.2)';" onmouseout="this.style.background='{{ $buttonBg }}'; this.style.color='{{ $buttonColor }}'; this.style.borderColor='{{ $buttonBorder }}'; this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0, 0, 0, 0.1)';">
                     <i data-lucide="chevron-right" style="width: 20px; height: 20px;"></i>
                 </a>
             @else
@@ -58,4 +76,3 @@
         </nav>
     </div>
 @endif
-

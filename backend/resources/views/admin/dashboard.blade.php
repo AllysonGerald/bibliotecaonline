@@ -9,6 +9,7 @@
     $totalUsers = \App\Models\User::count();
     $totalRentals = \App\Models\Rental::where('status', \App\Enums\RentalStatus::ATIVO)->count();
     $totalReservations = \App\Models\Reservation::whereIn('status', [\App\Enums\ReservationStatus::PENDENTE, \App\Enums\ReservationStatus::CONFIRMADA])->count();
+    $totalUnreadContacts = \App\Models\Contact::where('lido', false)->count();
     $recentBooks = \App\Models\Book::latest()->take(3)->get();
 
     // Buscar todas as atividades recentes do sistema
@@ -110,6 +111,21 @@
         ]);
     }
 
+    // Mensagens de Contato (criação)
+    $contacts = \App\Models\Contact::latest('created_at')->take(10)->get();
+    foreach ($contacts as $contact) {
+        $activities->push([
+            'type' => 'mensagem',
+            'action' => 'enviada',
+            'title' => $contact->assunto,
+            'user' => $contact->nome,
+            'date' => $contact->created_at,
+            'route' => route('admin.contatos.show', $contact),
+            'icon' => 'mail',
+            'color' => '#10b981',
+        ]);
+    }
+
     // Ordenar por data (mais recente primeiro) e pegar os 5 mais recentes
     $recentActivities = $activities->sortByDesc('date')->take(5)->values();
 @endphp
@@ -184,6 +200,21 @@
                 <div style="flex: 1;">
                     <p style="font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Total de Usuários</p>
                     <p style="font-size: 32px; font-weight: 900; color: #1f2937; margin: 0;">{{ $totalUsers }}</p>
+                </div>
+            </div>
+        </div>
+    </a>
+
+    <!-- Card Mensagens Não Lidas -->
+    <a href="{{ route('admin.contatos.index') }}" style="text-decoration: none; display: block;">
+        <div style="background: linear-gradient(135deg, #d1fae5, #ecfdf5, white); border-radius: 16px; padding: 24px; border: 3px solid #86efac; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.15); transition: all 0.3s; cursor: pointer;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 15px 40px rgba(16, 185, 129, 0.25)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 30px rgba(16, 185, 129, 0.15)';">
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <div style="width: 56px; height: 56px; background: linear-gradient(135deg, #10b981, #34d399); border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);">
+                    <i data-lucide="mail" style="width: 28px; height: 28px; color: white;"></i>
+                </div>
+                <div style="flex: 1;">
+                    <p style="font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Mensagens Não Lidas</p>
+                    <p style="font-size: 32px; font-weight: 900; color: #1f2937; margin: 0;">{{ $totalUnreadContacts }}</p>
                 </div>
             </div>
         </div>
@@ -268,7 +299,7 @@
                 @endforeach
             </div>
             <div style="margin-top: 20px;">
-                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
                     <a href="{{ route('admin.livros.index') }}" style="display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; background: linear-gradient(135deg, #fff1f2, #fff7ed); color: #f97316; border: 2px solid #fed7aa; border-radius: 12px; text-decoration: none; transition: all 0.3s; box-shadow: 0 2px 5px rgba(249, 115, 22, 0.15);" onmouseover="this.style.background='linear-gradient(135deg, #f97316, #fb923c)'; this.style.color='white'; this.style.borderColor='#f97316'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 10px rgba(249, 115, 22, 0.3)';" onmouseout="this.style.background='linear-gradient(135deg, #fff1f2, #fff7ed)'; this.style.color='#f97316'; this.style.borderColor='#fed7aa'; this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 5px rgba(249, 115, 22, 0.15)';" title="Gerenciar Livros">
                         <i data-lucide="book-open" style="width: 20px; height: 20px;"></i>
                     </a>
@@ -280,6 +311,13 @@
                     </a>
                     <a href="{{ route('admin.usuarios.index') }}" style="display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; background: linear-gradient(135deg, #e0f2fe, #f0f9ff); color: #0ea5e9; border: 2px solid #bae6fd; border-radius: 12px; text-decoration: none; transition: all 0.3s; box-shadow: 0 2px 5px rgba(14, 165, 233, 0.15);" onmouseover="this.style.background='linear-gradient(135deg, #0ea5e9, #38bdf8)'; this.style.color='white'; this.style.borderColor='#0ea5e9'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 10px rgba(14, 165, 233, 0.3)';" onmouseout="this.style.background='linear-gradient(135deg, #e0f2fe, #f0f9ff)'; this.style.color='#0ea5e9'; this.style.borderColor='#bae6fd'; this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 5px rgba(14, 165, 233, 0.15)';" title="Gerenciar Usuários">
                         <i data-lucide="users" style="width: 20px; height: 20px;"></i>
+                    </a>
+                    <a href="{{ route('admin.contatos.index') }}" style="display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; background: linear-gradient(135deg, #d1fae5, #ecfdf5); color: #10b981; border: 2px solid #86efac; border-radius: 12px; text-decoration: none; transition: all 0.3s; box-shadow: 0 2px 5px rgba(16, 185, 129, 0.15);" onmouseover="this.style.background='linear-gradient(135deg, #10b981, #34d399)'; this.style.color='white'; this.style.borderColor='#10b981'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 10px rgba(16, 185, 129, 0.3)';" onmouseout="this.style.background='linear-gradient(135deg, #d1fae5, #ecfdf5)'; this.style.color='#10b981'; this.style.borderColor='#86efac'; this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 5px rgba(16, 185, 129, 0.15)';" title="Mensagens de Contato">
+                        <i data-lucide="mail" style="width: 20px; height: 20px;"></i>
+                    </a>
+                    <a href="{{ route('admin.atividades.index') }}" style="display: inline-flex; align-items: center; padding: 12px 20px; background: linear-gradient(135deg, #ec4899, #f97316); color: white; border: 3px solid #ec4899; border-radius: 12px; font-size: 14px; font-weight: 700; text-decoration: none; transition: all 0.3s; box-shadow: 0 4px 10px rgba(236, 72, 153, 0.3);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 15px rgba(236, 72, 153, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 10px rgba(236, 72, 153, 0.3)';">
+                        <i data-lucide="activity" style="width: 18px; height: 18px; margin-right: 8px;"></i>
+                        Ver Todas as Atividades
                     </a>
                 </div>
             </div>
@@ -289,7 +327,7 @@
                     <i data-lucide="activity" style="width: 40px; height: 40px; color: #ec4899;"></i>
                 </div>
                 <p style="font-size: 16px; color: #6b7280; text-align: center; margin-bottom: 24px; font-weight: 500;">Nenhuma atividade recente.</p>
-                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
                     <a href="{{ route('admin.livros.index') }}" style="display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; background: linear-gradient(135deg, #fff1f2, #fff7ed); color: #f97316; border: 2px solid #fed7aa; border-radius: 12px; text-decoration: none; transition: all 0.3s; box-shadow: 0 2px 5px rgba(249, 115, 22, 0.15);" onmouseover="this.style.background='linear-gradient(135deg, #f97316, #fb923c)'; this.style.color='white'; this.style.borderColor='#f97316'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 10px rgba(249, 115, 22, 0.3)';" onmouseout="this.style.background='linear-gradient(135deg, #fff1f2, #fff7ed)'; this.style.color='#f97316'; this.style.borderColor='#fed7aa'; this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 5px rgba(249, 115, 22, 0.15)';" title="Gerenciar Livros">
                         <i data-lucide="book-open" style="width: 20px; height: 20px;"></i>
                     </a>
@@ -301,6 +339,10 @@
                     </a>
                     <a href="{{ route('admin.usuarios.index') }}" style="display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; background: linear-gradient(135deg, #e0f2fe, #f0f9ff); color: #0ea5e9; border: 2px solid #bae6fd; border-radius: 12px; text-decoration: none; transition: all 0.3s; box-shadow: 0 2px 5px rgba(14, 165, 233, 0.15);" onmouseover="this.style.background='linear-gradient(135deg, #0ea5e9, #38bdf8)'; this.style.color='white'; this.style.borderColor='#0ea5e9'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 10px rgba(14, 165, 233, 0.3)';" onmouseout="this.style.background='linear-gradient(135deg, #e0f2fe, #f0f9ff)'; this.style.color='#0ea5e9'; this.style.borderColor='#bae6fd'; this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 5px rgba(14, 165, 233, 0.15)';" title="Gerenciar Usuários">
                         <i data-lucide="users" style="width: 20px; height: 20px;"></i>
+                    </a>
+                    <a href="{{ route('admin.atividades.index') }}" style="display: inline-flex; align-items: center; padding: 12px 20px; background: linear-gradient(135deg, #ec4899, #f97316); color: white; border: 3px solid #ec4899; border-radius: 12px; font-size: 14px; font-weight: 700; text-decoration: none; transition: all 0.3s; box-shadow: 0 4px 10px rgba(236, 72, 153, 0.3);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 15px rgba(236, 72, 153, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 10px rgba(236, 72, 153, 0.3)';">
+                        <i data-lucide="activity" style="width: 18px; height: 18px; margin-right: 8px;"></i>
+                        Ver Todas as Atividades
                     </a>
                 </div>
             </div>

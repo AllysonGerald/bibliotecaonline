@@ -119,6 +119,15 @@
             </table>
 
             @if($rentals->hasPages())
+                @php
+                    view()->share([
+                        'pagination_primaryColor' => '#8b5cf6',
+                        'pagination_primaryColorLight' => '#a855f7',
+                        'pagination_borderColor' => '#e9d5ff',
+                        'pagination_backgroundGradient' => 'linear-gradient(135deg, #f3e8ff, #faf5ff)',
+                        'pagination_backgroundGradientHover' => 'linear-gradient(135deg, #8b5cf6, #a855f7)',
+                    ]);
+                @endphp
                 {{ $rentals->links('components.pagination') }}
             @endif
         @else

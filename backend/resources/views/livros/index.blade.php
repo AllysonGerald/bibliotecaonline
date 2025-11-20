@@ -117,7 +117,16 @@
 
     <!-- Paginação -->
     @if($books->hasPages())
-        <div style="display: flex; justify-content: center; margin-top: 32px;">
+        <div style="background: white; border-radius: 20px; padding: 32px; border: 3px solid #e9d5ff; box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15);">
+            @php
+                view()->share([
+                    'pagination_primaryColor' => '#8b5cf6',
+                    'pagination_primaryColorLight' => '#a855f7',
+                    'pagination_borderColor' => '#e9d5ff',
+                    'pagination_backgroundGradient' => 'linear-gradient(135deg, #f3e8ff, #faf5ff)',
+                    'pagination_backgroundGradientHover' => 'linear-gradient(135deg, #8b5cf6, #a855f7)',
+                ]);
+            @endphp
             {{ $books->links('components.pagination') }}
         </div>
     @endif
