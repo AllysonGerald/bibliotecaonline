@@ -17,6 +17,7 @@ use App\Services\ContactService;
 use App\Services\RentalService;
 use App\Services\ReservationService;
 use App\Services\UserService;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 /**
@@ -40,7 +41,7 @@ class DashboardController extends Controller
      */
     public function index(): View
     {
-        $user = auth()->user();
+        $user = Auth::user();
         $totalBooks = $this->bookService->getTotalCount();
         $totalUsers = $this->userService->getTotalCount();
         $totalRentals = $this->rentalService->getActiveCount();
