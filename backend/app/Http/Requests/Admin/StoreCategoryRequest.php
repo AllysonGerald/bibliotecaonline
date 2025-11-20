@@ -13,15 +13,6 @@ class StoreCategoryRequest extends FormRequest
         return auth()->check() && auth()->user()->isAdmin();
     }
 
-    public function rules(): array
-    {
-        return [
-            'nome' => ['required', 'string', 'max:255'],
-            'descricao' => ['nullable', 'string', 'max:1000'],
-            'icone' => ['nullable', 'string', 'max:255'],
-        ];
-    }
-
     public function messages(): array
     {
         return [
@@ -29,6 +20,15 @@ class StoreCategoryRequest extends FormRequest
             'nome.max' => 'O nome da categoria não pode ter mais de 255 caracteres.',
             'descricao.max' => 'A descrição não pode ter mais de 1000 caracteres.',
             'icone.max' => 'O ícone não pode ter mais de 255 caracteres.',
+        ];
+    }
+
+    public function rules(): array
+    {
+        return [
+            'nome' => ['required', 'string', 'max:255'],
+            'descricao' => ['nullable', 'string', 'max:1000'],
+            'icone' => ['nullable', 'string', 'max:255'],
         ];
     }
 }

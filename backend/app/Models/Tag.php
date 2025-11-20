@@ -12,11 +12,11 @@ class Tag extends Model
 {
     use HasFactory;
 
-    protected $table = 'tags';
-
     protected $fillable = [
         'nome',
     ];
+
+    protected $table = 'tags';
 
     public function books(): BelongsToMany
     {

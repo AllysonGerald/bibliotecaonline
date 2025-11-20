@@ -11,22 +11,32 @@ use Illuminate\Database\Eloquent\Collection;
 
 class UserRepository implements UserRepositoryInterface
 {
-    public function findAll(): Collection
+    public function create(array $data): User
     {
-        return User::with(['rentals', 'reservations'])->get();
+        if (isset($data['password'])) {
+            $data['password'] = bcrypt($data['password']);
+        }
+
+        return User::create($data);
     }
 
-    public function findPaginated(int $perPage = 15): LengthAwarePaginator
+    public function delete(User $user): bool
+    {
+        return (bool) $user->delete();
+    }
+
+    public function findActive(): Collection
     {
         return User::with(['rentals', 'reservations'])
+            ->where('ativo', true)
             ->latest()
-            ->paginate($perPage)
+            ->get()
         ;
     }
 
-    public function findById(int $id): ?User
+    public function findAll(): Collection
     {
-        return User::with(['rentals', 'reservations', 'reviews', 'fines', 'wishlists'])->find($id);
+        return User::with(['rentals', 'reservations'])->get();
     }
 
     public function findByEmail(string $email): ?User
@@ -34,20 +44,15 @@ class UserRepository implements UserRepositoryInterface
         return User::where('email', $email)->first();
     }
 
-    public function search(string $term): Collection
+    public function findById(int $id): ?User
     {
-        return User::with(['rentals', 'reservations'])
-            ->where('name', 'like', "%{$term}%")
-            ->orWhere('email', 'like', "%{$term}%")
-            ->latest()
-            ->get()
-        ;
+        return User::with(['rentals', 'reservations', 'reviews', 'fines', 'wishlists'])->find($id);
     }
 
-    public function findActive(): Collection
+    public function findByRole(string $role): Collection
     {
         return User::with(['rentals', 'reservations'])
-            ->where('ativo', true)
+            ->where('papel', $role)
             ->latest()
             ->get()
         ;
@@ -62,22 +67,22 @@ class UserRepository implements UserRepositoryInterface
         ;
     }
 
-    public function findByRole(string $role): Collection
+    public function findPaginated(int $perPage = 15): LengthAwarePaginator
     {
         return User::with(['rentals', 'reservations'])
-            ->where('papel', $role)
             ->latest()
-            ->get()
+            ->paginate($perPage)
         ;
     }
 
-    public function create(array $data): User
+    public function search(string $term): Collection
     {
-        if (isset($data['password'])) {
-            $data['password'] = bcrypt($data['password']);
-        }
-
-        return User::create($data);
+        return User::with(['rentals', 'reservations'])
+            ->where('name', 'like', "%{$term}%")
+            ->orWhere('email', 'like', "%{$term}%")
+            ->latest()
+            ->get()
+        ;
     }
 
     public function update(User $user, array $data): bool
@@ -89,10 +94,5 @@ class UserRepository implements UserRepositoryInterface
         }
 
         return $user->update($data);
-    }
-
-    public function delete(User $user): bool
-    {
-        return (bool) $user->delete();
     }
 }

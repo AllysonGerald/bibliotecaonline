@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function (): void {
-    Route::get('/dashboard', function () {
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(static function (): void {
+    Route::get('/dashboard', static function () {
         return view('admin.dashboard');
     })->name('dashboard');
 

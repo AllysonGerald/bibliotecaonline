@@ -28,6 +28,25 @@ class AuthorController extends Controller
     ) {
     }
 
+    public function create(): View
+    {
+        return view('admin.autores.create');
+    }
+
+    public function destroy(Author $autor): RedirectResponse
+    {
+        $this->deleteAuthorAction->execute($autor);
+
+        return redirect()->route('admin.autores.index')
+            ->with('success', 'Autor excluído com sucesso!')
+        ;
+    }
+
+    public function edit(Author $autor): View
+    {
+        return view('admin.autores.edit', compact('autor'));
+    }
+
     public function index(Request $request): View
     {
         $authors = $this->authorService->getAllPaginated(
@@ -38,9 +57,11 @@ class AuthorController extends Controller
         return view('admin.autores.index', compact('authors'));
     }
 
-    public function create(): View
+    public function show(Author $autor): View
     {
-        return view('admin.autores.create');
+        $autor->load('books');
+
+        return view('admin.autores.show', compact('autor'));
     }
 
     public function store(StoreAuthorRequest $request): RedirectResponse|JsonResponse
@@ -73,18 +94,6 @@ class AuthorController extends Controller
         ;
     }
 
-    public function show(Author $autor): View
-    {
-        $autor->load('books');
-
-        return view('admin.autores.show', compact('autor'));
-    }
-
-    public function edit(Author $autor): View
-    {
-        return view('admin.autores.edit', compact('autor'));
-    }
-
     public function update(UpdateAuthorRequest $request, Author $autor): RedirectResponse
     {
         $validated = $request->validated();
@@ -100,15 +109,6 @@ class AuthorController extends Controller
 
         return redirect()->route('admin.autores.index')
             ->with('success', 'Autor atualizado com sucesso!')
-        ;
-    }
-
-    public function destroy(Author $autor): RedirectResponse
-    {
-        $this->deleteAuthorAction->execute($autor);
-
-        return redirect()->route('admin.autores.index')
-            ->with('success', 'Autor excluído com sucesso!')
         ;
     }
 }

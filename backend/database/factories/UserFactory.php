@@ -13,6 +13,14 @@ class UserFactory extends Factory
 {
     protected static ?string $password;
 
+    public function admin(): static
+    {
+        // Laravel requer closures não-estáticas para $this->state() funcionar com bindTo()
+        return $this->state(fn (array $attributes) => [
+            'papel' => UserRole::ADMIN,
+        ]);
+    }
+
     public function definition(): array
     {
         return [
@@ -27,24 +35,19 @@ class UserFactory extends Factory
         ];
     }
 
-    public function unverified(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
-        ]);
-    }
-
-    public function admin(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'papel' => UserRole::ADMIN,
-        ]);
-    }
-
     public function inactive(): static
     {
+        // Laravel requer closures não-estáticas para $this->state() funcionar com bindTo()
         return $this->state(fn (array $attributes) => [
             'ativo' => false,
+        ]);
+    }
+
+    public function unverified(): static
+    {
+        // Laravel requer closures não-estáticas para $this->state() funcionar com bindTo()
+        return $this->state(fn (array $attributes) => [
+            'email_verified_at' => null,
         ]);
     }
 }

@@ -30,7 +30,7 @@ class UserRentalController extends Controller
 
         // Filtrar por status se fornecido
         if ($request->filled('status')) {
-            $rentals = $rentals->filter(fn ($rental) => $rental->status->value === $request->status);
+            $rentals = $rentals->filter(static fn ($rental) => $rental->status->value === $request->status);
         }
 
         // Separar em grupos

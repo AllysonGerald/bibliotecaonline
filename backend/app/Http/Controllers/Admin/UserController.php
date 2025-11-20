@@ -28,6 +28,29 @@ class UserController extends Controller
     ) {
     }
 
+    public function create(): View
+    {
+        $roles = UserRole::cases();
+
+        return view('admin.usuarios.create', compact('roles'));
+    }
+
+    public function destroy(User $usuario): RedirectResponse
+    {
+        $this->deleteUserAction->execute($usuario);
+
+        return redirect()->route('admin.usuarios.index')
+            ->with('success', 'Usuário excluído com sucesso!')
+        ;
+    }
+
+    public function edit(User $usuario): View
+    {
+        $roles = UserRole::cases();
+
+        return view('admin.usuarios.edit', compact('usuario', 'roles'));
+    }
+
     public function index(Request $request): View
     {
         $users = $this->userService->getAllPaginated(
@@ -42,11 +65,11 @@ class UserController extends Controller
         return view('admin.usuarios.index', compact('users', 'roles'));
     }
 
-    public function create(): View
+    public function show(User $usuario): View
     {
-        $roles = UserRole::cases();
+        $usuario->load(['rentals', 'reservations', 'reviews', 'fines', 'wishlists']);
 
-        return view('admin.usuarios.create', compact('roles'));
+        return view('admin.usuarios.show', compact('usuario'));
     }
 
     public function store(StoreUserRequest $request): RedirectResponse
@@ -69,20 +92,6 @@ class UserController extends Controller
         ;
     }
 
-    public function show(User $usuario): View
-    {
-        $usuario->load(['rentals', 'reservations', 'reviews', 'fines', 'wishlists']);
-
-        return view('admin.usuarios.show', compact('usuario'));
-    }
-
-    public function edit(User $usuario): View
-    {
-        $roles = UserRole::cases();
-
-        return view('admin.usuarios.edit', compact('usuario', 'roles'));
-    }
-
     public function update(UpdateUserRequest $request, User $usuario): RedirectResponse
     {
         $validated = $request->validated();
@@ -100,15 +109,6 @@ class UserController extends Controller
 
         return redirect()->route('admin.usuarios.index')
             ->with('success', 'Usuário atualizado com sucesso!')
-        ;
-    }
-
-    public function destroy(User $usuario): RedirectResponse
-    {
-        $this->deleteUserAction->execute($usuario);
-
-        return redirect()->route('admin.usuarios.index')
-            ->with('success', 'Usuário excluído com sucesso!')
         ;
     }
 }

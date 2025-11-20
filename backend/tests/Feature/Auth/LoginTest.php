@@ -12,6 +12,16 @@ class LoginTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function testAuthenticatedUserCannotAccessLoginPage(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->get(route('login'));
+
+        $response->assertRedirect(route('home'));
+    }
+
     public function testLoginPageCanBeRendered(): void
     {
         $response = $this->get(route('login'));
@@ -22,14 +32,52 @@ class LoginTest extends TestCase
         $response->assertSee('Senha');
     }
 
-    public function testAuthenticatedUserCannotAccessLoginPage(): void
+    public function testLoginRequiresEmail(): void
+    {
+        $response = $this->post(route('login'), [
+            'password' => 'password123',
+        ]);
+
+        $response->assertSessionHasErrors('email');
+    }
+
+    public function testLoginRequiresPassword(): void
+    {
+        $response = $this->post(route('login'), [
+            'email' => 'test@example.com',
+        ]);
+
+        $response->assertSessionHasErrors('password');
+    }
+
+    public function testLoginRequiresValidEmailFormat(): void
+    {
+        $response = $this->post(route('login'), [
+            'email' => 'invalid-email',
+            'password' => 'password123',
+        ]);
+
+        $response->assertSessionHasErrors('email');
+    }
+
+    public function testRememberMeFunctionality(): void
     {
         /** @var User $user */
-        $user = User::factory()->create();
+        $user = User::factory()->create([
+            'email' => 'test@example.com',
+            'password' => bcrypt('password123'),
+            'ativo' => true,
+        ]);
 
-        $response = $this->actingAs($user)->get(route('login'));
+        $response = $this->post(route('login'), [
+            'email' => 'test@example.com',
+            'password' => 'password123',
+            'remember' => true,
+        ]);
 
         $response->assertRedirect(route('home'));
+        $this->assertAuthenticatedAs($user);
+        $this->assertNotNull($user->fresh()->remember_token);
     }
 
     public function testUserCanLoginWithValidCredentials(): void
@@ -48,6 +96,24 @@ class LoginTest extends TestCase
 
         $response->assertRedirect(route('home'));
         $this->assertAuthenticatedAs($user);
+    }
+
+    public function testUserCannotLoginWithInactiveAccount(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create([
+            'email' => 'test@example.com',
+            'password' => bcrypt('password123'),
+            'ativo' => false,
+        ]);
+
+        $response = $this->post(route('login'), [
+            'email' => 'test@example.com',
+            'password' => 'password123',
+        ]);
+
+        $response->assertSessionHasErrors('email');
+        $this->assertGuest();
     }
 
     public function testUserCannotLoginWithInvalidEmail(): void
@@ -80,71 +146,5 @@ class LoginTest extends TestCase
 
         $response->assertSessionHasErrors('email');
         $this->assertGuest();
-    }
-
-    public function testUserCannotLoginWithInactiveAccount(): void
-    {
-        /** @var User $user */
-        $user = User::factory()->create([
-            'email' => 'test@example.com',
-            'password' => bcrypt('password123'),
-            'ativo' => false,
-        ]);
-
-        $response = $this->post(route('login'), [
-            'email' => 'test@example.com',
-            'password' => 'password123',
-        ]);
-
-        $response->assertSessionHasErrors('email');
-        $this->assertGuest();
-    }
-
-    public function testRememberMeFunctionality(): void
-    {
-        /** @var User $user */
-        $user = User::factory()->create([
-            'email' => 'test@example.com',
-            'password' => bcrypt('password123'),
-            'ativo' => true,
-        ]);
-
-        $response = $this->post(route('login'), [
-            'email' => 'test@example.com',
-            'password' => 'password123',
-            'remember' => true,
-        ]);
-
-        $response->assertRedirect(route('home'));
-        $this->assertAuthenticatedAs($user);
-        $this->assertNotNull($user->fresh()->remember_token);
-    }
-
-    public function testLoginRequiresEmail(): void
-    {
-        $response = $this->post(route('login'), [
-            'password' => 'password123',
-        ]);
-
-        $response->assertSessionHasErrors('email');
-    }
-
-    public function testLoginRequiresPassword(): void
-    {
-        $response = $this->post(route('login'), [
-            'email' => 'test@example.com',
-        ]);
-
-        $response->assertSessionHasErrors('password');
-    }
-
-    public function testLoginRequiresValidEmailFormat(): void
-    {
-        $response = $this->post(route('login'), [
-            'email' => 'invalid-email',
-            'password' => 'password123',
-        ]);
-
-        $response->assertSessionHasErrors('email');
     }
 }

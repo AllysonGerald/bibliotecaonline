@@ -26,6 +26,24 @@ class RentalControllerTest extends TestCase
         $this->admin = $admin;
     }
 
+    public function testAdminCanAccessCreateRentalPage(): void
+    {
+        $response = $this->actingAs($this->admin)->get(route('admin.alugueis.create'));
+
+        $response->assertStatus(200);
+        $response->assertSee('Novo Aluguel');
+    }
+
+    public function testAdminCanAccessEditRentalPage(): void
+    {
+        $rental = Rental::factory()->create();
+
+        $response = $this->actingAs($this->admin)->get(route('admin.alugueis.edit', $rental));
+
+        $response->assertStatus(200);
+        $response->assertSee('Editar Aluguel');
+    }
+
     public function testAdminCanAccessRentalsIndexPage(): void
     {
         $response = $this->actingAs($this->admin)->get(route('admin.alugueis.index'));
@@ -34,29 +52,14 @@ class RentalControllerTest extends TestCase
         $response->assertSee('Gerenciar Aluguéis');
     }
 
-    public function testRegularUserCannotAccessRentalsIndexPage(): void
+    public function testAdminCanAccessShowRentalPage(): void
     {
-        /** @var User $user */
-        $user = User::factory()->create();
+        $rental = Rental::factory()->create();
 
-        $response = $this->actingAs($user)->get(route('admin.alugueis.index'));
-
-        $response->assertStatus(403);
-    }
-
-    public function testGuestCannotAccessRentalsIndexPage(): void
-    {
-        $response = $this->get(route('admin.alugueis.index'));
-
-        $response->assertRedirect(route('login'));
-    }
-
-    public function testAdminCanAccessCreateRentalPage(): void
-    {
-        $response = $this->actingAs($this->admin)->get(route('admin.alugueis.create'));
+        $response = $this->actingAs($this->admin)->get(route('admin.alugueis.show', $rental));
 
         $response->assertStatus(200);
-        $response->assertSee('Novo Aluguel');
+        $response->assertSee('Detalhes do Aluguel');
     }
 
     public function testAdminCanCreateRental(): void
@@ -82,6 +85,19 @@ class RentalControllerTest extends TestCase
         ]);
     }
 
+    public function testAdminCanDeleteRental(): void
+    {
+        $rental = Rental::factory()->create();
+
+        $response = $this->actingAs($this->admin)->delete(route('admin.alugueis.destroy', $rental));
+
+        $response->assertRedirect(route('admin.alugueis.index'));
+        $response->assertSessionHas('success');
+        $this->assertDatabaseMissing('alugueis', [
+            'id' => $rental->id,
+        ]);
+    }
+
     public function testAdminCannotCreateRentalWithInvalidData(): void
     {
         $response = $this->actingAs($this->admin)->post(route('admin.alugueis.store'), []);
@@ -89,14 +105,13 @@ class RentalControllerTest extends TestCase
         $response->assertSessionHasErrors(['usuario_id', 'livro_id', 'alugado_em', 'data_devolucao', 'status']);
     }
 
-    public function testAdminCanAccessEditRentalPage(): void
+    public function testAdminCannotUpdateRentalWithInvalidData(): void
     {
         $rental = Rental::factory()->create();
 
-        $response = $this->actingAs($this->admin)->get(route('admin.alugueis.edit', $rental));
+        $response = $this->actingAs($this->admin)->put(route('admin.alugueis.update', $rental), []);
 
-        $response->assertStatus(200);
-        $response->assertSee('Editar Aluguel');
+        $response->assertSessionHasErrors(['usuario_id', 'livro_id', 'alugado_em', 'data_devolucao', 'status']);
     }
 
     public function testAdminCanUpdateRental(): void
@@ -122,36 +137,21 @@ class RentalControllerTest extends TestCase
         ]);
     }
 
-    public function testAdminCannotUpdateRentalWithInvalidData(): void
+    public function testGuestCannotAccessRentalsIndexPage(): void
     {
-        $rental = Rental::factory()->create();
+        $response = $this->get(route('admin.alugueis.index'));
 
-        $response = $this->actingAs($this->admin)->put(route('admin.alugueis.update', $rental), []);
-
-        $response->assertSessionHasErrors(['usuario_id', 'livro_id', 'alugado_em', 'data_devolucao', 'status']);
+        $response->assertRedirect(route('login'));
     }
 
-    public function testAdminCanAccessShowRentalPage(): void
+    public function testRegularUserCannotAccessRentalsIndexPage(): void
     {
-        $rental = Rental::factory()->create();
+        /** @var User $user */
+        $user = User::factory()->create();
 
-        $response = $this->actingAs($this->admin)->get(route('admin.alugueis.show', $rental));
+        $response = $this->actingAs($user)->get(route('admin.alugueis.index'));
 
-        $response->assertStatus(200);
-        $response->assertSee('Detalhes do Aluguel');
-    }
-
-    public function testAdminCanDeleteRental(): void
-    {
-        $rental = Rental::factory()->create();
-
-        $response = $this->actingAs($this->admin)->delete(route('admin.alugueis.destroy', $rental));
-
-        $response->assertRedirect(route('admin.alugueis.index'));
-        $response->assertSessionHas('success');
-        $this->assertDatabaseMissing('alugueis', [
-            'id' => $rental->id,
-        ]);
+        $response->assertStatus(403);
     }
 
     public function testRentalIndexPageShowsSearchResults(): void

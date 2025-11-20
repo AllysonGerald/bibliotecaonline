@@ -11,9 +11,24 @@ use Illuminate\Database\Eloquent\Collection;
 
 class CategoryRepository implements CategoryRepositoryInterface
 {
+    public function create(array $data): Category
+    {
+        return Category::create($data);
+    }
+
+    public function delete(Category $category): bool
+    {
+        return (bool) $category->delete();
+    }
+
     public function findAll(): Collection
     {
         return Category::with('books')->get();
+    }
+
+    public function findById(int $id): ?Category
+    {
+        return Category::with('books')->find($id);
     }
 
     public function findPaginated(int $perPage = 15): LengthAwarePaginator
@@ -22,11 +37,6 @@ class CategoryRepository implements CategoryRepositoryInterface
             ->latest()
             ->paginate($perPage)
         ;
-    }
-
-    public function findById(int $id): ?Category
-    {
-        return Category::with('books')->find($id);
     }
 
     public function search(string $term): Collection
@@ -38,18 +48,8 @@ class CategoryRepository implements CategoryRepositoryInterface
         ;
     }
 
-    public function create(array $data): Category
-    {
-        return Category::create($data);
-    }
-
     public function update(Category $category, array $data): bool
     {
         return $category->update($data);
-    }
-
-    public function delete(Category $category): bool
-    {
-        return (bool) $category->delete();
     }
 }

@@ -24,37 +24,42 @@ class UserControllerTest extends TestCase
         $this->admin = $admin;
     }
 
-    public function testAdminCanAccessUsersIndexPage(): void
-    {
-        $response = $this->actingAs($this->admin)->get(route('admin.usuarios.index'));
-
-        $response->assertStatus(200);
-        $response->assertSee('Gerenciar Usuários');
-    }
-
-    public function testRegularUserCannotAccessUsersIndexPage(): void
-    {
-        /** @var User $user */
-        $user = User::factory()->create();
-
-        $response = $this->actingAs($user)->get(route('admin.usuarios.index'));
-
-        $response->assertStatus(403);
-    }
-
-    public function testGuestCannotAccessUsersIndexPage(): void
-    {
-        $response = $this->get(route('admin.usuarios.index'));
-
-        $response->assertRedirect(route('login'));
-    }
-
     public function testAdminCanAccessCreateUserPage(): void
     {
         $response = $this->actingAs($this->admin)->get(route('admin.usuarios.create'));
 
         $response->assertStatus(200);
         $response->assertSee('Novo Usuário');
+    }
+
+    public function testAdminCanAccessEditUserPage(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($this->admin)->get(route('admin.usuarios.edit', $user));
+
+        $response->assertStatus(200);
+        $response->assertSee('Editar Usuário');
+    }
+
+    public function testAdminCanAccessShowUserPage(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($this->admin)->get(route('admin.usuarios.show', $user));
+
+        $response->assertStatus(200);
+        $response->assertSee('Detalhes do Usuário');
+        $response->assertSee($user->name);
+        $response->assertSee($user->email);
+    }
+
+    public function testAdminCanAccessUsersIndexPage(): void
+    {
+        $response = $this->actingAs($this->admin)->get(route('admin.usuarios.index'));
+
+        $response->assertStatus(200);
+        $response->assertSee('Gerenciar Usuários');
     }
 
     public function testAdminCanCreateUser(): void
@@ -76,11 +81,17 @@ class UserControllerTest extends TestCase
         ]);
     }
 
-    public function testAdminCannotCreateUserWithInvalidData(): void
+    public function testAdminCanDeleteUser(): void
     {
-        $response = $this->actingAs($this->admin)->post(route('admin.usuarios.store'), []);
+        $user = User::factory()->create();
 
-        $response->assertSessionHasErrors(['name', 'email', 'password', 'papel']);
+        $response = $this->actingAs($this->admin)->delete(route('admin.usuarios.destroy', $user));
+
+        $response->assertRedirect(route('admin.usuarios.index'));
+        $response->assertSessionHas('success');
+        $this->assertDatabaseMissing('users', [
+            'id' => $user->id,
+        ]);
     }
 
     public function testAdminCannotCreateUserWithDuplicateEmail(): void
@@ -98,14 +109,20 @@ class UserControllerTest extends TestCase
         $response->assertSessionHasErrors(['email']);
     }
 
-    public function testAdminCanAccessEditUserPage(): void
+    public function testAdminCannotCreateUserWithInvalidData(): void
+    {
+        $response = $this->actingAs($this->admin)->post(route('admin.usuarios.store'), []);
+
+        $response->assertSessionHasErrors(['name', 'email', 'password', 'papel']);
+    }
+
+    public function testAdminCannotUpdateUserWithInvalidData(): void
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($this->admin)->get(route('admin.usuarios.edit', $user));
+        $response = $this->actingAs($this->admin)->put(route('admin.usuarios.update', $user), []);
 
-        $response->assertStatus(200);
-        $response->assertSee('Editar Usuário');
+        $response->assertSessionHasErrors(['name', 'email', 'papel']);
     }
 
     public function testAdminCanUpdateUser(): void
@@ -146,50 +163,21 @@ class UserControllerTest extends TestCase
         $response->assertSessionHas('success');
     }
 
-    public function testAdminCannotUpdateUserWithInvalidData(): void
+    public function testGuestCannotAccessUsersIndexPage(): void
     {
-        $user = User::factory()->create();
+        $response = $this->get(route('admin.usuarios.index'));
 
-        $response = $this->actingAs($this->admin)->put(route('admin.usuarios.update', $user), []);
-
-        $response->assertSessionHasErrors(['name', 'email', 'papel']);
+        $response->assertRedirect(route('login'));
     }
 
-    public function testAdminCanAccessShowUserPage(): void
-    {
-        $user = User::factory()->create();
-
-        $response = $this->actingAs($this->admin)->get(route('admin.usuarios.show', $user));
-
-        $response->assertStatus(200);
-        $response->assertSee('Detalhes do Usuário');
-        $response->assertSee($user->name);
-        $response->assertSee($user->email);
-    }
-
-    public function testAdminCanDeleteUser(): void
-    {
-        $user = User::factory()->create();
-
-        $response = $this->actingAs($this->admin)->delete(route('admin.usuarios.destroy', $user));
-
-        $response->assertRedirect(route('admin.usuarios.index'));
-        $response->assertSessionHas('success');
-        $this->assertDatabaseMissing('users', [
-            'id' => $user->id,
-        ]);
-    }
-
-    public function testUserIndexPageShowsSearchResults(): void
+    public function testRegularUserCannotAccessUsersIndexPage(): void
     {
         /** @var User $user */
-        $user = User::factory()->create(['name' => 'Usuário Teste']);
-        User::factory()->create(['name' => 'Outro Usuário']);
+        $user = User::factory()->create();
 
-        $response = $this->actingAs($this->admin)->get(route('admin.usuarios.index', ['search' => 'Teste']));
+        $response = $this->actingAs($user)->get(route('admin.usuarios.index'));
 
-        $response->assertStatus(200);
-        $response->assertSee('Usuário Teste');
+        $response->assertStatus(403);
     }
 
     public function testUserIndexPageFiltersByRole(): void
@@ -210,5 +198,17 @@ class UserControllerTest extends TestCase
         $response = $this->actingAs($this->admin)->get(route('admin.usuarios.index', ['ativo' => '1']));
 
         $response->assertStatus(200);
+    }
+
+    public function testUserIndexPageShowsSearchResults(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create(['name' => 'Usuário Teste']);
+        User::factory()->create(['name' => 'Outro Usuário']);
+
+        $response = $this->actingAs($this->admin)->get(route('admin.usuarios.index', ['search' => 'Teste']));
+
+        $response->assertStatus(200);
+        $response->assertSee('Usuário Teste');
     }
 }

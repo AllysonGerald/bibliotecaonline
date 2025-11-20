@@ -15,19 +15,6 @@ class StoreRentalRequest extends FormRequest
         return auth()->check() && auth()->user()->isAdmin();
     }
 
-    public function rules(): array
-    {
-        return [
-            'usuario_id' => ['required', 'integer', 'exists:users,id'],
-            'livro_id' => ['required', 'integer', 'exists:livros,id'],
-            'alugado_em' => ['required', 'date'],
-            'data_devolucao' => ['required', 'date', 'after:alugado_em'],
-            'devolvido_em' => ['nullable', 'date', 'after_or_equal:alugado_em'],
-            'taxa_atraso' => ['nullable', 'numeric', 'min:0'],
-            'status' => ['required', new Enum(RentalStatus::class)],
-        ];
-    }
-
     public function messages(): array
     {
         return [
@@ -45,6 +32,19 @@ class StoreRentalRequest extends FormRequest
             'taxa_atraso.numeric' => 'A taxa de atraso deve ser um número.',
             'taxa_atraso.min' => 'A taxa de atraso não pode ser negativa.',
             'status.required' => 'O campo status é obrigatório.',
+        ];
+    }
+
+    public function rules(): array
+    {
+        return [
+            'usuario_id' => ['required', 'integer', 'exists:users,id'],
+            'livro_id' => ['required', 'integer', 'exists:livros,id'],
+            'alugado_em' => ['required', 'date'],
+            'data_devolucao' => ['required', 'date', 'after:alugado_em'],
+            'devolvido_em' => ['nullable', 'date', 'after_or_equal:alugado_em'],
+            'taxa_atraso' => ['nullable', 'numeric', 'min:0'],
+            'status' => ['required', new Enum(RentalStatus::class)],
         ];
     }
 }

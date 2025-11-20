@@ -7,9 +7,14 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
+    public function down(): void
+    {
+        Schema::dropIfExists('reservas');
+    }
+
     public function up(): void
     {
-        Schema::create('reservas', function (Blueprint $table): void {
+        Schema::create('reservas', static function (Blueprint $table): void {
             $table->id();
             $table->foreignId('usuario_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('livro_id')->constrained('livros')->onDelete('cascade');
@@ -18,10 +23,5 @@ return new class extends Migration {
             $table->enum('status', ['pendente', 'confirmada', 'cancelada', 'expirada'])->default('pendente');
             $table->timestamps();
         });
-    }
-
-    public function down(): void
-    {
-        Schema::dropIfExists('reservas');
     }
 };

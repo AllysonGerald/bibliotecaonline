@@ -32,29 +32,32 @@ class AuthorControllerTest extends TestCase
         $response->assertSee('Gerenciar Autores');
     }
 
-    public function testRegularUserCannotAccessAuthorsIndexPage(): void
-    {
-        /** @var User $user */
-        $user = User::factory()->create();
-
-        $response = $this->actingAs($user)->get(route('admin.autores.index'));
-
-        $response->assertStatus(403);
-    }
-
-    public function testGuestCannotAccessAuthorsIndexPage(): void
-    {
-        $response = $this->get(route('admin.autores.index'));
-
-        $response->assertRedirect(route('login'));
-    }
-
     public function testAdminCanAccessCreateAuthorPage(): void
     {
         $response = $this->actingAs($this->admin)->get(route('admin.autores.create'));
 
         $response->assertStatus(200);
         $response->assertSee('Novo Autor');
+    }
+
+    public function testAdminCanAccessEditAuthorPage(): void
+    {
+        $author = Author::factory()->create();
+
+        $response = $this->actingAs($this->admin)->get(route('admin.autores.edit', $author));
+
+        $response->assertStatus(200);
+        $response->assertSee('Editar Autor');
+    }
+
+    public function testAdminCanAccessShowAuthorPage(): void
+    {
+        $author = Author::factory()->create();
+
+        $response = $this->actingAs($this->admin)->get(route('admin.autores.show', $author));
+
+        $response->assertStatus(200);
+        $response->assertSee($author->nome);
     }
 
     public function testAdminCanCreateAuthor(): void
@@ -71,15 +74,6 @@ class AuthorControllerTest extends TestCase
         $this->assertDatabaseHas('autores', [
             'nome' => 'Autor de Teste',
         ]);
-    }
-
-    public function testAdminCannotCreateAuthorWithInvalidData(): void
-    {
-        $response = $this->actingAs($this->admin)->post(route('admin.autores.store'), [
-            'nome' => '',
-        ]);
-
-        $response->assertSessionHasErrors(['nome']);
     }
 
     public function testAdminCanCreateAuthorViaAjax(): void
@@ -114,6 +108,20 @@ class AuthorControllerTest extends TestCase
         ]);
     }
 
+    public function testAdminCanDeleteAuthor(): void
+    {
+        $author = Author::factory()->create();
+
+        $response = $this->actingAs($this->admin)->delete(route('admin.autores.destroy', $author));
+
+        $response->assertRedirect(route('admin.autores.index'));
+        $response->assertSessionHas('success');
+
+        $this->assertDatabaseMissing('autores', [
+            'id' => $author->id,
+        ]);
+    }
+
     public function testAdminCannotCreateAuthorViaAjaxWithInvalidData(): void
     {
         $response = $this->actingAs($this->admin)
@@ -130,44 +138,24 @@ class AuthorControllerTest extends TestCase
         $response->assertJsonValidationErrors(['nome']);
     }
 
-    public function testRegularUserCannotCreateAuthorViaAjax(): void
+    public function testAdminCannotCreateAuthorWithInvalidData(): void
     {
-        /** @var User $user */
-        $user = User::factory()->create();
-
-        $response = $this->actingAs($user)
-            ->withHeaders([
-                'X-Requested-With' => 'XMLHttpRequest',
-                'Accept' => 'application/json',
-            ])
-            ->post(route('admin.autores.store'), [
-                'nome' => 'Autor Não Autorizado',
-            ])
-        ;
-
-        $response->assertStatus(403);
-    }
-
-    public function testGuestCannotCreateAuthorViaAjax(): void
-    {
-        $response = $this->withHeaders([
-            'X-Requested-With' => 'XMLHttpRequest',
-            'Accept' => 'application/json',
-        ])->post(route('admin.autores.store'), [
-            'nome' => 'Autor Não Autenticado',
+        $response = $this->actingAs($this->admin)->post(route('admin.autores.store'), [
+            'nome' => '',
         ]);
 
-        $response->assertStatus(401);
+        $response->assertSessionHasErrors(['nome']);
     }
 
-    public function testAdminCanAccessEditAuthorPage(): void
+    public function testAdminCannotUpdateAuthorWithInvalidData(): void
     {
         $author = Author::factory()->create();
 
-        $response = $this->actingAs($this->admin)->get(route('admin.autores.edit', $author));
+        $response = $this->actingAs($this->admin)->put(route('admin.autores.update', $author), [
+            'nome' => '',
+        ]);
 
-        $response->assertStatus(200);
-        $response->assertSee('Editar Autor');
+        $response->assertSessionHasErrors(['nome']);
     }
 
     public function testAdminCanUpdateAuthor(): void
@@ -189,41 +177,6 @@ class AuthorControllerTest extends TestCase
         ]);
     }
 
-    public function testAdminCannotUpdateAuthorWithInvalidData(): void
-    {
-        $author = Author::factory()->create();
-
-        $response = $this->actingAs($this->admin)->put(route('admin.autores.update', $author), [
-            'nome' => '',
-        ]);
-
-        $response->assertSessionHasErrors(['nome']);
-    }
-
-    public function testAdminCanAccessShowAuthorPage(): void
-    {
-        $author = Author::factory()->create();
-
-        $response = $this->actingAs($this->admin)->get(route('admin.autores.show', $author));
-
-        $response->assertStatus(200);
-        $response->assertSee($author->nome);
-    }
-
-    public function testAdminCanDeleteAuthor(): void
-    {
-        $author = Author::factory()->create();
-
-        $response = $this->actingAs($this->admin)->delete(route('admin.autores.destroy', $author));
-
-        $response->assertRedirect(route('admin.autores.index'));
-        $response->assertSessionHas('success');
-
-        $this->assertDatabaseMissing('autores', [
-            'id' => $author->id,
-        ]);
-    }
-
     public function testAuthorIndexPageShowsSearchResults(): void
     {
         Author::factory()->create(['nome' => 'Autor Teste']);
@@ -234,5 +187,52 @@ class AuthorControllerTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Autor Teste');
         $response->assertDontSee('Outro Autor');
+    }
+
+    public function testGuestCannotAccessAuthorsIndexPage(): void
+    {
+        $response = $this->get(route('admin.autores.index'));
+
+        $response->assertRedirect(route('login'));
+    }
+
+    public function testGuestCannotCreateAuthorViaAjax(): void
+    {
+        $response = $this->withHeaders([
+            'X-Requested-With' => 'XMLHttpRequest',
+            'Accept' => 'application/json',
+        ])->post(route('admin.autores.store'), [
+            'nome' => 'Autor Não Autenticado',
+        ]);
+
+        $response->assertStatus(401);
+    }
+
+    public function testRegularUserCannotAccessAuthorsIndexPage(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->get(route('admin.autores.index'));
+
+        $response->assertStatus(403);
+    }
+
+    public function testRegularUserCannotCreateAuthorViaAjax(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)
+            ->withHeaders([
+                'X-Requested-With' => 'XMLHttpRequest',
+                'Accept' => 'application/json',
+            ])
+            ->post(route('admin.autores.store'), [
+                'nome' => 'Autor Não Autorizado',
+            ])
+        ;
+
+        $response->assertStatus(403);
     }
 }

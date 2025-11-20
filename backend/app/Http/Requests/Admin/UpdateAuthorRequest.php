@@ -13,16 +13,6 @@ class UpdateAuthorRequest extends FormRequest
         return auth()->check() && auth()->user()->isAdmin();
     }
 
-    public function rules(): array
-    {
-        return [
-            'nome' => ['required', 'string', 'max:255'],
-            'biografia' => ['nullable', 'string', 'max:5000'],
-            'data_nascimento' => ['nullable', 'date', 'before:today'],
-            'foto' => ['nullable', 'string', 'max:255'],
-        ];
-    }
-
     public function messages(): array
     {
         return [
@@ -32,6 +22,16 @@ class UpdateAuthorRequest extends FormRequest
             'data_nascimento.date' => 'A data de nascimento deve ser uma data válida.',
             'data_nascimento.before' => 'A data de nascimento deve ser anterior a hoje.',
             'foto.max' => 'O caminho da foto não pode ter mais de 255 caracteres.',
+        ];
+    }
+
+    public function rules(): array
+    {
+        return [
+            'nome' => ['required', 'string', 'max:255'],
+            'biografia' => ['nullable', 'string', 'max:5000'],
+            'data_nascimento' => ['nullable', 'date', 'before:today'],
+            'foto' => ['nullable', 'string', 'max:255'],
         ];
     }
 }

@@ -12,6 +12,22 @@ use Illuminate\Http\RedirectResponse;
 
 class ReviewController extends Controller
 {
+    public function destroy(Review $review): RedirectResponse
+    {
+        $user = auth()->user();
+
+        // Verificar se a avaliação pertence ao usuário
+        if ($review->usuario_id !== $user->id) {
+            abort(403, 'Você não tem permissão para excluir esta avaliação.');
+        }
+
+        $review->delete();
+
+        return redirect()->back()
+            ->with('success', 'Avaliação removida com sucesso!')
+        ;
+    }
+
     public function store(StoreReviewRequest $request, Book $livro): RedirectResponse
     {
         $user = auth()->user();
@@ -61,22 +77,6 @@ class ReviewController extends Controller
 
         return redirect()->back()
             ->with('success', 'Avaliação atualizada com sucesso!')
-        ;
-    }
-
-    public function destroy(Review $review): RedirectResponse
-    {
-        $user = auth()->user();
-
-        // Verificar se a avaliação pertence ao usuário
-        if ($review->usuario_id !== $user->id) {
-            abort(403, 'Você não tem permissão para excluir esta avaliação.');
-        }
-
-        $review->delete();
-
-        return redirect()->back()
-            ->with('success', 'Avaliação removida com sucesso!')
         ;
     }
 }

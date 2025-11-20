@@ -18,6 +18,21 @@ class UserService
     ) {
     }
 
+    public function create(UserDTO $dto): User
+    {
+        return $this->userRepository->create($dto->toArray());
+    }
+
+    public function delete(User $user): bool
+    {
+        return $this->userRepository->delete($user);
+    }
+
+    public function getActive(): Collection
+    {
+        return $this->userRepository->findActive();
+    }
+
     public function getAllPaginated(
         int $perPage = 15,
         ?string $search = null,
@@ -27,7 +42,7 @@ class UserService
         $query = User::with(['rentals', 'reservations']);
 
         if ($search !== null) {
-            $query->where(function ($q) use ($search): void {
+            $query->where(static function ($q) use ($search): void {
                 $q->where('name', 'like', "%{$search}%")
                     ->orWhere('email', 'like', "%{$search}%")
                 ;
@@ -45,29 +60,14 @@ class UserService
         return $query->latest()->paginate($perPage);
     }
 
-    public function getById(int $id): ?User
-    {
-        return $this->userRepository->findById($id);
-    }
-
     public function getByEmail(string $email): ?User
     {
         return $this->userRepository->findByEmail($email);
     }
 
-    public function search(string $term): Collection
+    public function getById(int $id): ?User
     {
-        return $this->userRepository->search($term);
-    }
-
-    public function getActive(): Collection
-    {
-        return $this->userRepository->findActive();
-    }
-
-    public function getInactive(): Collection
-    {
-        return $this->userRepository->findInactive();
+        return $this->userRepository->findById($id);
     }
 
     public function getByRole(string $role): Collection
@@ -75,9 +75,14 @@ class UserService
         return $this->userRepository->findByRole($role);
     }
 
-    public function create(UserDTO $dto): User
+    public function getInactive(): Collection
     {
-        return $this->userRepository->create($dto->toArray());
+        return $this->userRepository->findInactive();
+    }
+
+    public function search(string $term): Collection
+    {
+        return $this->userRepository->search($term);
     }
 
     public function update(User $user, UserDTO $dto): User
@@ -89,10 +94,5 @@ class UserService
         }
 
         return $user->fresh(['rentals', 'reservations', 'reviews', 'fines', 'wishlists']) ?? $user;
-    }
-
-    public function delete(User $user): bool
-    {
-        return $this->userRepository->delete($user);
     }
 }

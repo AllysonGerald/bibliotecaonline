@@ -13,17 +13,6 @@ class StoreReviewRequest extends FormRequest
         return true;
     }
 
-    public function rules(): array
-    {
-        $user = $this->user();
-        $bookId = $this->route('livro')->id;
-
-        return [
-            'nota' => ['required', 'integer', 'min:1', 'max:5'],
-            'comentario' => ['nullable', 'string', 'max:2000'],
-        ];
-    }
-
     public function messages(): array
     {
         return [
@@ -32,6 +21,17 @@ class StoreReviewRequest extends FormRequest
             'nota.min' => 'A nota mínima é 1.',
             'nota.max' => 'A nota máxima é 5.',
             'comentario.max' => 'O comentário não pode ter mais de 2000 caracteres.',
+        ];
+    }
+
+    public function rules(): array
+    {
+        $user = $this->user();
+        $bookId = $this->route('livro')->id;
+
+        return [
+            'nota' => ['required', 'integer', 'min:1', 'max:5'],
+            'comentario' => ['nullable', 'string', 'max:2000'],
         ];
     }
 

@@ -7,17 +7,17 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
+    public function down(): void
+    {
+        Schema::dropIfExists('tags');
+    }
+
     public function up(): void
     {
-        Schema::create('tags', function (Blueprint $table): void {
+        Schema::create('tags', static function (Blueprint $table): void {
             $table->id();
             $table->string('nome')->unique();
             $table->timestamps();
         });
-    }
-
-    public function down(): void
-    {
-        Schema::dropIfExists('tags');
     }
 };

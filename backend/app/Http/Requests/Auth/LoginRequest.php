@@ -13,21 +13,21 @@ class LoginRequest extends FormRequest
         return true;
     }
 
-    public function rules(): array
-    {
-        return [
-            'email' => ['required', 'string', 'email', 'max:255'],
-            'password' => ['required', 'string'],
-            'remember' => ['sometimes', 'boolean'],
-        ];
-    }
-
     public function messages(): array
     {
         return [
             'email.required' => 'O campo e-mail é obrigatório.',
             'email.email' => 'O e-mail deve ser um endereço válido.',
             'password.required' => 'O campo senha é obrigatório.',
+        ];
+    }
+
+    public function rules(): array
+    {
+        return [
+            'email' => ['required', 'string', 'email', 'max:255'],
+            'password' => ['required', 'string'],
+            'remember' => ['sometimes', 'boolean'],
         ];
     }
 }

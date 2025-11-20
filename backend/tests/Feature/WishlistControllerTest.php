@@ -66,25 +66,6 @@ class WishlistControllerTest extends TestCase
         $this->assertDatabaseCount('lista_desejos', 1);
     }
 
-    public function testUserCanRemoveBookFromWishlist(): void
-    {
-        /** @var User $user */
-        $user = User::factory()->create();
-        $book = Book::factory()->create();
-        $wishlist = Wishlist::factory()->create([
-            'usuario_id' => $user->id,
-            'livro_id' => $book->id,
-        ]);
-
-        $response = $this->actingAs($user)->delete(route('lista-desejos.destroy', $wishlist));
-
-        $response->assertRedirect(route('lista-desejos'));
-        $response->assertSessionHas('success', 'Livro removido da lista de desejos com sucesso!');
-        $this->assertDatabaseMissing('lista_desejos', [
-            'id' => $wishlist->id,
-        ]);
-    }
-
     public function testUserCannotRemoveOtherUserWishlistItem(): void
     {
         /** @var User $user1 */
@@ -101,6 +82,25 @@ class WishlistControllerTest extends TestCase
 
         $response->assertStatus(403);
         $this->assertDatabaseHas('lista_desejos', [
+            'id' => $wishlist->id,
+        ]);
+    }
+
+    public function testUserCanRemoveBookFromWishlist(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+        $book = Book::factory()->create();
+        $wishlist = Wishlist::factory()->create([
+            'usuario_id' => $user->id,
+            'livro_id' => $book->id,
+        ]);
+
+        $response = $this->actingAs($user)->delete(route('lista-desejos.destroy', $wishlist));
+
+        $response->assertRedirect(route('lista-desejos'));
+        $response->assertSessionHas('success', 'Livro removido da lista de desejos com sucesso!');
+        $this->assertDatabaseMissing('lista_desejos', [
             'id' => $wishlist->id,
         ]);
     }
@@ -130,17 +130,6 @@ class WishlistControllerTest extends TestCase
         $response->assertDontSee($wishlist2->book->titulo);
     }
 
-    public function testWishlistPageShowsEmptyStateWhenNoItems(): void
-    {
-        /** @var User $user */
-        $user = User::factory()->create();
-
-        $response = $this->actingAs($user)->get(route('lista-desejos'));
-
-        $response->assertStatus(200);
-        $response->assertSee('Sua lista de desejos está vazia');
-    }
-
     public function testWishlistPageDisplaysBookInformation(): void
     {
         /** @var User $user */
@@ -157,5 +146,16 @@ class WishlistControllerTest extends TestCase
         $response->assertSee($wishlist->book->titulo);
         $response->assertSee($wishlist->book->author->nome);
         $response->assertSee($wishlist->book->category->nome);
+    }
+
+    public function testWishlistPageShowsEmptyStateWhenNoItems(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->get(route('lista-desejos'));
+
+        $response->assertStatus(200);
+        $response->assertSee('Sua lista de desejos está vazia');
     }
 }

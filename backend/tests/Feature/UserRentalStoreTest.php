@@ -16,31 +16,6 @@ class UserRentalStoreTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testUserCanRentAvailableBook(): void
-    {
-        /** @var User $user */
-        $user = User::factory()->create();
-        $book = Book::factory()->create([
-            'status' => BookStatus::DISPONIVEL,
-            'quantidade' => 5,
-        ]);
-
-        $response = $this->actingAs($user)->post(route('alugueis.store', $book));
-
-        $response->assertRedirect(route('meus-alugueis'));
-        $response->assertSessionHas('success');
-        $this->assertDatabaseHas('alugueis', [
-            'usuario_id' => $user->id,
-            'livro_id' => $book->id,
-            'status' => RentalStatus::ATIVO->value,
-        ]);
-        $book->refresh();
-        // O livro deve permanecer DISPONIVEL quando ainda há exemplares disponíveis
-        $this->assertEquals(BookStatus::DISPONIVEL, $book->status);
-        // A quantidade deve ser decrementada
-        $this->assertEquals(4, $book->quantidade);
-    }
-
     public function testBookBecomesUnavailableWhenAllCopiesAreRented(): void
     {
         /** @var User $user */
@@ -65,22 +40,15 @@ class UserRentalStoreTest extends TestCase
         $this->assertEquals(0, $book->quantidade);
     }
 
-    public function testUserCannotRentUnavailableBook(): void
+    public function testGuestCannotRentBook(): void
     {
-        /** @var User $user */
-        $user = User::factory()->create();
         $book = Book::factory()->create([
-            'status' => BookStatus::ALUGADO,
+            'status' => BookStatus::DISPONIVEL,
         ]);
 
-        $response = $this->actingAs($user)->post(route('alugueis.store', $book));
+        $response = $this->post(route('alugueis.store', $book));
 
-        $response->assertRedirect();
-        $response->assertSessionHas('error', 'Este livro não está disponível para aluguel.');
-        $this->assertDatabaseMissing('alugueis', [
-            'usuario_id' => $user->id,
-            'livro_id' => $book->id,
-        ]);
+        $response->assertRedirect(route('login'));
     }
 
     public function testUserCannotRentSameBookTwice(): void
@@ -105,14 +73,46 @@ class UserRentalStoreTest extends TestCase
         $this->assertDatabaseCount('alugueis', 1);
     }
 
-    public function testGuestCannotRentBook(): void
+    public function testUserCannotRentUnavailableBook(): void
     {
+        /** @var User $user */
+        $user = User::factory()->create();
         $book = Book::factory()->create([
-            'status' => BookStatus::DISPONIVEL,
+            'status' => BookStatus::ALUGADO,
         ]);
 
-        $response = $this->post(route('alugueis.store', $book));
+        $response = $this->actingAs($user)->post(route('alugueis.store', $book));
 
-        $response->assertRedirect(route('login'));
+        $response->assertRedirect();
+        $response->assertSessionHas('error', 'Este livro não está disponível para aluguel.');
+        $this->assertDatabaseMissing('alugueis', [
+            'usuario_id' => $user->id,
+            'livro_id' => $book->id,
+        ]);
+    }
+
+    public function testUserCanRentAvailableBook(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+        $book = Book::factory()->create([
+            'status' => BookStatus::DISPONIVEL,
+            'quantidade' => 5,
+        ]);
+
+        $response = $this->actingAs($user)->post(route('alugueis.store', $book));
+
+        $response->assertRedirect(route('meus-alugueis'));
+        $response->assertSessionHas('success');
+        $this->assertDatabaseHas('alugueis', [
+            'usuario_id' => $user->id,
+            'livro_id' => $book->id,
+            'status' => RentalStatus::ATIVO->value,
+        ]);
+        $book->refresh();
+        // O livro deve permanecer DISPONIVEL quando ainda há exemplares disponíveis
+        $this->assertEquals(BookStatus::DISPONIVEL, $book->status);
+        // A quantidade deve ser decrementada
+        $this->assertEquals(4, $book->quantidade);
     }
 }

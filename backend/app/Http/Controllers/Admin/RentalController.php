@@ -31,6 +31,32 @@ class RentalController extends Controller
     ) {
     }
 
+    public function create(): View
+    {
+        $users = User::where('ativo', true)->orderBy('name')->get();
+        $books = Book::with('author')->orderBy('titulo')->get();
+
+        return view('admin.alugueis.create', compact('users', 'books'));
+    }
+
+    public function destroy(Rental $aluguel): RedirectResponse
+    {
+        $this->deleteRentalAction->execute($aluguel);
+
+        return redirect()->route('admin.alugueis.index')
+            ->with('success', 'Aluguel excluído com sucesso!')
+        ;
+    }
+
+    public function edit(Rental $aluguel): View
+    {
+        $aluguel->load(['user', 'book']);
+        $users = User::where('ativo', true)->orderBy('name')->get();
+        $books = Book::with('author')->orderBy('titulo')->get();
+
+        return view('admin.alugueis.edit', compact('aluguel', 'users', 'books'));
+    }
+
     public function index(Request $request): View
     {
         $rentals = $this->rentalService->getAllPaginated(
@@ -41,12 +67,11 @@ class RentalController extends Controller
         return view('admin.alugueis.index', compact('rentals'));
     }
 
-    public function create(): View
+    public function show(Rental $aluguel): View
     {
-        $users = User::where('ativo', true)->orderBy('name')->get();
-        $books = Book::with('author')->orderBy('titulo')->get();
+        $aluguel->load(['user', 'book.author', 'book.category', 'fine']);
 
-        return view('admin.alugueis.create', compact('users', 'books'));
+        return view('admin.alugueis.show', compact('aluguel'));
     }
 
     public function store(StoreRentalRequest $request): RedirectResponse
@@ -70,22 +95,6 @@ class RentalController extends Controller
         ;
     }
 
-    public function show(Rental $aluguel): View
-    {
-        $aluguel->load(['user', 'book.author', 'book.category', 'fine']);
-
-        return view('admin.alugueis.show', compact('aluguel'));
-    }
-
-    public function edit(Rental $aluguel): View
-    {
-        $aluguel->load(['user', 'book']);
-        $users = User::where('ativo', true)->orderBy('name')->get();
-        $books = Book::with('author')->orderBy('titulo')->get();
-
-        return view('admin.alugueis.edit', compact('aluguel', 'users', 'books'));
-    }
-
     public function update(UpdateRentalRequest $request, Rental $aluguel): RedirectResponse
     {
         $validated = $request->validated();
@@ -104,15 +113,6 @@ class RentalController extends Controller
 
         return redirect()->route('admin.alugueis.index')
             ->with('success', 'Aluguel atualizado com sucesso!')
-        ;
-    }
-
-    public function destroy(Rental $aluguel): RedirectResponse
-    {
-        $this->deleteRentalAction->execute($aluguel);
-
-        return redirect()->route('admin.alugueis.index')
-            ->with('success', 'Aluguel excluído com sucesso!')
         ;
     }
 }

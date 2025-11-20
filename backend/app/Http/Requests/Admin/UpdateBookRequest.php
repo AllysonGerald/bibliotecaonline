@@ -15,29 +15,6 @@ class UpdateBookRequest extends FormRequest
         return auth()->check() && auth()->user()->isAdmin();
     }
 
-    public function rules(): array
-    {
-        $bookId = $this->route('livro');
-        $bookId = $bookId instanceof \App\Models\Book ? $bookId->id : $bookId;
-
-        return [
-            'titulo' => ['required', 'string', 'max:255'],
-            'descricao' => ['required', 'string'],
-            'autor_id' => ['required', 'integer', 'exists:autores,id'],
-            'categoria_id' => ['required', 'integer', 'exists:categorias,id'],
-            'isbn' => ['required', 'string', 'max:20', 'unique:livros,isbn,'.$bookId],
-            'editora' => ['required', 'string', 'max:255'],
-            'ano_publicacao' => ['required', 'integer', 'min:1000', 'max:'.date('Y')],
-            'paginas' => ['required', 'integer', 'min:1'],
-            'preco' => ['required', 'numeric', 'min:0'],
-            'imagem_capa' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
-            'status' => ['required', new Enum(BookStatus::class)],
-            'quantidade' => ['required', 'integer', 'min:0'],
-            'tags' => ['nullable', 'array'],
-            'tags.*' => ['integer', 'exists:tags,id'],
-        ];
-    }
-
     public function messages(): array
     {
         return [
@@ -62,6 +39,29 @@ class UpdateBookRequest extends FormRequest
             'status.required' => 'O campo status é obrigatório.',
             'quantidade.required' => 'O campo quantidade é obrigatório.',
             'quantidade.min' => 'A quantidade não pode ser negativa.',
+        ];
+    }
+
+    public function rules(): array
+    {
+        $bookId = $this->route('livro');
+        $bookId = $bookId instanceof \App\Models\Book ? $bookId->id : $bookId;
+
+        return [
+            'titulo' => ['required', 'string', 'max:255'],
+            'descricao' => ['required', 'string'],
+            'autor_id' => ['required', 'integer', 'exists:autores,id'],
+            'categoria_id' => ['required', 'integer', 'exists:categorias,id'],
+            'isbn' => ['required', 'string', 'max:20', 'unique:livros,isbn,'.$bookId],
+            'editora' => ['required', 'string', 'max:255'],
+            'ano_publicacao' => ['required', 'integer', 'min:1000', 'max:'.date('Y')],
+            'paginas' => ['required', 'integer', 'min:1'],
+            'preco' => ['required', 'numeric', 'min:0'],
+            'imagem_capa' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+            'status' => ['required', new Enum(BookStatus::class)],
+            'quantidade' => ['required', 'integer', 'min:0'],
+            'tags' => ['nullable', 'array'],
+            'tags.*' => ['integer', 'exists:tags,id'],
         ];
     }
 }

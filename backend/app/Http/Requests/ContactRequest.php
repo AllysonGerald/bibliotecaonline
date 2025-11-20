@@ -13,16 +13,6 @@ class ContactRequest extends FormRequest
         return true;
     }
 
-    public function rules(): array
-    {
-        return [
-            'nome' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255'],
-            'assunto' => ['required', 'string', 'max:255'],
-            'mensagem' => ['required', 'string', 'max:5000'],
-        ];
-    }
-
     public function messages(): array
     {
         return [
@@ -35,6 +25,16 @@ class ContactRequest extends FormRequest
             'assunto.max' => 'O assunto não pode ter mais de 255 caracteres.',
             'mensagem.required' => 'O campo mensagem é obrigatório.',
             'mensagem.max' => 'A mensagem não pode ter mais de 5000 caracteres.',
+        ];
+    }
+
+    public function rules(): array
+    {
+        return [
+            'nome' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255'],
+            'assunto' => ['required', 'string', 'max:255'],
+            'mensagem' => ['required', 'string', 'max:5000'],
         ];
     }
 }
