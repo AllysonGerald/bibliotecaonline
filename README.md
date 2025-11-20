@@ -1,14 +1,146 @@
-# 🚀 Laravel Docker Mono
 
-Ambiente de desenvolvimento Laravel completo com Docker, incluindo múltiplos bancos de dados (MySQL, PostgreSQL, MongoDB) e Redis, com mais de 400 comandos Make organizados em módulos.
+# 📚 Biblioteca Online
+
+Sistema completo de gerenciamento de biblioteca, desenvolvido em Laravel e Docker, com arquitetura modular, comandos automatizados via Makefile e pronto para rodar em poucos minutos.
 
 ![Laravel](https://img.shields.io/badge/Laravel-12.x-FF2D20?style=flat-square&logo=laravel)
 ![PHP](https://img.shields.io/badge/PHP-8.x-777BB4?style=flat-square&logo=php)
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat-square&logo=docker)
 ![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=flat-square&logo=mysql)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-336791?style=flat-square&logo=postgresql)
-![MongoDB](https://img.shields.io/badge/MongoDB-8.0-47A248?style=flat-square&logo=mongodb)
 ![Redis](https://img.shields.io/badge/Redis-Alpine-DC382D?style=flat-square&logo=redis)
+
+---
+
+## Sobre o Projeto
+
+O **Biblioteca Online** é uma aplicação web para gestão de acervo, usuários, reservas, empréstimos e contatos, com painel administrativo moderno e arquitetura escalável. O projeto utiliza Laravel, Docker, Makefiles e segue boas práticas de organização de código.
+
+---
+
+## 🏗️ Arquitetura
+
+- **Backend:** Laravel (PHP)
+- **Frontend:** Blade + Vite (integrado ao Laravel)
+- **Banco de Dados:** MySQL (padrão, mas pode ser adaptado)
+- **Cache/Sessão:** Redis
+- **Containers:** Docker Compose para orquestração
+- **Automação:** Makefile com comandos para setup, manutenção, testes e deploy
+
+Estrutura principal:
+
+```
+biblioteca_online/
+├── backend/           # Código Laravel (app, config, routes, tests, etc)
+├── docker/            # Configurações de Docker (nginx, php, mysql, etc)
+├── makefiles/         # Makefiles modulares para automação
+├── backups/           # Backups automáticos dos bancos
+├── docker-compose.yml # Orquestração dos serviços
+├── Makefile           # Makefile principal
+└── README.md          # Este arquivo
+```
+
+---
+
+## 🚀 Como rodar o projeto
+
+### 1. Pré-requisitos
+
+- [Docker](https://docs.docker.com/get-docker/) 20.10+
+- [Docker Compose](https://docs.docker.com/compose/install/) 2.0+
+- [Make](https://www.gnu.org/software/make/)
+
+### 2. Clone o repositório
+
+```bash
+git clone <url-do-repositorio>
+cd biblioteca_online
+```
+
+### 3. Inicialize tudo com um comando
+
+```bash
+make init-project
+```
+
+Esse comando irá:
+- Subir containers (nginx, php, mysql, redis)
+- Instalar dependências
+- Gerar .env e chave da aplicação
+- Rodar migrations e seeders
+- Linkar storage
+
+### 4. Acesse no navegador
+
+- App: http://localhost:8080
+- Painel admin: http://localhost:8080/admin/dashboard
+
+---
+
+## 🛠️ Principais comandos
+
+```bash
+make up            # Sobe os containers
+make down          # Para e remove containers
+make bash          # Entra no bash do container PHP
+make migrate       # Executa as migrations
+make seed          # Popula o banco com dados fake
+make test          # Executa os testes automatizados
+make logs          # Mostra logs dos containers
+make quality-check # Roda análise de qualidade
+```
+
+Veja todos os comandos disponíveis com:
+
+```bash
+make help
+```
+
+---
+
+## 📂 Estrutura de pastas relevante
+
+```
+backend/app/Actions      # Actions de domínio (Auth, Books, Users...)
+backend/app/DTOs         # Data Transfer Objects
+backend/app/Models       # Models Eloquent
+backend/app/Repositories # Repositórios
+backend/app/Services     # Serviços de negócio
+backend/app/Http         # Controllers, Requests, Resources
+backend/database/        # Migrations, seeders, factories
+backend/routes/          # Rotas web, api, admin
+backend/resources/views/ # Views Blade
+```
+
+---
+
+## 👩‍💻 Dicas para desenvolvedores
+
+- Use `make` para tudo: setup, testes, deploy, manutenção
+- O projeto já vem pronto para rodar em qualquer ambiente com Docker
+- Para resetar tudo: `make reset-hard` (⚠️ apaga dados!)
+- Para rodar só o backend: `make up` e acesse http://localhost:8080
+- Para rodar testes: `make test`
+- Para rodar análise de código: `make quality-check`
+
+---
+
+## 📑 Mais informações
+
+- Documentação dos comandos: veja os arquivos em `makefiles/`
+- Configurações de ambiente: `.env.example` e arquivos em `docker/`
+- Backups automáticos: pasta `backups/`
+
+---
+
+## 🤝 Contribuição
+
+Pull requests são bem-vindos! Siga o padrão de branchs e descreva bem suas alterações.
+
+---
+
+## 📝 Licença
+
+MIT
 
 ## 📋 Índice
 
@@ -434,31 +566,34 @@ Workflow completo:
 
 Configure no arquivo `.env`:
 
+
 #### Para MySQL (padrão):
 ```env
 DB_CONNECTION=mysql
-DB_HOST=mysql
+DB_HOST=setup-laravel-mysql
 DB_PORT=3306
 DB_DATABASE=db_laravel
 DB_USERNAME=developer
 DB_PASSWORD=123456
 ```
 
+
 #### Para PostgreSQL:
 ```env
 DB_CONNECTION=pgsql
-DB_HOST=postgres
+DB_HOST=setup-laravel-postgres
 DB_PORT=5432
 DB_DATABASE=db_laravel
 DB_USERNAME=developer
 DB_PASSWORD=123456
 ```
 
+
 #### Para MongoDB:
 ```env
 # Requer pacote adicional: mongodb/laravel-mongodb
 DB_CONNECTION=mongodb
-DB_HOST=mongodb
+DB_HOST=setup-laravel-mongodb
 DB_PORT=27017
 DB_DATABASE=db_laravel
 DB_USERNAME=developer
@@ -755,8 +890,6 @@ Este projeto está sob a licença MIT.
 <div align="center">
 
 **[⬆ Voltar ao topo](#-laravel-docker-mono)**
-
-Feito com ❤️ para a comunidade Laravel
 
 </div>
 
