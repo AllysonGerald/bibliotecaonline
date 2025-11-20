@@ -53,7 +53,7 @@ biblioteca_online/
 
 ```bash
 git clone <url-do-repositorio>
-cd biblioteca_online
+cd bibliotecaonline
 ```
 
 ### 3. Inicialize tudo com um comando
@@ -191,7 +191,7 @@ make --version
 
 ```bash
 git clone <seu-repositorio>
-cd laravel-docker-mono
+cd bibliotecaonline
 ```
 
 ### 2. Inicialize o Projeto
