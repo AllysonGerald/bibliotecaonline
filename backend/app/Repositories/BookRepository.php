@@ -52,11 +52,37 @@ class BookRepository implements BookRepositoryInterface
         return Book::where('isbn', $isbn)->first();
     }
 
+    public function findMostRented(int $limit = 6): Collection
+    {
+        return Book::with(['author', 'category'])
+            ->withCount('rentals as total_rentals')
+            ->orderByDesc('total_rentals')
+            ->orderByDesc('created_at')
+            ->take($limit)
+            ->get()
+        ;
+    }
+
     public function findPaginated(int $perPage = 15): LengthAwarePaginator
     {
         return Book::with(['author', 'category', 'tags'])
             ->latest()
             ->paginate($perPage)
+        ;
+    }
+
+    public function findRandomAvailable(int $limit = 6): Collection
+    {
+        return Book::with(['author', 'category'])
+            ->where('status', \App\Enums\BookStatus::DISPONIVEL)
+            ->where(static function ($query): void {
+                $query->whereNull('quantidade')
+                    ->orWhere('quantidade', '>', 0)
+                ;
+            })
+            ->inRandomOrder()
+            ->take($limit)
+            ->get()
         ;
     }
 

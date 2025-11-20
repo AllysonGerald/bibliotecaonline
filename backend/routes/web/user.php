@@ -5,9 +5,7 @@ declare(strict_types=1);
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(static function (): void {
-    Route::get('/home', static function () {
-        return view('home');
-    })->name('home');
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
     Route::get('/livros', [App\Http\Controllers\BookController::class, 'index'])->name('livros.index');
     Route::get('/livros/{livro}', [App\Http\Controllers\BookController::class, 'show'])->name('livros.show');

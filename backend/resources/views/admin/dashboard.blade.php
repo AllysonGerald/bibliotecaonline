@@ -3,132 +3,6 @@
 @section('title', 'Painel do Admin')
 
 @section('content')
-@php
-    $user = auth()->user();
-    $totalBooks = \App\Models\Book::count();
-    $totalUsers = \App\Models\User::count();
-    $totalRentals = \App\Models\Rental::where('status', \App\Enums\RentalStatus::ATIVO)->count();
-    $totalReservations = \App\Models\Reservation::whereIn('status', [\App\Enums\ReservationStatus::PENDENTE, \App\Enums\ReservationStatus::CONFIRMADA])->count();
-    $totalUnreadContacts = \App\Models\Contact::where('lido', false)->count();
-    $recentBooks = \App\Models\Book::latest()->take(3)->get();
-
-    // Buscar todas as atividades recentes do sistema
-    $activities = collect();
-
-    // Aluguéis (criação e atualização)
-    $rentals = \App\Models\Rental::with(['user', 'book'])->latest('updated_at')->take(10)->get();
-    foreach ($rentals as $rental) {
-        $isNew = $rental->created_at->equalTo($rental->updated_at);
-        $activities->push([
-            'type' => 'aluguel',
-            'action' => $isNew ? 'criado' : 'atualizado',
-            'title' => $rental->book->titulo ?? 'Livro removido',
-            'user' => $rental->user->name ?? 'Usuário removido',
-            'date' => $rental->updated_at,
-            'route' => route('admin.alugueis.show', $rental),
-            'icon' => 'book',
-            'color' => '#8b5cf6',
-        ]);
-    }
-
-    // Reservas (criação e atualização)
-    $reservations = \App\Models\Reservation::with(['user', 'book'])->latest('updated_at')->take(10)->get();
-    foreach ($reservations as $reservation) {
-        $isNew = $reservation->created_at->equalTo($reservation->updated_at);
-        $activities->push([
-            'type' => 'reserva',
-            'action' => $isNew ? 'criada' : 'atualizada',
-            'title' => $reservation->book->titulo ?? 'Livro removido',
-            'user' => $reservation->user->name ?? 'Usuário removido',
-            'date' => $reservation->updated_at,
-            'route' => route('admin.reservas.show', $reservation),
-            'icon' => 'clock',
-            'color' => '#ec4899',
-        ]);
-    }
-
-    // Livros (criação e atualização)
-    $books = \App\Models\Book::with(['author', 'category'])->latest('updated_at')->take(10)->get();
-    foreach ($books as $book) {
-        $isNew = $book->created_at->equalTo($book->updated_at);
-        $activities->push([
-            'type' => 'livro',
-            'action' => $isNew ? 'criado' : 'atualizado',
-            'title' => $book->titulo,
-            'user' => 'Sistema',
-            'date' => $book->updated_at,
-            'route' => route('admin.livros.show', $book),
-            'icon' => 'book-open',
-            'color' => '#f97316',
-        ]);
-    }
-
-    // Usuários (criação e atualização)
-    $users = \App\Models\User::latest('updated_at')->take(10)->get();
-    foreach ($users as $userItem) {
-        $isNew = $userItem->created_at->equalTo($userItem->updated_at);
-        $activities->push([
-            'type' => 'usuario',
-            'action' => $isNew ? 'criado' : 'atualizado',
-            'title' => $userItem->name,
-            'user' => 'Sistema',
-            'date' => $userItem->updated_at,
-            'route' => route('admin.usuarios.show', $userItem),
-            'icon' => 'user',
-            'color' => '#0ea5e9',
-        ]);
-    }
-
-    // Autores (criação e atualização)
-    $authors = \App\Models\Author::latest('updated_at')->take(10)->get();
-    foreach ($authors as $author) {
-        $isNew = $author->created_at->equalTo($author->updated_at);
-        $activities->push([
-            'type' => 'autor',
-            'action' => $isNew ? 'criado' : 'atualizado',
-            'title' => $author->nome,
-            'user' => 'Sistema',
-            'date' => $author->updated_at,
-            'route' => route('admin.autores.show', $author),
-            'icon' => 'pen-tool',
-            'color' => '#10b981',
-        ]);
-    }
-
-    // Categorias (criação e atualização)
-    $categories = \App\Models\Category::latest('updated_at')->take(10)->get();
-    foreach ($categories as $category) {
-        $isNew = $category->created_at->equalTo($category->updated_at);
-        $activities->push([
-            'type' => 'categoria',
-            'action' => $isNew ? 'criada' : 'atualizada',
-            'title' => $category->nome,
-            'user' => 'Sistema',
-            'date' => $category->updated_at,
-            'route' => route('admin.categorias.show', $category),
-            'icon' => 'tag',
-            'color' => '#8b5cf6',
-        ]);
-    }
-
-    // Mensagens de Contato (criação)
-    $contacts = \App\Models\Contact::latest('created_at')->take(10)->get();
-    foreach ($contacts as $contact) {
-        $activities->push([
-            'type' => 'mensagem',
-            'action' => 'enviada',
-            'title' => $contact->assunto,
-            'user' => $contact->nome,
-            'date' => $contact->created_at,
-            'route' => route('admin.contatos.show', $contact),
-            'icon' => 'mail',
-            'color' => '#10b981',
-        ]);
-    }
-
-    // Ordenar por data (mais recente primeiro) e pegar os 5 mais recentes
-    $recentActivities = $activities->sortByDesc('date')->take(5)->values();
-@endphp
 
 <div style="margin-bottom: 32px;">
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
@@ -222,52 +96,17 @@
 </div>
 
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 24px;">
-    <!-- Livros em Destaque -->
-    <div style="background: white; border-radius: 20px; padding: 32px; border: 3px solid #e9d5ff; box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15);">
-        <h3 style="font-size: 22px; font-weight: 900; color: #1f2937; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
-            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #8b5cf6, #ec4899); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                <i data-lucide="star" style="width: 20px; height: 20px; color: white;"></i>
-            </div>
-            Livros em Destaque
-        </h3>
-        @if($recentBooks->count() > 0)
-            <div style="display: flex; flex-direction: column; gap: 16px;">
-                @foreach($recentBooks as $book)
-                    <a href="{{ route('admin.livros.show', $book) }}" style="display: flex; align-items: center; gap: 16px; padding: 16px; background: linear-gradient(135deg, #faf5ff, #f3e8ff); border: 2px solid #e9d5ff; border-radius: 12px; text-decoration: none; transition: all 0.3s;" onmouseover="this.style.background='linear-gradient(135deg, #f3e8ff, #e9d5ff)'; this.style.borderColor='#8b5cf6'; this.style.transform='translateX(4px)';" onmouseout="this.style.background='linear-gradient(135deg, #faf5ff, #f3e8ff)'; this.style.borderColor='#e9d5ff'; this.style.transform='translateX(0)';">
-                        <div style="width: 60px; height: 80px; background: linear-gradient(135deg, #f3e8ff, #fce7f3); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                            @if($book->imagem_capa)
-                                <img src="{{ $book->imagem_capa }}" alt="{{ $book->titulo }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
-                            @else
-                                <i data-lucide="book-open" style="width: 30px; height: 30px; color: #8b5cf6;"></i>
-                            @endif
-                        </div>
-                        <div style="flex: 1; min-width: 0;">
-                            <h4 style="font-size: 16px; font-weight: 900; color: #1f2937; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $book->titulo }}</h4>
-                            <p style="font-size: 14px; color: #6b7280; font-weight: 600; margin-bottom: 4px;">{{ $book->author?->nome ?? 'Autor desconhecido' }}</p>
-                            <p style="font-size: 12px; color: #9ca3af;">{{ $book->category->nome }}</p>
-                        </div>
-                    </a>
-                @endforeach
-            </div>
-            <div style="margin-top: 20px;">
-                <a href="{{ route('admin.livros.index') }}" style="display: inline-flex; align-items: center; padding: 12px 24px; background: linear-gradient(135deg, #8b5cf6, #ec4899); color: white; border-radius: 12px; font-weight: 700; text-decoration: none; box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3); transition: all 0.3s;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 10px 25px rgba(139, 92, 246, 0.4)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 8px 20px rgba(139, 92, 246, 0.3)';">
-                    <span>Explorar Catálogo</span>
-                    <i data-lucide="arrow-right" style="width: 18px; height: 18px; margin-left: 8px;"></i>
-                </a>
-            </div>
-        @else
-            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px 0;">
-                <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #f3e8ff, #fce7f3); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
-                    <i data-lucide="book-open" style="width: 40px; height: 40px; color: #8b5cf6;"></i>
-                </div>
-                <p style="font-size: 16px; color: #6b7280; text-align: center; margin-bottom: 24px; font-weight: 500;">Nenhum livro para exibir no momento.</p>
-                <a href="{{ route('admin.livros.index') }}" style="display: inline-flex; align-items: center; padding: 12px 24px; background: linear-gradient(135deg, #8b5cf6, #ec4899); color: white; border-radius: 12px; font-weight: 700; text-decoration: none; box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3); transition: all 0.3s;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 10px 25px rgba(139, 92, 246, 0.4)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 8px 20px rgba(139, 92, 246, 0.3)';">
-                    <span>Explorar Catálogo</span>
-                    <i data-lucide="arrow-right" style="width: 18px; height: 18px; margin-left: 8px;"></i>
-                </a>
-            </div>
-        @endif
-    </div>
+    <!-- Livros em Destaque (Mais Alugados) -->
+    <x-books.featured-grid
+        :books="$featuredBooks"
+        title="Livros Mais Alugados"
+        icon="trending-up"
+        iconColor="#8b5cf6"
+        emptyMessage="Nenhum livro para exibir no momento."
+        viewRoute="admin.livros.show"
+        indexRoute="admin.livros.index"
+        layout="grid"
+    />
 
     <!-- Últimas Atividades -->
     <div style="background: white; border-radius: 20px; padding: 32px; border: 3px solid #fbcfe8; box-shadow: 0 10px 30px rgba(236, 72, 153, 0.15);">

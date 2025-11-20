@@ -5,9 +5,7 @@ declare(strict_types=1);
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(static function (): void {
-    Route::get('/dashboard', static function () {
-        return view('admin.dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
 
     // Rotas de Livros
     Route::resource('livros', App\Http\Controllers\Admin\BookController::class)->names([

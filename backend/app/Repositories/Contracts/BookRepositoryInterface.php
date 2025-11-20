@@ -24,7 +24,11 @@ interface BookRepositoryInterface
 
     public function findByIsbn(string $isbn): ?Book;
 
+    public function findMostRented(int $limit = 6): Collection;
+
     public function findPaginated(int $perPage = 15): LengthAwarePaginator;
+
+    public function findRandomAvailable(int $limit = 6): Collection;
 
     public function search(string $term): Collection;
 

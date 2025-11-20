@@ -72,6 +72,27 @@ class BookService
         return $this->bookRepository->findById($id);
     }
 
+    /**
+     * Busca os livros mais alugados (para área admin)
+     * Ordena por quantidade total de aluguéis (histórico completo) e retorna os mais populares
+     */
+    public function getMostRentedBooks(int $limit = 6): Collection
+    {
+        return $this->bookRepository->findMostRented($limit);
+    }
+
+    /**
+     * Busca livros aleatórios disponíveis (para área de usuário)
+     * Retorna apenas livros disponíveis de forma aleatória
+     */
+    public function getRandomAvailableBooks(int $limit = 6): Collection
+    {
+        $books = $this->bookRepository->findRandomAvailable($limit);
+
+        // Filtro adicional de disponibilidade (lógica de negócio)
+        return $books->filter(static fn ($book) => $book->isAvailable());
+    }
+
     public function search(string $term): Collection
     {
         return $this->bookRepository->search($term);
