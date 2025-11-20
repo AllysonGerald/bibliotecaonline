@@ -3,70 +3,6 @@
 @section('title', 'Dashboard')
 
 @section('content')
-@php
-    $user = auth()->user();
-    $activeRentals = $user->rentals()->where('status', \App\Enums\RentalStatus::ATIVO)->count();
-    $pendingReservations = $user->reservations()->whereIn('status', [\App\Enums\ReservationStatus::PENDENTE, \App\Enums\ReservationStatus::CONFIRMADA])->count();
-    $wishlistCount = $user->wishlists()->count();
-    $reviewsCount = $user->reviews()->count();
-
-    // Buscar livros em destaque (disponíveis, ordenados por mais recentes)
-    $featuredBooks = \App\Models\Book::with(['author', 'category'])
-        ->where('status', \App\Enums\BookStatus::DISPONIVEL)
-        ->where(function($query) {
-            $query->whereNull('quantidade')
-                  ->orWhere('quantidade', '>', 0);
-        })
-        ->latest('created_at')
-        ->take(6)
-        ->get()
-        ->filter(fn($book) => $book->isAvailable());
-
-    // Buscar últimas atividades do usuário
-    $activities = collect();
-
-    // Aluguéis do usuário (criação)
-    $userRentals = $user->rentals()
-        ->with('book')
-        ->latest('created_at')
-        ->take(10)
-        ->get();
-    foreach ($userRentals as $rental) {
-        $activities->push([
-            'type' => 'aluguel',
-            'action' => 'criado',
-            'title' => $rental->book->titulo ?? 'Livro removido',
-            'date' => $rental->created_at,
-            'route' => route('meus-alugueis'),
-            'icon' => 'book',
-            'color' => '#8b5cf6',
-        ]);
-    }
-
-    // Reservas do usuário (criação, atualização, remoção)
-    $userReservations = $user->reservations()
-        ->with('book')
-        ->latest('updated_at')
-        ->take(10)
-        ->get();
-    foreach ($userReservations as $reservation) {
-        $isNew = $reservation->created_at->equalTo($reservation->updated_at);
-        $isCancelled = $reservation->status === \App\Enums\ReservationStatus::CANCELADA;
-        
-        $activities->push([
-            'type' => 'reserva',
-            'action' => $isCancelled ? 'cancelada' : ($isNew ? 'criada' : 'atualizada'),
-            'title' => $reservation->book->titulo ?? 'Livro removido',
-            'date' => $reservation->updated_at,
-            'route' => route('minhas-reservas'),
-            'icon' => 'clock',
-            'color' => '#ec4899',
-        ]);
-    }
-
-    // Ordenar atividades por data (mais recentes primeiro) e limitar a 5
-    $activities = $activities->sortByDesc('date')->take(5)->values();
-@endphp
 
 <div style="margin-bottom: 32px;">
     <h1 style="font-size: 36px; font-weight: 900; color: #1f2937; margin-bottom: 8px;">Olá, {{ $user->name }}!</h1>
@@ -128,48 +64,17 @@
 </div>
 
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 24px;">
-    <!-- Livros em Destaque -->
-    <div style="background: white; border-radius: 20px; padding: 32px; border: 3px solid #e9d5ff; box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15);">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-            <h3 style="font-size: 22px; font-weight: 900; color: #1f2937; display: flex; align-items: center; gap: 12px; margin: 0;">
-                <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #8b5cf6, #ec4899); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                    <i data-lucide="star" style="width: 20px; height: 20px; color: white;"></i>
-                </div>
-                Livros em Destaque
-            </h3>
-            <a href="{{ route('livros.index') }}" style="display: inline-flex; align-items: center; padding: 8px 16px; background: linear-gradient(135deg, #8b5cf6, #ec4899); color: white; border-radius: 10px; font-size: 14px; font-weight: 700; text-decoration: none; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3); transition: all 0.3s;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 6px 20px rgba(139, 92, 246, 0.4)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 15px rgba(139, 92, 246, 0.3)';">
-                Explorar Catálogo
-                <i data-lucide="arrow-right" style="width: 16px; height: 16px; margin-left: 6px;"></i>
-            </a>
-        </div>
-        @if($featuredBooks->count() > 0)
-            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; max-height: 400px; overflow-y: auto; padding-right: 8px;">
-                @foreach($featuredBooks as $book)
-                    <a href="{{ route('livros.show', $book) }}" style="text-decoration: none; display: block;">
-                        <div style="background: linear-gradient(135deg, #f3e8ff, #faf5ff); border-radius: 16px; padding: 16px; border: 2px solid #e9d5ff; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.1); transition: all 0.3s; height: 100%;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 25px rgba(139, 92, 246, 0.2)'; this.style.borderColor='#8b5cf6';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(139, 92, 246, 0.1)'; this.style.borderColor='#e9d5ff';">
-                            <div style="width: 100%; height: 120px; background: linear-gradient(135deg, #f3e8ff, #fce7f3); border-radius: 12px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
-                                @if($book->imagem_capa)
-                                    <img src="{{ asset('storage/'.$book->imagem_capa) }}" alt="{{ $book->titulo }}" style="width: 100%; height: 100%; object-fit: cover;">
-                                @else
-                                    <i data-lucide="book-open" style="width: 48px; height: 48px; color: #8b5cf6;"></i>
-                                @endif
-                            </div>
-                            <h4 style="font-size: 14px; font-weight: 900; color: #1f2937; margin-bottom: 6px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">{{ $book->titulo }}</h4>
-                            <p style="font-size: 12px; color: #6b7280; font-weight: 600; margin-bottom: 4px;">{{ $book->author?->nome ?? 'Autor desconhecido' }}</p>
-                            <p style="font-size: 11px; color: #9ca3af;">{{ $book->category->nome ?? 'Sem categoria' }}</p>
-                        </div>
-                    </a>
-                @endforeach
-            </div>
-        @else
-            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px 0;">
-                <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #f3e8ff, #fce7f3); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
-                    <i data-lucide="book-open" style="width: 40px; height: 40px; color: #8b5cf6;"></i>
-                </div>
-                <p style="font-size: 16px; color: #6b7280; text-align: center; margin-bottom: 24px; font-weight: 500;">Nenhum livro disponível no momento.</p>
-            </div>
-        @endif
-    </div>
+    <!-- Livros em Destaque (Aleatórios) -->
+    <x-books.featured-grid
+        :books="$featuredBooks"
+        title="Livros em Destaque"
+        icon="star"
+        iconColor="#8b5cf6"
+        emptyMessage="Nenhum livro disponível no momento."
+        viewRoute="livros.show"
+        indexRoute="livros.index"
+        layout="grid"
+    />
 
     <!-- Últimas Atividades -->
     <div style="background: white; border-radius: 20px; padding: 32px; border: 3px solid #fbcfe8; box-shadow: 0 10px 30px rgba(236, 72, 153, 0.15);">
@@ -179,9 +84,9 @@
             </div>
             Últimas Atividades
         </h3>
-        @if($activities->count() > 0)
+        @if($recentActivities->count() > 0)
             <div style="display: flex; flex-direction: column; gap: 12px; max-height: 400px; overflow-y: auto; padding-right: 8px;">
-                @foreach($activities as $activity)
+                @foreach($recentActivities as $activity)
                     <a href="{{ $activity['route'] }}" style="text-decoration: none; display: block;">
                         <div style="background: linear-gradient(135deg, #fce7f3, #fdf2f8); border-radius: 12px; padding: 16px; border: 2px solid #fbcfe8; transition: all 0.3s;" onmouseover="this.style.transform='translateX(4px)'; this.style.borderColor='{{ $activity['color'] }}'; this.style.boxShadow='0 4px 15px rgba(236, 72, 153, 0.2)';" onmouseout="this.style.transform='translateX(0)'; this.style.borderColor='#fbcfe8'; this.style.boxShadow='none';">
                             <div style="display: flex; align-items: center; gap: 12px;">
