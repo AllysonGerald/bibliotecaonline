@@ -96,6 +96,15 @@
     </div>
 
     @if($authors->hasPages())
+        @php
+            view()->share([
+                'pagination_primaryColor' => '#10b981',
+                'pagination_primaryColorLight' => '#34d399',
+                'pagination_borderColor' => '#86efac',
+                'pagination_backgroundGradient' => 'linear-gradient(135deg, #d1fae5, #ecfdf5)',
+                'pagination_backgroundGradientHover' => 'linear-gradient(135deg, #10b981, #34d399)',
+            ]);
+        @endphp
         {{ $authors->links('components.pagination') }}
     @endif
 </div>

@@ -167,6 +167,15 @@
         </div>
 
         @if($users->hasPages())
+            @php
+                view()->share([
+                    'pagination_primaryColor' => '#0ea5e9',
+                    'pagination_primaryColorLight' => '#38bdf8',
+                    'pagination_borderColor' => '#bae6fd',
+                    'pagination_backgroundGradient' => 'linear-gradient(135deg, #e0f2fe, #f0f9ff)',
+                    'pagination_backgroundGradientHover' => 'linear-gradient(135deg, #0ea5e9, #38bdf8)',
+                ]);
+            @endphp
             {{ $users->links('components.pagination') }}
         @endif
     </div>

@@ -188,6 +188,15 @@
         </div>
 
         @if($reservations->hasPages())
+            @php
+                view()->share([
+                    'pagination_primaryColor' => '#ec4899',
+                    'pagination_primaryColorLight' => '#f472b6',
+                    'pagination_borderColor' => '#fbcfe8',
+                    'pagination_backgroundGradient' => 'linear-gradient(135deg, #fce7f3, #fdf2f8)',
+                    'pagination_backgroundGradientHover' => 'linear-gradient(135deg, #ec4899, #f472b6)',
+                ]);
+            @endphp
             {{ $reservations->links('components.pagination') }}
         @endif
     </div>

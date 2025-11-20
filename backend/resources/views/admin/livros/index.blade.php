@@ -167,6 +167,15 @@
         </div>
 
         @if($books->hasPages())
+            @php
+                view()->share([
+                    'pagination_primaryColor' => '#f97316',
+                    'pagination_primaryColorLight' => '#fb923c',
+                    'pagination_borderColor' => '#fed7aa',
+                    'pagination_backgroundGradient' => 'linear-gradient(135deg, #fff1f2, #fff7ed)',
+                    'pagination_backgroundGradientHover' => 'linear-gradient(135deg, #f97316, #fb923c)',
+                ]);
+            @endphp
             {{ $books->links('components.pagination') }}
         @endif
     </div>
