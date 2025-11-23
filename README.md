@@ -129,19 +129,19 @@ Port: 6379
 ```
 biblioteca_online/
 ├── backend/                    # Aplicação Laravel
-│   ├── app/                   # Código da aplicação
-│   │   ├── Actions/          # Actions de domínio
-│   │   ├── Services/         # Serviços de negócio
-│   │   ├── Repositories/     # Repositórios
-│   │   ├── Models/           # Models Eloquent
-│   │   └── Http/             # Controllers, Requests
-│   ├── database/              # Migrations, seeders
-│   ├── resources/            # Views, assets
-│   └── routes/               # Rotas da aplicação
-├── docker/                    # Configurações Docker
-├── makefiles/                # Comandos Make organizados
-├── docker-compose.yml        # Configuração dos serviços
-└── Makefile                  # Makefile principal
+│   ├── app/                    # Código da aplicação
+│   │   ├── Actions/            # Actions de domínio
+│   │   ├── Services/           # Serviços de negócio
+│   │   ├── Repositories/       # Repositórios
+│   │   ├── Models/             # Models Eloquent
+│   │   └── Http/               # Controllers, Requests
+│   ├── database/               # Migrations, seeders
+│   ├── resources/              # Views, assets
+│   └── routes/                 # Rotas da aplicação
+├── docker/                     # Configurações Docker
+├── makefiles/                  # Comandos Make organizados
+├── docker-compose.yml          # Configuração dos serviços
+└── Makefile                    # Makefile principal
 ```
 
 ---
@@ -158,8 +158,8 @@ O projeto segue padrões arquiteturais:
 ### Criar Componentes
 
 ```bash
-make make-service         # Criar Service
-make make-repository      # Criar Repository + Interface
+make make-service        # Criar Service
+make make-repository     # Criar Repository + Interface
 make make-action         # Criar Action
 make make-dto            # Criar DTO
 make make-controller     # Criar Controller
@@ -202,7 +202,7 @@ make test-coverage       # Testes com coverage
 ### Container não inicia
 ```bash
 make logs-php           # Ver logs do PHP
-make logs-nginx          # Ver logs do Nginx
+make logs-nginx         # Ver logs do Nginx
 make logs-mysql         # Ver logs do MySQL
 make ps                 # Verificar status
 ```
