@@ -3,252 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Biblioteca Online') }} - @yield('title')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body style="background: linear-gradient(to bottom, #f3e8ff, #ffffff); min-height: 100vh;">
-    <nav style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-bottom: 3px solid #e9d5ff; box-shadow: 0 4px 6px rgba(139, 92, 246, 0.1); position: sticky; top: 0; z-index: 50;">
-        <div style="max-width: 1280px; margin: 0 auto; padding: 0 24px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; height: 80px;">
-                <div style="display: flex; align-items: center; gap: 32px;">
-                    <a href="{{ route('admin.dashboard') }}" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
-                        <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #8b5cf6, #ec4899); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);">
-                            <i data-lucide="book-open" style="width: 28px; height: 28px; color: white;"></i>
-                        </div>
-                        <span style="font-size: 22px; font-weight: 800; background: linear-gradient(135deg, #8b5cf6, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Biblioteca Online</span>
-                    </a>
+<body style="background: linear-gradient(to bottom, #f3e8ff, white); min-height: 100vh; margin: 0; padding: 0;">
+    @php
+        $navLinks = [
+            ['route' => 'admin.dashboard', 'label' => 'Painel do Admin', 'pattern' => 'admin.dashboard', 'icon' => 'layout-dashboard'],
+            ['route' => 'admin.livros.index', 'label' => 'Livros', 'pattern' => 'admin.livros.*', 'icon' => 'book'],
+            ['route' => 'admin.autores.index', 'label' => 'Autores', 'pattern' => 'admin.autores.*', 'icon' => 'user'],
+            ['route' => 'admin.categorias.index', 'label' => 'Categorias', 'pattern' => 'admin.categorias.*', 'icon' => 'folder'],
+            ['route' => 'admin.alugueis.index', 'label' => 'Aluguéis', 'pattern' => 'admin.alugueis.*', 'icon' => 'book-open'],
+            ['route' => 'admin.reservas.index', 'label' => 'Reservas', 'pattern' => 'admin.reservas.*', 'icon' => 'calendar'],
+            ['route' => 'admin.multas.index', 'label' => 'Multas', 'pattern' => 'admin.multas.index', 'icon' => 'alert-circle'],
+            ['route' => 'admin.multas.payment-requests', 'label' => 'Solicitações de Pagamento', 'pattern' => 'admin.multas.payment-requests', 'icon' => 'clock'],
+            ['route' => 'admin.usuarios.index', 'label' => 'Usuários', 'pattern' => 'admin.usuarios.*', 'icon' => 'users'],
+        ];
+    @endphp
 
-                    <div style="display: none; gap: 4px; @media (min-width: 768px) { display: flex; }">
-                        <a href="{{ route('admin.dashboard') }}" style="padding: 10px 16px; color: #4b5563; font-weight: 600; text-decoration: none; border-radius: 10px; transition: all 0.3s; {{ request()->routeIs('admin.dashboard') ? 'background: linear-gradient(135deg, #f3e8ff, #fce7f3); color: #8b5cf6;' : '' }}" onmouseover="if (!this.style.background.includes('gradient')) { this.style.background='#f3e8ff'; this.style.color='#8b5cf6'; }" onmouseout="if (!this.style.background.includes('gradient')) { this.style.background=''; this.style.color='#4b5563'; }">
-                            Painel do Admin
-                        </a>
-                        <a href="{{ route('admin.livros.index') }}" style="padding: 10px 16px; color: #4b5563; font-weight: 600; text-decoration: none; border-radius: 10px; transition: all 0.3s; {{ request()->routeIs('admin.livros.*') ? 'background: linear-gradient(135deg, #f3e8ff, #fce7f3); color: #8b5cf6;' : '' }}" onmouseover="if (!this.style.background.includes('gradient')) { this.style.background='#f3e8ff'; this.style.color='#8b5cf6'; }" onmouseout="if (!this.style.background.includes('gradient')) { this.style.background=''; this.style.color='#4b5563'; }">
-                            Livros
-                        </a>
-                        <a href="{{ route('admin.autores.index') }}" style="padding: 10px 16px; color: #4b5563; font-weight: 600; text-decoration: none; border-radius: 10px; transition: all 0.3s; {{ request()->routeIs('admin.autores.*') ? 'background: linear-gradient(135deg, #f3e8ff, #fce7f3); color: #8b5cf6;' : '' }}" onmouseover="if (!this.style.background.includes('gradient')) { this.style.background='#f3e8ff'; this.style.color='#8b5cf6'; }" onmouseout="if (!this.style.background.includes('gradient')) { this.style.background=''; this.style.color='#4b5563'; }">
-                            Autores
-                        </a>
-                        <a href="{{ route('admin.categorias.index') }}" style="padding: 10px 16px; color: #4b5563; font-weight: 600; text-decoration: none; border-radius: 10px; transition: all 0.3s; {{ request()->routeIs('admin.categorias.*') ? 'background: linear-gradient(135deg, #f3e8ff, #fce7f3); color: #8b5cf6;' : '' }}" onmouseover="if (!this.style.background.includes('gradient')) { this.style.background='#f3e8ff'; this.style.color='#8b5cf6'; }" onmouseout="if (!this.style.background.includes('gradient')) { this.style.background=''; this.style.color='#4b5563'; }">
-                            Categorias
-                        </a>
-                        <a href="{{ route('admin.alugueis.index') }}" style="padding: 10px 16px; color: #4b5563; font-weight: 600; text-decoration: none; border-radius: 10px; transition: all 0.3s; {{ request()->routeIs('admin.alugueis.*') ? 'background: linear-gradient(135deg, #f3e8ff, #fce7f3); color: #8b5cf6;' : '' }}" onmouseover="if (!this.style.background.includes('gradient')) { this.style.background='#f3e8ff'; this.style.color='#8b5cf6'; }" onmouseout="if (!this.style.background.includes('gradient')) { this.style.background=''; this.style.color='#4b5563'; }">
-                            Aluguéis
-                        </a>
-                        <a href="{{ route('admin.reservas.index') }}" style="padding: 10px 16px; color: #4b5563; font-weight: 600; text-decoration: none; border-radius: 10px; transition: all 0.3s; {{ request()->routeIs('admin.reservas.*') ? 'background: linear-gradient(135deg, #f3e8ff, #fce7f3); color: #8b5cf6;' : '' }}" onmouseover="if (!this.style.background.includes('gradient')) { this.style.background='#f3e8ff'; this.style.color='#8b5cf6'; }" onmouseout="if (!this.style.background.includes('gradient')) { this.style.background=''; this.style.color='#4b5563'; }">
-                            Reservas
-                        </a>
-                        <a href="{{ route('admin.usuarios.index') }}" style="padding: 10px 16px; color: #4b5563; font-weight: 600; text-decoration: none; border-radius: 10px; transition: all 0.3s; {{ request()->routeIs('admin.usuarios.*') ? 'background: linear-gradient(135deg, #f3e8ff, #fce7f3); color: #8b5cf6;' : '' }}" onmouseover="if (!this.style.background.includes('gradient')) { this.style.background='#f3e8ff'; this.style.color='#8b5cf6'; }" onmouseout="if (!this.style.background.includes('gradient')) { this.style.background=''; this.style.color='#4b5563'; }">
-                            Usuários
-                        </a>
-                    </div>
-                </div>
+    <div style="display: flex; min-height: 100vh;">
+        <!-- Sidebar -->
+        <x-ui.sidebar :navLinks="$navLinks" />
 
-                <div style="display: flex; align-items: center; gap: 16px;">
-                    <div style="position: relative;" x-data="{ open: false }">
-                        <button @click="open = !open" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; color: #4b5563; font-weight: 600; text-decoration: none; border-radius: 10px; border: none; background: transparent; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='#f3e8ff'; this.style.color='#8b5cf6';" onmouseout="this.style.background='transparent'; this.style.color='#4b5563';">
-                            <div style="width: 36px; height: 36px; background: linear-gradient(135deg, #8b5cf6, #ec4899); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 14px; box-shadow: 0 4px 10px rgba(139, 92, 246, 0.3);">
-                                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+        <!-- Main Content Area -->
+        <div class="main-content-wrapper" style="flex: 1; margin-left: 280px; display: flex; flex-direction: column; min-height: 100vh; transition: margin-left 0.3s ease;">
+            <!-- Top Bar -->
+            <header style="background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(20px); border-bottom: 3px solid #e9d5ff; box-shadow: 0 4px 20px rgba(139, 92, 246, 0.1); position: sticky; top: 0; z-index: 50;">
+                <div style="max-width: 1280px; margin: 0 auto; padding: 0 24px 0 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; height: 80px; gap: 24px;">
+                        <!-- Lado Esquerdo: Botão Mobile + Botão Colapsar + Título -->
+                        <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0;">
+                            <!-- Botão para abrir/fechar sidebar em mobile -->
+                            <button
+                                class="mobile-sidebar-toggle"
+                                style="display: none; padding: 8px; background: transparent; border: none; cursor: pointer; border-radius: 8px; transition: all 0.3s;"
+                            >
+                                <x-ui.icon name="menu" size="24" style="color: #8b5cf6;" />
+                            </button>
+
+                            <!-- Botão Colapsar Sidebar (Desktop) -->
+                            <button
+                                id="sidebar-collapse-btn"
+                                class="desktop-sidebar-toggle"
+                                style="display: flex; align-items: center; justify-content: center; padding: 6px; background: linear-gradient(135deg, #f3e8ff, #fdf2f8); border: 2px solid #e9d5ff; border-radius: 8px; cursor: pointer; transition: all 0.3s; flex-shrink: 0; pointer-events: auto;"
+                                title="Colapsar/Expandir menu"
+                            >
+                                <x-ui.icon name="panel-left" size="18" class="sidebar-toggle-icon" style="color: #8b5cf6; transition: transform 0.3s; pointer-events: none;" />
+                            </button>
+
+                            <!-- Page Title -->
+                            <div>
+                                <h1 style="font-size: 18px; font-weight: 900; color: #1f2937; margin: 0;">@yield('title', 'Painel Administrativo')</h1>
                             </div>
-                            <span style="font-size: 14px; font-weight: 600; display: none; @media (min-width: 640px) { display: inline; }">{{ auth()->user()->name }}</span>
-                            <i data-lucide="chevron-down" style="width: 16px; height: 16px;"></i>
-                        </button>
+                        </div>
 
-                        <div x-show="open" @click.away="open = false" x-cloak style="position: absolute; right: 0; margin-top: 8px; width: 200px; background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(139, 92, 246, 0.2); border: 2px solid #e9d5ff; padding: 8px; z-index: 50;">
-                            <a href="{{ route('home') }}" style="display: block; padding: 12px 16px; font-size: 14px; color: #4b5563; font-weight: 600; text-decoration: none; border-radius: 8px; transition: all 0.3s;" onmouseover="this.style.background='#f3e8ff'; this.style.color='#8b5cf6';" onmouseout="this.style.background=''; this.style.color='#4b5563';">
-                                Home
-                            </a>
-                            <hr style="margin: 8px 0; border: none; border-top: 1px solid #e9d5ff;">
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button type="submit" style="display: block; width: 100%; text-align: left; padding: 12px 16px; font-size: 14px; color: #ef4444; font-weight: 600; text-decoration: none; border-radius: 8px; border: none; background: transparent; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='#fee2e2';" onmouseout="this.style.background='transparent';">
-                                    Sair
+                        <!-- Lado Direito: User Menu -->
+                        <div style="display: flex; align-items: center; gap: 16px; flex-shrink: 0;">
+                            <div style="position: relative;" x-data="{ open: false }">
+                                <button
+                                    @click="open = !open"
+                                    class="user-menu-btn"
+                                    style="display: flex; align-items: center; gap: 10px; padding: 6px 12px; color: #4b5563; font-weight: 600; border-radius: 10px; border: none; background: transparent; cursor: pointer; transition: all 0.3s;"
+                                >
+                                    <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #8b5cf6, #ec4899); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 16px; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4); flex-shrink: 0;">
+                                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                                    </div>
+                                    <span class="user-name" style="font-size: 15px; font-weight: 600; white-space: nowrap;">{{ auth()->user()->name }}</span>
+                                    <x-ui.icon name="chevron-down" size="18" style="color: #6b7280; flex-shrink: 0;" />
                                 </button>
-                            </form>
+
+                                <div
+                                    x-show="open"
+                                    @click.away="open = false"
+                                    x-cloak
+                                    style="position: absolute; right: 0; margin-top: 8px; width: 192px; background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(139, 92, 246, 0.2); border: 2px solid #e9d5ff; padding: 8px; z-index: 50;"
+                                >
+                                    <a
+                                        href="{{ route('home') }}"
+                                        class="user-menu-link"
+                                        style="display: block; padding: 12px 16px; font-size: 14px; color: #4b5563; font-weight: 600; text-decoration: none; border-radius: 8px; transition: all 0.3s;"
+                                    >
+                                        Home
+                                    </a>
+                                    <hr style="margin: 8px 0; border: none; border-top: 1px solid #e9d5ff;">
+                                    <form method="POST" action="{{ route('logout') }}">
+                                        @csrf
+                                        <button
+                                            type="submit"
+                                            class="user-menu-link-danger"
+                                            style="display: block; width: 100%; text-align: left; padding: 12px 16px; font-size: 14px; color: #ef4444; font-weight: 600; text-decoration: none; border-radius: 8px; border: none; background: transparent; cursor: pointer; transition: all 0.3s;"
+                                        >
+                                            Sair
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </header>
+
+            <!-- Content -->
+            <main style="flex: 1; padding: 24px;">
+                <div style="max-width: 1280px; margin: 0 auto;">
+                    @if (session('success'))
+                        <x-ui.alert type="success" :message="session('success')" />
+                    @endif
+
+                    @if (session('error'))
+                        <x-ui.alert type="error" :message="session('error')" />
+                    @endif
+
+                    @yield('content')
+                </div>
+            </main>
         </div>
-    </nav>
-
-    <div style="max-width: 1280px; margin: 0 auto; padding: 32px 24px;">
-        @if (session('success'))
-            <div style="margin-bottom: 24px; padding: 16px; background: linear-gradient(135deg, #d1fae5, #a7f3d0); border: 3px solid #86efac; border-radius: 12px; color: #065f46; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)">
-                <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <i data-lucide="check-circle" style="width: 20px; height: 20px; color: #10b981;"></i>
-                        <span style="font-weight: 600;">{{ session('success') }}</span>
-                    </div>
-                    <button @click="show = false" style="background: transparent; border: none; cursor: pointer; color: #065f46; padding: 4px;" onmouseover="this.style.color='#047857';" onmouseout="this.style.color='#065f46';">
-                        <i data-lucide="x" style="width: 18px; height: 18px;"></i>
-                    </button>
-                </div>
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div style="margin-bottom: 24px; padding: 16px; background: linear-gradient(135deg, #fee2e2, #fef2f2); border: 3px solid #fca5a5; border-radius: 12px; color: #991b1b; box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2);" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)">
-                <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <i data-lucide="alert-circle" style="width: 20px; height: 20px; color: #ef4444;"></i>
-                        <span style="font-weight: 600;">{{ session('error') }}</span>
-                    </div>
-                    <button @click="show = false" style="background: transparent; border: none; cursor: pointer; color: #991b1b; padding: 4px;" onmouseover="this.style.color='#7f1d1d';" onmouseout="this.style.color='#991b1b';">
-                        <i data-lucide="x" style="width: 18px; height: 18px;"></i>
-                    </button>
-                </div>
-            </div>
-        @endif
-
-        @yield('content')
     </div>
 
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="{{ asset('js/utils/masks.js') }}"></script>
-    <script src="{{ asset('js/utils/password-utils.js') }}"></script>
-    <script>
-        // Função para inicializar Lucide Icons
-        function initLucideIcons() {
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
+    <style>
+        .desktop-sidebar-toggle {
+            pointer-events: auto !important;
+            user-select: none;
+        }
+        .desktop-sidebar-toggle:hover .sidebar-toggle-icon {
+            color: white !important;
+        }
+        .desktop-sidebar-toggle:active {
+            transform: scale(0.95);
+        }
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .mobile-sidebar-toggle {
+                display: block !important;
+            }
+            .desktop-sidebar-toggle {
+                display: none !important;
+            }
+            div[style*="margin-left: 280px"] {
+                margin-left: 0 !important;
+            }
+            .user-name {
+                display: none !important;
             }
         }
-        // Inicializar quando o DOM estiver pronto
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initLucideIcons);
-        } else {
-            initLucideIcons();
+        /* Overlay para mobile */
+        @media (max-width: 1024px) {
+            .sidebar-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 35;
+            }
+            .sidebar-overlay.active {
+                display: block;
+            }
         }
-        // Re-inicializar após mudanças dinâmicas (Alpine.js)
-        document.addEventListener('alpine:init', () => {
-            setTimeout(initLucideIcons, 100);
-        });
-
-        // Remove máscaras de formulários antes de enviar
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('form').forEach(form => {
-                form.addEventListener('submit', function(e) {
-                    if (typeof InputMasks !== 'undefined') {
-                        InputMasks.removeMasksFromForm(this);
-                    }
-                });
-            });
-        });
-    </script>
-    <style>
-        [x-cloak] { display: none !important; }
-        
-        /* Remove outline padrão preto do navegador e aplica cor de focus do projeto */
-        input:focus,
-        textarea:focus,
-        select:focus {
-            outline: none !important;
-        }
-        /* A cor de focus específica será aplicada pelos estilos inline onfocus, mas garantimos que não há outline preto */
-
-        /* Custom select styling - Remove native arrow and add custom one with proper spacing */
-        select {
-            appearance: none !important;
-            -webkit-appearance: none !important;
-            -moz-appearance: none !important;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") !important;
-            background-repeat: no-repeat !important;
-            background-position: right 12px center !important;
-            background-size: 16px !important;
-        }
-
-        /* Override inline padding-right for selects to add space for icon */
-        select[style*="padding"] {
-            padding-right: 40px !important;
-        }
-
-        select:focus {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238b5cf6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") !important;
-        }
-
-        /* Custom datetime-local input styling - Keep native calendar functionality but style the icon */
-        input[type="datetime-local"] {
-            position: relative;
-            padding-right: 10px !important;
-        }
-
-        /* Style the native calendar picker indicator to look like our custom icon - positioned more to the right */
-        input[type="datetime-local"]::-webkit-calendar-picker-indicator {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E") !important;
-            background-repeat: no-repeat !important;
-            background-position: center !important;
-            background-size: 16px !important;
-            cursor: pointer !important;
-            opacity: 1 !important;
-            width: 16px !important;
-            height: 16px !important;
-            margin: 0 !important;
-            padding: 0 !important;
-        }
-
-        input[type="datetime-local"]:focus::-webkit-calendar-picker-indicator {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238b5cf6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E") !important;
-        }
-
-        /* Hide native spin buttons but keep functionality */
-        input[type="datetime-local"]::-webkit-inner-spin-button,
-        input[type="datetime-local"]::-webkit-clear-button {
-            display: none !important;
-        }
-
-        /* Custom date input styling - Keep native calendar functionality but style the icon */
-        input[type="date"] {
-            position: relative;
-            padding-right: 10px !important;
-        }
-
-        /* Style the native calendar picker indicator to look like our custom icon */
-        input[type="date"]::-webkit-calendar-picker-indicator {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E") !important;
-            background-repeat: no-repeat !important;
-            background-position: center !important;
-            background-size: 16px !important;
-            cursor: pointer !important;
-            opacity: 1 !important;
-            width: 16px !important;
-            height: 16px !important;
-            margin: 0 !important;
-            padding: 0 !important;
-        }
-
-        input[type="date"]:focus::-webkit-calendar-picker-indicator {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238b5cf6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E") !important;
-        }
-
-        /* Ensure inputs have proper text color */
-        input, select {
-            color: #374151 !important;
-        }
-
-        /* Improve date picker appearance - better styling for empty and filled states */
-        input[type="datetime-local"]::-webkit-datetime-edit { color: #374151 !important; }
-        input[type="datetime-local"]::-webkit-datetime-edit-fields-wrapper { color: #374151 !important; }
-        input[type="datetime-local"]::-webkit-datetime-edit-text { color: #9ca3af !important; padding: 0 2px; }
-        input[type="datetime-local"]::-webkit-datetime-edit-month-field,
-        input[type="datetime-local"]::-webkit-datetime-edit-day-field,
-        input[type="datetime-local"]::-webkit-datetime-edit-year-field,
-        input[type="datetime-local"]::-webkit-datetime-edit-hour-field,
-        input[type="datetime-local"]::-webkit-datetime-edit-minute-field { color: #374151 !important; padding: 0 2px; }
-        input[type="datetime-local"]::-webkit-datetime-edit-ampm-field { color: #374151 !important; }
-        /* Style placeholder/empty state - when field is empty or invalid */
-        input[type="datetime-local"]:invalid::-webkit-datetime-edit-text,
-        input[type="datetime-local"]:not([value])::-webkit-datetime-edit-text { color: #9ca3af !important; }
-        input[type="datetime-local"]:invalid::-webkit-datetime-edit-month-field,
-        input[type="datetime-local"]:invalid::-webkit-datetime-edit-day-field,
-        input[type="datetime-local"]:invalid::-webkit-datetime-edit-year-field,
-        input[type="datetime-local"]:invalid::-webkit-datetime-edit-hour-field,
-        input[type="datetime-local"]:invalid::-webkit-datetime-edit-minute-field,
-        input[type="datetime-local"]:not([value])::-webkit-datetime-edit-month-field,
-        input[type="datetime-local"]:not([value])::-webkit-datetime-edit-day-field,
-        input[type="datetime-local"]:not([value])::-webkit-datetime-edit-year-field,
-        input[type="datetime-local"]:not([value])::-webkit-datetime-edit-hour-field,
-        input[type="datetime-local"]:not([value])::-webkit-datetime-edit-minute-field { color: #9ca3af !important; }
     </style>
+
+    <!-- Overlay para mobile -->
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+    <x-layout.scripts />
 </body>
 </html>

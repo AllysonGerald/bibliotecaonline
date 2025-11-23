@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Biblioteca Online') }} - @yield('title')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -10,7 +11,7 @@
     <!-- Decorative Elements -->
     <div style="position: absolute; top: -100px; left: -100px; width: 400px; height: 400px; background: rgba(196, 181, 253, 0.3); border-radius: 50%; filter: blur(80px);"></div>
     <div style="position: absolute; bottom: -100px; right: -100px; width: 400px; height: 400px; background: rgba(251, 113, 133, 0.3); border-radius: 50%; filter: blur(80px);"></div>
-    
+
     <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; position: relative; z-index: 1;">
         <div style="width: 100%; max-width: 480px;">
             @if (session('success'))
@@ -40,33 +41,29 @@
     </div>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="{{ asset('js/utils/masks.js') }}"></script>
-    <script src="{{ asset('js/utils/password-utils.js') }}"></script>
     <script>
-        // Função para inicializar Lucide Icons
-        function initLucideIcons() {
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
-        }
-        // Inicializar quando o DOM estiver pronto
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initLucideIcons);
-        } else {
-            initLucideIcons();
-        }
-
-        // Remove máscaras de formulários antes de enviar
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('form').forEach(form => {
-                form.addEventListener('submit', function(e) {
-                    if (typeof InputMasks !== 'undefined') {
-                        InputMasks.removeMasksFromForm(this);
+        // Garantir que lucide está disponível globalmente imediatamente
+        (function() {
+            function ensureLucide() {
+                if (typeof lucide !== 'undefined') {
+                    window.lucide = lucide;
+                    // Inicializar ícones imediatamente se o DOM estiver pronto
+                    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+                        lucide.createIcons();
+                    } else {
+                        document.addEventListener('DOMContentLoaded', function() {
+                            lucide.createIcons();
+                        });
                     }
-                });
-            });
-        });
+                } else {
+                    // Se ainda não carregou, tentar novamente
+                    setTimeout(ensureLucide, 50);
+                }
+            }
+            ensureLucide();
+        })();
     </script>
+    @vite(['resources/js/app.js'])
     <style>
         /* Remove outline padrão preto do navegador e aplica cor de focus do projeto */
         input:focus,

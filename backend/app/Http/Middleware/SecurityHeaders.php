@@ -30,8 +30,8 @@ class SecurityHeaders
         $response->headers->set('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
 
         // Content-Security-Policy: Política de segurança de conteúdo
-        // Permite CDNs necessários para Alpine.js e Lucide Icons
-        $csp = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; img-src 'self' data: https:; font-src 'self' data: https://cdn.jsdelivr.net https://unpkg.com; connect-src 'self';";
+        // Permite CDNs necessários para Alpine.js, Lucide Icons e Fonts Bunny
+        $csp = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.bunny.net; img-src 'self' data: https:; font-src 'self' data: https://cdn.jsdelivr.net https://unpkg.com https://fonts.bunny.net; connect-src 'self' https://unpkg.com;";
         $response->headers->set('Content-Security-Policy', $csp);
 
         return $response;

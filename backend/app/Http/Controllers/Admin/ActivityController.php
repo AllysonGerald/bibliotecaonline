@@ -9,6 +9,7 @@ use App\Models\Author;
 use App\Models\Book;
 use App\Models\Category;
 use App\Models\Contact;
+use App\Models\Fine;
 use App\Models\Rental;
 use App\Models\Reservation;
 use App\Models\User;
@@ -130,6 +131,33 @@ class ActivityController extends Controller
                 'route' => route('admin.contatos.show', $contact),
                 'icon' => 'mail',
                 'color' => '#10b981',
+            ]);
+        }
+
+        // Multas (criação, atualização e pagamento)
+        $fines = Fine::with(['user', 'rental.book'])->latest('updated_at')->take(50)->get();
+        foreach ($fines as $fine) {
+            $isNew = $fine->created_at->equalTo($fine->updated_at);
+            $action = 'criada';
+            if (!$isNew) {
+                if ($fine->paga && $fine->paga_em) {
+                    $action = 'paga';
+                } elseif ($fine->pagamento_solicitado && $fine->pagamento_solicitado_em) {
+                    $action = 'pagamento solicitado';
+                } else {
+                    $action = 'atualizada';
+                }
+            }
+
+            $activities->push([
+                'type' => 'multa',
+                'action' => $action,
+                'title' => $fine->rental->book->titulo ?? 'Livro removido',
+                'user' => $fine->user->name ?? 'Usuário removido',
+                'date' => $fine->updated_at,
+                'route' => route('admin.multas.show', $fine),
+                'icon' => 'alert-circle',
+                'color' => '#ef4444',
             ]);
         }
 

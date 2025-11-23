@@ -24,6 +24,8 @@ class Fine extends Model
         'valor' => 'decimal:2',
         'paga' => 'boolean',
         'paga_em' => 'datetime',
+        'pagamento_solicitado' => 'boolean',
+        'pagamento_solicitado_em' => 'datetime',
     ];
 
     /**
@@ -37,6 +39,8 @@ class Fine extends Model
         'valor',
         'paga',
         'paga_em',
+        'pagamento_solicitado',
+        'pagamento_solicitado_em',
     ];
 
     /**
@@ -54,6 +58,7 @@ class Fine extends Model
         $this->update([
             'paga' => true,
             'paga_em' => now(),
+            'pagamento_solicitado' => false,
         ]);
     }
 
@@ -65,6 +70,17 @@ class Fine extends Model
     public function rental(): BelongsTo
     {
         return $this->belongsTo(Rental::class, 'aluguel_id');
+    }
+
+    /**
+     * Solicita o pagamento da multa (usuário solicita, admin confirma).
+     */
+    public function requestPayment(): void
+    {
+        $this->update([
+            'pagamento_solicitado' => true,
+            'pagamento_solicitado_em' => now(),
+        ]);
     }
 
     /**

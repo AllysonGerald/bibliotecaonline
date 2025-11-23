@@ -9,3 +9,210 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+/* ============================================
+    GLOBAL HOVER EFFECTS
+   ============================================ */
+
+/* Sidebar Logo Link */
+.sidebar-logo-link:hover {
+    transform: scale(1.02);
+}
+
+/* Sidebar Nav Links */
+.sidebar-nav-link:not(.active):hover {
+    background: linear-gradient(135deg, #f3e8ff, #fdf2f8) !important;
+    color: #8b5cf6 !important;
+    transform: translateX(4px);
+}
+
+.sidebar-nav-link.active {
+    background: linear-gradient(135deg, #f3e8ff, #fdf2f8);
+    color: #8b5cf6;
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.2);
+}
+
+/* Mobile Sidebar Toggle */
+.mobile-sidebar-toggle:hover {
+    background: #f3e8ff !important;
+}
+
+/* Desktop Sidebar Toggle */
+.desktop-sidebar-toggle:hover {
+    background: linear-gradient(135deg, #8b5cf6, #ec4899) !important;
+    border-color: #8b5cf6 !important;
+}
+
+.desktop-sidebar-toggle:hover .sidebar-toggle-icon {
+    color: white !important;
+}
+
+/* User Menu Button */
+.user-menu-btn:hover {
+    background: #f3e8ff !important;
+    color: #8b5cf6 !important;
+}
+
+/* User Menu Links */
+.user-menu-link:hover {
+    background: #f3e8ff !important;
+    color: #8b5cf6 !important;
+}
+
+.user-menu-link-danger:hover {
+    background: #fee2e2 !important;
+    color: #ef4444 !important;
+}
+
+/* Nav Links (App Layout) */
+.nav-link:hover {
+    background: #f3e8ff !important;
+    color: #8b5cf6 !important;
+}
+
+.nav-link-multas:hover {
+    background: #fee2e2 !important;
+    color: #ef4444 !important;
+}
+
+/* Nav Link Active State */
+.nav-link-active {
+    background: linear-gradient(135deg, #f3e8ff, #fce7f3) !important;
+    color: #8b5cf6 !important;
+}
+
+.nav-link-active-multas {
+    background: linear-gradient(135deg, #fee2e2, #fef2f2) !important;
+    color: #ef4444 !important;
+}
+
+/* Login/Register Links */
+.login-link:hover {
+    color: #8b5cf6 !important;
+}
+
+.register-link:hover {
+    transform: scale(1.05) !important;
+    box-shadow: 0 10px 25px rgba(139, 92, 246, 0.4) !important;
+}
+
+/* Forgot Password Link */
+.forgot-password-link:hover {
+    color: #a855f7 !important;
+    text-decoration: underline !important;
+}
+
+/* Modal Close Button */
+.modal-close-btn:hover {
+    background: #fee2e2 !important;
+    color: #ef4444 !important;
+}
+
+/* Action Buttons (View/Edit/Delete) - já definidos em action-buttons.blade.php */
+/* Mantidos como estão */
+
+/* Pagination Links */
+.pagination-link:hover {
+    background: linear-gradient(135deg, #f3e8ff, #fdf2f8) !important;
+    color: #8b5cf6 !important;
+}
+
+.pagination-link-active {
+    background: linear-gradient(135deg, #8b5cf6, #ec4899) !important;
+    color: white !important;
+}
+
+/* Book Card */
+.book-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(139, 92, 246, 0.25) !important;
+}
+
+/* Feature Card */
+.feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(139, 92, 246, 0.25) !important;
+}
+
+/* Review Card */
+.review-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(139, 92, 246, 0.2) !important;
+}
+
+/* Contact Info Item */
+.contact-info-item:hover {
+    background: linear-gradient(135deg, #f3e8ff, #fdf2f8) !important;
+    transform: translateX(4px);
+}
+
+/* Contact Feature Item */
+.contact-feature-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(139, 92, 246, 0.2) !important;
+}
+
+/* Alert Close Button */
+.alert-close-btn:hover {
+    background: rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ============================================
+    POINTER EVENTS & Z-INDEX STANDARDIZATION
+   ============================================ */
+
+/* Icon-only buttons - sempre clicáveis */
+.icon-only-btn,
+.action-btn-view,
+.action-btn-edit,
+.action-btn-delete {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    position: relative;
+    z-index: 100;
+}
+
+/* Password toggle button - usa absolute positioning */
+.password-toggle-btn {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    z-index: 10000;
+}
+
+/* Ícones dentro de botões não devem bloquear cliques */
+.icon-only-btn i[data-lucide],
+.icon-only-btn svg,
+.action-btn-view i[data-lucide],
+.action-btn-view svg,
+.action-btn-edit i[data-lucide],
+.action-btn-edit svg,
+.action-btn-delete i[data-lucide],
+.action-btn-delete svg,
+.password-toggle-btn i[data-lucide],
+.password-toggle-btn svg {
+    pointer-events: none !important;
+}
+
+/* Desktop sidebar toggle */
+.desktop-sidebar-toggle {
+    pointer-events: auto !important;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.desktop-sidebar-toggle .sidebar-toggle-icon {
+    pointer-events: none !important;
+}
+
+/* Mobile sidebar toggle */
+.mobile-sidebar-toggle {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+/* Links da sidebar */
+.sidebar-link-fast,
+.sidebar-nav-link {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}

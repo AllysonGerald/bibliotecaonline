@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\DTOs\RentalDTO;
+use App\Models\Fine;
 use App\Models\Rental;
 use App\Repositories\Contracts\RentalRepositoryInterface;
+use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use RuntimeException;
@@ -29,7 +31,14 @@ class RentalService
      */
     public function create(RentalDTO $dto): Rental
     {
-        return $this->rentalRepository->create($dto->toArray());
+        $rental = $this->rentalRepository->create($dto->toArray());
+
+        // Criar multa se houver taxa de atraso
+        if ($dto->taxaAtraso > 0) {
+            $this->createOrUpdateFine($rental, $dto->taxaAtraso);
+        }
+
+        return $rental->fresh(['user', 'book.author', 'book.category', 'fine']) ?? $rental;
     }
 
     /**
@@ -150,6 +159,67 @@ class RentalService
             throw new RuntimeException('Falha ao atualizar o aluguel.');
         }
 
+        // Recarregar o aluguel para ter os dados atualizados
+        $rental->refresh();
+
+        // Calcular multa automaticamente se o livro foi devolvido com atraso
+        // Prioridade: se taxa_atraso foi informada manualmente, usar ela; senão, calcular automaticamente
+        if ($dto->taxaAtraso > 0) {
+            // Se o admin informou manualmente a taxa, usar ela
+            $this->createOrUpdateFine($rental, $dto->taxaAtraso);
+        } elseif ($dto->devolvidoEm !== null && $dto->devolvidoEm > $dto->dataDevolucao) {
+            // Se não foi informada manualmente, calcular automaticamente baseado no atraso
+            $calculatedFine = $this->calculateFineForOverdue($dto->dataDevolucao, $dto->devolvidoEm);
+            if ($calculatedFine > 0) {
+                $this->createOrUpdateFine($rental, $calculatedFine);
+            }
+        }
+
         return $rental->fresh(['user', 'book.author', 'book.category', 'fine']) ?? $rental;
+    }
+
+    /**
+     * Calcula o valor da multa baseado nos dias de atraso.
+     *
+     * @param Carbon $dataDevolucao Data prevista para devolução
+     * @param Carbon $devolvidoEm Data real da devolução
+     * @return float Valor da multa calculado
+     */
+    private function calculateFineForOverdue(Carbon $dataDevolucao, Carbon $devolvidoEm): float
+    {
+        $daysOverdue = (int) $dataDevolucao->diffInDays($devolvidoEm);
+        $finePerDay = (float) config('library.fine_per_day', 5.00);
+
+        return $daysOverdue * $finePerDay;
+    }
+
+    /**
+     * Cria ou atualiza uma multa para o aluguel.
+     *
+     * @param Rental $rental Aluguel relacionado
+     * @param float $valor Valor da multa
+     */
+    private function createOrUpdateFine(Rental $rental, float $valor): void
+    {
+        // Recarregar o relacionamento fine para garantir que temos os dados atualizados
+        $rental->refresh();
+        $rental->load('fine');
+        $fine = $rental->fine;
+
+        if ($fine) {
+            // Atualizar multa existente
+            $fine->update([
+                'valor' => $valor,
+                'usuario_id' => $rental->usuario_id, // Garantir que usuario_id está preenchido
+            ]);
+        } else {
+            // Criar nova multa
+            Fine::create([
+                'aluguel_id' => $rental->id,
+                'usuario_id' => $rental->usuario_id,
+                'valor' => $valor,
+                'paga' => false,
+            ]);
+        }
     }
 }
