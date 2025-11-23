@@ -70,14 +70,14 @@ make db              # Conecta ao MySQL
 
 ### Desenvolvimento
 ```bash
-make bash            # Entra no container PHP
+make bash             # Entra no container PHP
 make tinker           # Laravel Tinker
 make route-list       # Lista rotas
 ```
 
 ### Cache e Otimização
 ```bash
-make cache-clear     # Limpa cache
+make cache-clear      # Limpa cache
 make clear-all        # Limpa todos os caches
 make optimize         # Otimiza aplicação
 ```
