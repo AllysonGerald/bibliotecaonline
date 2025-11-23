@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Biblioteca Online') }} - @yield('title')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -19,59 +20,94 @@
                     </a>
 
                     <div style="display: none; gap: 4px; @media (min-width: 768px) { display: flex; }">
-                        <a href="{{ route('home') }}" style="padding: 10px 16px; color: #4b5563; font-weight: 600; text-decoration: none; border-radius: 10px; transition: all 0.3s; {{ request()->routeIs('home') ? 'background: linear-gradient(135deg, #f3e8ff, #fce7f3); color: #8b5cf6;' : '' }}" onmouseover="if (!this.style.background.includes('gradient')) { this.style.background='#f3e8ff'; this.style.color='#8b5cf6'; }" onmouseout="if (!this.style.background.includes('gradient')) { this.style.background=''; this.style.color='#4b5563'; }">
+                        <a href="{{ route('home') }}" class="nav-link{{ request()->routeIs('home') ? ' nav-link-active' : '' }}" style="padding: 10px 16px; color: #4b5563; font-weight: 600; text-decoration: none; border-radius: 10px; transition: all 0.3s; {{ request()->routeIs('home') ? 'background: linear-gradient(135deg, #f3e8ff, #fce7f3); color: #8b5cf6;' : '' }}">
                             Início
                         </a>
-                        <a href="{{ route('livros.index') }}" style="padding: 10px 16px; color: #4b5563; font-weight: 600; text-decoration: none; border-radius: 10px; transition: all 0.3s; {{ request()->routeIs('livros.*') ? 'background: linear-gradient(135deg, #f3e8ff, #fce7f3); color: #8b5cf6;' : '' }}" onmouseover="if (!this.style.background.includes('gradient')) { this.style.background='#f3e8ff'; this.style.color='#8b5cf6'; }" onmouseout="if (!this.style.background.includes('gradient')) { this.style.background=''; this.style.color='#4b5563'; }">
+                        <a href="{{ route('livros.index') }}" class="nav-link{{ request()->routeIs('livros.*') ? ' nav-link-active' : '' }}" style="padding: 10px 16px; color: #4b5563; font-weight: 600; text-decoration: none; border-radius: 10px; transition: all 0.3s; {{ request()->routeIs('livros.*') ? 'background: linear-gradient(135deg, #f3e8ff, #fce7f3); color: #8b5cf6;' : '' }}">
                             Livros
                         </a>
-                        <a href="{{ route('meus-alugueis') }}" style="padding: 10px 16px; color: #4b5563; font-weight: 600; text-decoration: none; border-radius: 10px; transition: all 0.3s; {{ request()->routeIs('meus-alugueis') ? 'background: linear-gradient(135deg, #f3e8ff, #fce7f3); color: #8b5cf6;' : '' }}" onmouseover="if (!this.style.background.includes('gradient')) { this.style.background='#f3e8ff'; this.style.color='#8b5cf6'; }" onmouseout="if (!this.style.background.includes('gradient')) { this.style.background=''; this.style.color='#4b5563'; }">
+                        <a href="{{ route('meus-alugueis') }}" class="nav-link{{ request()->routeIs('meus-alugueis') ? ' nav-link-active' : '' }}" style="padding: 10px 16px; color: #4b5563; font-weight: 600; text-decoration: none; border-radius: 10px; transition: all 0.3s; {{ request()->routeIs('meus-alugueis') ? 'background: linear-gradient(135deg, #f3e8ff, #fce7f3); color: #8b5cf6;' : '' }}">
                             Meus Aluguéis
                         </a>
-                        <a href="{{ route('minhas-reservas') }}" style="padding: 10px 16px; color: #4b5563; font-weight: 600; text-decoration: none; border-radius: 10px; transition: all 0.3s; {{ request()->routeIs('minhas-reservas') ? 'background: linear-gradient(135deg, #f3e8ff, #fce7f3); color: #8b5cf6;' : '' }}" onmouseover="if (!this.style.background.includes('gradient')) { this.style.background='#f3e8ff'; this.style.color='#8b5cf6'; }" onmouseout="if (!this.style.background.includes('gradient')) { this.style.background=''; this.style.color='#4b5563'; }">
+                        <a href="{{ route('minhas-reservas') }}" class="nav-link{{ request()->routeIs('minhas-reservas') ? ' nav-link-active' : '' }}" style="padding: 10px 16px; color: #4b5563; font-weight: 600; text-decoration: none; border-radius: 10px; transition: all 0.3s; {{ request()->routeIs('minhas-reservas') ? 'background: linear-gradient(135deg, #f3e8ff, #fce7f3); color: #8b5cf6;' : '' }}">
                             Minhas Reservas
+                        </a>
+                        <a href="{{ route('minhas-multas') }}" class="nav-link nav-link-multas{{ request()->routeIs('minhas-multas') ? ' nav-link-active-multas' : '' }}" style="padding: 10px 16px; color: #4b5563; font-weight: 600; text-decoration: none; border-radius: 10px; transition: all 0.3s; {{ request()->routeIs('minhas-multas') ? 'background: linear-gradient(135deg, #fee2e2, #fef2f2); color: #ef4444;' : '' }}">
+                            Minhas Multas
                         </a>
                     </div>
                 </div>
 
-                <div style="display: flex; align-items: center; gap: 16px;">
+                <div style="display: flex; align-items: center; gap: 16px; flex-shrink: 0;">
                     @auth
                         <div style="position: relative;" x-data="{ open: false }">
-                            <button @click="open = !open" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; color: #4b5563; font-weight: 600; text-decoration: none; border-radius: 10px; border: none; background: transparent; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='#f3e8ff'; this.style.color='#8b5cf6';" onmouseout="this.style.background='transparent'; this.style.color='#4b5563';">
-                                <div style="width: 36px; height: 36px; background: linear-gradient(135deg, #8b5cf6, #ec4899); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 14px; box-shadow: 0 4px 10px rgba(139, 92, 246, 0.3);">
+                            <button
+                                @click="open = !open"
+                                class="user-menu-btn"
+                                style="display: flex; align-items: center; gap: 10px; padding: 6px 12px; color: #4b5563; font-weight: 600; border-radius: 10px; border: none; background: transparent; cursor: pointer; transition: all 0.3s;"
+                            >
+                                <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #8b5cf6, #ec4899); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 16px; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4); flex-shrink: 0;">
                                     {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                                 </div>
-                                <span style="font-size: 14px; font-weight: 600; display: none; @media (min-width: 640px) { display: inline; }">{{ auth()->user()->name }}</span>
-                                <i data-lucide="chevron-down" style="width: 16px; height: 16px;"></i>
+                                <span class="user-name" style="font-size: 15px; font-weight: 600; white-space: nowrap;">{{ auth()->user()->name }}</span>
+                                <x-ui.icon name="chevron-down" size="18" style="color: #6b7280; flex-shrink: 0;" />
                             </button>
 
-                            <div x-show="open" @click.away="open = false" x-cloak style="position: absolute; right: 0; margin-top: 8px; width: 200px; background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(139, 92, 246, 0.2); border: 2px solid #e9d5ff; padding: 8px; z-index: 50;">
-                                <a href="{{ route('perfil') }}" style="display: block; padding: 12px 16px; font-size: 14px; color: #4b5563; font-weight: 600; text-decoration: none; border-radius: 8px; transition: all 0.3s;" onmouseover="this.style.background='#f3e8ff'; this.style.color='#8b5cf6';" onmouseout="this.style.background=''; this.style.color='#4b5563';">
+                            <div
+                                x-show="open"
+                                @click.away="open = false"
+                                x-cloak
+                                style="position: absolute; right: 0; margin-top: 8px; width: 192px; background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(139, 92, 246, 0.2); border: 2px solid #e9d5ff; padding: 8px; z-index: 50;"
+                            >
+                                <a
+                                    href="{{ route('perfil') }}"
+                                    class="user-menu-link"
+                                    style="display: block; padding: 12px 16px; font-size: 14px; color: #4b5563; font-weight: 600; text-decoration: none; border-radius: 8px; transition: all 0.3s;"
+                                >
                                     Meu Perfil
                                 </a>
-                                <a href="{{ route('lista-desejos') }}" style="display: block; padding: 12px 16px; font-size: 14px; color: #4b5563; font-weight: 600; text-decoration: none; border-radius: 8px; transition: all 0.3s;" onmouseover="this.style.background='#f3e8ff'; this.style.color='#8b5cf6';" onmouseout="this.style.background=''; this.style.color='#4b5563';">
+                                <a
+                                    href="{{ route('lista-desejos') }}"
+                                    class="user-menu-link"
+                                    style="display: block; padding: 12px 16px; font-size: 14px; color: #4b5563; font-weight: 600; text-decoration: none; border-radius: 8px; transition: all 0.3s;"
+                                >
                                     Lista de Desejos
+                                </a>
+                                <a
+                                    href="{{ route('minhas-multas') }}"
+                                    class="user-menu-link-danger"
+                                    style="display: block; padding: 12px 16px; font-size: 14px; color: #4b5563; font-weight: 600; text-decoration: none; border-radius: 8px; transition: all 0.3s;"
+                                >
+                                    Minhas Multas
                                 </a>
                                 @if(auth()->user()->isAdmin())
                                     <hr style="margin: 8px 0; border: none; border-top: 1px solid #e9d5ff;">
-                                    <a href="{{ route('admin.dashboard') }}" style="display: block; padding: 12px 16px; font-size: 14px; color: #8b5cf6; font-weight: 700; text-decoration: none; border-radius: 8px; transition: all 0.3s;" onmouseover="this.style.background='#f3e8ff';" onmouseout="this.style.background='';">
+                                    <a
+                                        href="{{ route('admin.dashboard') }}"
+                                        class="user-menu-link"
+                                        style="display: block; padding: 12px 16px; font-size: 14px; color: #8b5cf6; font-weight: 700; text-decoration: none; border-radius: 8px; transition: all 0.3s;"
+                                    >
                                         Painel do Admin
                                     </a>
                                 @endif
                                 <hr style="margin: 8px 0; border: none; border-top: 1px solid #e9d5ff;">
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
-                                    <button type="submit" style="display: block; width: 100%; text-align: left; padding: 12px 16px; font-size: 14px; color: #ef4444; font-weight: 600; text-decoration: none; border-radius: 8px; border: none; background: transparent; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='#fee2e2';" onmouseout="this.style.background='transparent';">
+                                    <button
+                                        type="submit"
+                                        class="user-menu-link-danger"
+                                        style="display: block; width: 100%; text-align: left; padding: 12px 16px; font-size: 14px; color: #ef4444; font-weight: 600; text-decoration: none; border-radius: 8px; border: none; background: transparent; cursor: pointer; transition: all 0.3s;"
+                                    >
                                         Sair
                                     </button>
                                 </form>
                             </div>
                         </div>
                     @else
-                        <a href="{{ route('login') }}" style="padding: 10px 20px; color: #4b5563; font-weight: 600; text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='#8b5cf6';" onmouseout="this.style.color='#4b5563';">
+                        <a href="{{ route('login') }}" class="login-link" style="padding: 10px 20px; color: #4b5563; font-weight: 600; text-decoration: none; transition: color 0.3s;">
                             Entrar
                         </a>
-                        <a href="{{ route('register') }}" style="padding: 10px 20px; background: linear-gradient(135deg, #8b5cf6, #ec4899); color: white; border-radius: 10px; font-weight: 700; text-decoration: none; box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3); transition: all 0.3s;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 10px 25px rgba(139, 92, 246, 0.4)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 8px 20px rgba(139, 92, 246, 0.3)';">
+                        <a href="{{ route('register') }}" class="register-link" style="padding: 10px 20px; background: linear-gradient(135deg, #8b5cf6, #ec4899); color: white; border-radius: 10px; font-weight: 700; text-decoration: none; box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3); transition: all 0.3s;">
                             Cadastrar
                         </a>
                     @endauth
@@ -118,6 +154,24 @@
                 </div>
             @endif
 
+            @if (session('status'))
+                <div style="margin-bottom: 24px; padding: 16px; background: linear-gradient(135deg, #dbeafe, #bfdbfe); border-left: 4px solid #3b82f6; color: #1e40af; border-radius: 12px; box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div style="display: flex; align-items: center;">
+                            <svg style="width: 20px; height: 20px; margin-right: 12px; color: #3b82f6;" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                            </svg>
+                            <span style="font-weight: 600;">{{ session('status') }}</span>
+                        </div>
+                        <button @click="show = false" style="color: #3b82f6; background: transparent; border: none; cursor: pointer; padding: 4px;" onmouseover="this.style.color='#1e40af';">
+                            <svg style="width: 16px; height: 16px;" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            @endif
+
             @yield('content')
         </div>
     </main>
@@ -155,40 +209,32 @@
     </footer>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="{{ asset('js/utils/masks.js') }}"></script>
-    <script src="{{ asset('js/utils/password-utils.js') }}"></script>
     <script>
-        // Função para inicializar Lucide Icons
-        function initLucideIcons() {
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
-        }
-        // Inicializar quando o DOM estiver pronto
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initLucideIcons);
-        } else {
-            initLucideIcons();
-        }
-        // Re-inicializar após mudanças dinâmicas (Alpine.js)
-        document.addEventListener('alpine:init', () => {
-            setTimeout(initLucideIcons, 100);
-        });
-
-        // Remove máscaras de formulários antes de enviar
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('form').forEach(form => {
-                form.addEventListener('submit', function(e) {
-                    if (typeof InputMasks !== 'undefined') {
-                        InputMasks.removeMasksFromForm(this);
+        // Garantir que lucide está disponível globalmente imediatamente
+        (function() {
+            function ensureLucide() {
+                if (typeof lucide !== 'undefined') {
+                    window.lucide = lucide;
+                    // Inicializar ícones imediatamente se o DOM estiver pronto
+                    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+                        lucide.createIcons();
+                    } else {
+                        document.addEventListener('DOMContentLoaded', function() {
+                            lucide.createIcons();
+                        });
                     }
-                });
-            });
-        });
+                } else {
+                    // Se ainda não carregou, tentar novamente
+                    setTimeout(ensureLucide, 50);
+                }
+            }
+            ensureLucide();
+        })();
     </script>
+    @vite(['resources/js/app.js'])
     <style>
         [x-cloak] { display: none !important; }
-        
+
         /* Remove outline padrão preto do navegador e aplica cor de focus do projeto */
         input:focus,
         textarea:focus,
@@ -196,6 +242,12 @@
             outline: none !important;
             border-color: #8b5cf6 !important;
             box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1) !important;
+        }
+
+        @media (max-width: 1024px) {
+            .user-name {
+                display: none !important;
+            }
         }
     </style>
 </body>

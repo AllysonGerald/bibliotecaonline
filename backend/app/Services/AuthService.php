@@ -57,4 +57,37 @@ class AuthService
 
         return $this->userRepository->create($data);
     }
+
+    /**
+     * Reseta a senha do usuário.
+     *
+     * @param array<string, string> $credentials Credenciais (email, password, password_confirmation, token)
+     * @return string Status da operação
+     */
+    public function resetPassword(array $credentials): string
+    {
+        return \Illuminate\Support\Facades\Password::reset(
+            $credentials,
+            static function ($user, $password): void {
+                $user->forceFill([
+                    'password' => Hash::make($password),
+                ])->setRememberToken(\Illuminate\Support\Str::random(60));
+
+                $user->save();
+
+                event(new \Illuminate\Auth\Events\PasswordReset($user));
+            },
+        );
+    }
+
+    /**
+     * Envia o link de reset de senha para o email fornecido.
+     *
+     * @param string $email Email do usuário
+     * @return string Status da operação
+     */
+    public function sendPasswordResetLink(string $email): string
+    {
+        return \Illuminate\Support\Facades\Password::sendResetLink(['email' => $email]);
+    }
 }

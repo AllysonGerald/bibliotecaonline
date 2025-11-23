@@ -3,176 +3,114 @@
 @section('title', 'Editar Aluguel')
 
 @section('content')
-<div style="margin-bottom: 32px;">
-    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
-        <div>
-            <h1 style="font-size: 36px; font-weight: 900; color: #1f2937; margin-bottom: 8px;">Editar Aluguel</h1>
-            <p style="font-size: 18px; color: #6b7280; font-weight: 500;">Atualize as informações do aluguel</p>
-        </div>
-        <a href="{{ route('admin.alugueis.index') }}" style="display: inline-flex; align-items: center; padding: 12px 20px; background: linear-gradient(135deg, #f3e8ff, #faf5ff); color: #8b5cf6; border: 3px solid #e9d5ff; border-radius: 12px; font-size: 14px; font-weight: 700; text-decoration: none; transition: all 0.3s; box-shadow: 0 4px 10px rgba(139, 92, 246, 0.15);" onmouseover="this.style.background='linear-gradient(135deg, #8b5cf6, #a855f7)'; this.style.color='white'; this.style.borderColor='#8b5cf6'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 15px rgba(139, 92, 246, 0.3)';" onmouseout="this.style.background='linear-gradient(135deg, #f3e8ff, #faf5ff)'; this.style.color='#8b5cf6'; this.style.borderColor='#e9d5ff'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 10px rgba(139, 92, 246, 0.15)';">
-            <i data-lucide="arrow-left" style="width: 18px; height: 18px; margin-right: 8px;"></i>
-            Voltar
-        </a>
-    </div>
-</div>
+<x-ui.page-header 
+    title="Editar Aluguel" 
+    subtitle="Atualize as informações do aluguel"
+>
+    <x-ui.button href="{{ route('admin.alugueis.index') }}" variant="secondary" icon="arrow-left">Voltar</x-ui.button>
+</x-ui.page-header>
 
-<div style="background: white; border-radius: 20px; padding: 32px; border: 3px solid #e9d5ff; box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15); position: relative; overflow: hidden;">
-    <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(139, 92, 246, 0.05); border-radius: 50%; filter: blur(60px); z-index: 0;"></div>
-    <div style="position: relative; z-index: 1;">
-        <form method="POST" action="{{ route('admin.alugueis.update', $aluguel) }}">
-            @csrf
-            @method('PUT')
+<x-ui.card 
+    borderColor="#e9d5ff"
+    shadowColor="rgba(139, 92, 246, 0.15)"
+    backgroundGradient="linear-gradient(135deg, #f3e8ff, #faf5ff, white)"
+>
+    <form method="POST" action="{{ route('admin.alugueis.update', $aluguel) }}">
+        @csrf
+        @method('PUT')
 
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;">
-                <!-- Usuário e Livro -->
-                <div>
-                    <label for="usuario_id" style="display: block; font-size: 14px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">Usuário *</label>
-                    <select
-                        name="usuario_id"
-                        id="usuario_id"
-                        required
-                        style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('usuario_id') ? '#ef4444' : '#e9d5ff' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #faf5ff, #ffffff); cursor: pointer; box-sizing: border-box;"
-                        onfocus="this.style.borderColor='#8b5cf6'; this.style.boxShadow='0 0 0 3px rgba(139, 92, 246, 0.1)';"
-                        onblur="this.style.borderColor='{{ $errors->has('usuario_id') ? '#ef4444' : '#e9d5ff' }}'; this.style.boxShadow='none';"
-                    >
-                        <option value="">Selecione um usuário</option>
-                        @foreach($users as $user)
-                            <option value="{{ $user->id }}" {{ old('usuario_id', $aluguel->usuario_id) == $user->id ? 'selected' : '' }}>
-                                {{ $user->name }} ({{ $user->email }})
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('usuario_id')
-                        <p style="margin-top: 8px; font-size: 13px; color: #ef4444; font-weight: 600;">{{ $message }}</p>
-                    @enderror
-                </div>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;">
+            <!-- Usuário e Livro -->
+            <x-forms.select
+                name="usuario_id"
+                label="Usuário"
+                :options="['' => 'Selecione um usuário'] + $users->mapWithKeys(fn($user) => [$user->id => $user->name . ' (' . $user->email . ')'])->toArray()"
+                :value="old('usuario_id', $aluguel->usuario_id)"
+                required
+                borderColor="#e9d5ff"
+                focusColor="#8b5cf6"
+                backgroundGradient="linear-gradient(135deg, #faf5ff, #ffffff)"
+            />
 
-                <div>
-                    <label for="livro_id" style="display: block; font-size: 14px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">Livro *</label>
-                    <select
-                        name="livro_id"
-                        id="livro_id"
-                        required
-                        style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('livro_id') ? '#ef4444' : '#e9d5ff' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #faf5ff, #ffffff); cursor: pointer; box-sizing: border-box;"
-                        onfocus="this.style.borderColor='#8b5cf6'; this.style.boxShadow='0 0 0 3px rgba(139, 92, 246, 0.1)';"
-                        onblur="this.style.borderColor='{{ $errors->has('livro_id') ? '#ef4444' : '#e9d5ff' }}'; this.style.boxShadow='none';"
-                    >
-                        <option value="">Selecione um livro</option>
-                        @foreach($books as $book)
-                            <option value="{{ $book->id }}" {{ old('livro_id', $aluguel->livro_id) == $book->id ? 'selected' : '' }}>
-                                {{ $book->titulo }} - {{ $book->author?->nome ?? 'Autor desconhecido' }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('livro_id')
-                        <p style="margin-top: 8px; font-size: 13px; color: #ef4444; font-weight: 600;">{{ $message }}</p>
-                    @enderror
-                </div>
+            <x-forms.select
+                name="livro_id"
+                label="Livro"
+                :options="['' => 'Selecione um livro'] + $books->mapWithKeys(fn($book) => [$book->id => $book->titulo . ' - ' . ($book->author?->nome ?? 'Autor desconhecido')])->toArray()"
+                :value="old('livro_id', $aluguel->livro_id)"
+                required
+                borderColor="#e9d5ff"
+                focusColor="#8b5cf6"
+                backgroundGradient="linear-gradient(135deg, #faf5ff, #ffffff)"
+            />
 
-                <!-- Datas -->
-                <div>
-                    <label for="alugado_em" style="display: block; font-size: 14px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">Data de Aluguel *</label>
-                    <input
-                        type="datetime-local"
-                        name="alugado_em"
-                        id="alugado_em"
-                        value="{{ old('alugado_em', $aluguel->alugado_em->format('Y-m-d\TH:i')) }}"
-                        required
-                        style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('alugado_em') ? '#ef4444' : '#e9d5ff' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #faf5ff, #ffffff); box-sizing: border-box;"
-                        onfocus="this.style.borderColor='#8b5cf6'; this.style.boxShadow='0 0 0 3px rgba(139, 92, 246, 0.1)';"
-                        onblur="this.style.borderColor='{{ $errors->has('alugado_em') ? '#ef4444' : '#e9d5ff' }}'; this.style.boxShadow='none';"
-                    >
-                    @error('alugado_em')
-                        <p style="margin-top: 8px; font-size: 13px; color: #ef4444; font-weight: 600;">{{ $message }}</p>
-                    @enderror
-                </div>
+            <!-- Datas -->
+            <x-forms.input
+                type="datetime-local"
+                name="alugado_em"
+                label="Data de Aluguel"
+                :value="old('alugado_em', $aluguel->alugado_em->format('Y-m-d\TH:i'))"
+                required
+                borderColor="#e9d5ff"
+                focusColor="#8b5cf6"
+                backgroundGradient="linear-gradient(135deg, #faf5ff, #ffffff)"
+            />
 
-                <div>
-                    <label for="data_devolucao" style="display: block; font-size: 14px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">Data de Devolução *</label>
-                    <input
-                        type="datetime-local"
-                        name="data_devolucao"
-                        id="data_devolucao"
-                        value="{{ old('data_devolucao', $aluguel->data_devolucao->format('Y-m-d\TH:i')) }}"
-                        required
-                        style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('data_devolucao') ? '#ef4444' : '#e9d5ff' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #faf5ff, #ffffff); box-sizing: border-box;"
-                        onfocus="this.style.borderColor='#8b5cf6'; this.style.boxShadow='0 0 0 3px rgba(139, 92, 246, 0.1)';"
-                        onblur="this.style.borderColor='{{ $errors->has('data_devolucao') ? '#ef4444' : '#e9d5ff' }}'; this.style.boxShadow='none';"
-                    >
-                    @error('data_devolucao')
-                        <p style="margin-top: 8px; font-size: 13px; color: #ef4444; font-weight: 600;">{{ $message }}</p>
-                    @enderror
-                </div>
+            <x-forms.input
+                type="datetime-local"
+                name="data_devolucao"
+                label="Data de Devolução"
+                :value="old('data_devolucao', $aluguel->data_devolucao->format('Y-m-d\TH:i'))"
+                required
+                borderColor="#e9d5ff"
+                focusColor="#8b5cf6"
+                backgroundGradient="linear-gradient(135deg, #faf5ff, #ffffff)"
+            />
 
-                <div>
-                    <label for="devolvido_em" style="display: block; font-size: 14px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">Data de Devolução Efetiva</label>
-                    <input
-                        type="datetime-local"
-                        name="devolvido_em"
-                        id="devolvido_em"
-                        value="{{ old('devolvido_em', $aluguel->devolvido_em ? $aluguel->devolvido_em->format('Y-m-d\TH:i') : '') }}"
-                        style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('devolvido_em') ? '#ef4444' : '#e9d5ff' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #faf5ff, #ffffff); box-sizing: border-box;"
-                        onfocus="this.style.borderColor='#8b5cf6'; this.style.boxShadow='0 0 0 3px rgba(139, 92, 246, 0.1)';"
-                        onblur="this.style.borderColor='{{ $errors->has('devolvido_em') ? '#ef4444' : '#e9d5ff' }}'; this.style.boxShadow='none';"
-                    >
-                    @error('devolvido_em')
-                        <p style="margin-top: 8px; font-size: 13px; color: #ef4444; font-weight: 600;">{{ $message }}</p>
-                    @enderror
-                </div>
+            <x-forms.input
+                type="datetime-local"
+                name="devolvido_em"
+                label="Data de Devolução Efetiva"
+                :value="old('devolvido_em', $aluguel->devolvido_em ? $aluguel->devolvido_em->format('Y-m-d\TH:i') : '')"
+                borderColor="#e9d5ff"
+                focusColor="#8b5cf6"
+                backgroundGradient="linear-gradient(135deg, #faf5ff, #ffffff)"
+            />
 
-                <!-- Taxa e Status -->
-                <div>
-                    <label for="taxa_atraso" style="display: block; font-size: 14px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">Taxa de Atraso (R$)</label>
-                    <input
-                        type="text"
-                        name="taxa_atraso"
-                        id="taxa_atraso"
-                        value="{{ old('taxa_atraso', $aluguel->taxa_atraso) }}"
-                        data-mask="currency"
-                        placeholder="R$ 0,00"
-                        style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('taxa_atraso') ? '#ef4444' : '#e9d5ff' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #faf5ff, #ffffff); box-sizing: border-box;"
-                        onfocus="this.style.borderColor='#8b5cf6'; this.style.boxShadow='0 0 0 3px rgba(139, 92, 246, 0.1)';"
-                        onblur="this.style.borderColor='{{ $errors->has('taxa_atraso') ? '#ef4444' : '#e9d5ff' }}'; this.style.boxShadow='none';"
-                    >
-                    @error('taxa_atraso')
-                        <p style="margin-top: 8px; font-size: 13px; color: #ef4444; font-weight: 600;">{{ $message }}</p>
-                    @enderror
-                </div>
+            <!-- Taxa e Status -->
+            <x-forms.input
+                type="text"
+                name="taxa_atraso"
+                label="Taxa de Atraso (R$)"
+                :value="old('taxa_atraso', $aluguel->taxa_atraso)"
+                placeholder="R$ 0,00"
+                mask="currency"
+                borderColor="#e9d5ff"
+                focusColor="#8b5cf6"
+                backgroundGradient="linear-gradient(135deg, #faf5ff, #ffffff)"
+            />
 
-                <div>
-                    <label for="status" style="display: block; font-size: 14px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">Status *</label>
-                    <select
-                        name="status"
-                        id="status"
-                        required
-                        style="width: 100%; padding: 12px 16px; border: 2px solid {{ $errors->has('status') ? '#ef4444' : '#e9d5ff' }}; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: linear-gradient(135deg, #faf5ff, #ffffff); cursor: pointer; box-sizing: border-box;"
-                        onfocus="this.style.borderColor='#8b5cf6'; this.style.boxShadow='0 0 0 3px rgba(139, 92, 246, 0.1)';"
-                        onblur="this.style.borderColor='{{ $errors->has('status') ? '#ef4444' : '#e9d5ff' }}'; this.style.boxShadow='none';"
-                    >
-                        @foreach(\App\Enums\RentalStatus::cases() as $status)
-                            <option value="{{ $status->value }}" {{ old('status', $aluguel->status->value) == $status->value ? 'selected' : '' }}>
-                                {{ $status->label() }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('status')
-                        <p style="margin-top: 8px; font-size: 13px; color: #ef4444; font-weight: 600;">{{ $message }}</p>
-                    @enderror
-                </div>
+            <x-forms.select
+                name="status"
+                label="Status"
+                :options="collect(\App\Enums\RentalStatus::cases())->mapWithKeys(fn($status) => [$status->value => $status->label()])->toArray()"
+                :value="old('status', $aluguel->status->value)"
+                required
+                borderColor="#e9d5ff"
+                focusColor="#8b5cf6"
+                backgroundGradient="linear-gradient(135deg, #faf5ff, #ffffff)"
+            />
             </div>
 
             <div style="margin-top: 32px; display: flex; justify-content: flex-end; gap: 12px; flex-wrap: wrap;">
-                <a href="{{ route('admin.alugueis.index') }}" style="display: inline-flex; align-items: center; padding: 12px 24px; background: linear-gradient(135deg, #f3e8ff, #faf5ff); color: #8b5cf6; border: 3px solid #e9d5ff; border-radius: 12px; font-size: 14px; font-weight: 700; text-decoration: none; transition: all 0.3s; box-shadow: 0 4px 10px rgba(139, 92, 246, 0.15);" onmouseover="this.style.background='linear-gradient(135deg, #8b5cf6, #a855f7)'; this.style.color='white'; this.style.borderColor='#8b5cf6'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 15px rgba(139, 92, 246, 0.3)';" onmouseout="this.style.background='linear-gradient(135deg, #f3e8ff, #faf5ff)'; this.style.color='#8b5cf6'; this.style.borderColor='#e9d5ff'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 10px rgba(139, 92, 246, 0.15)';">
+                <x-ui.button href="{{ route('admin.alugueis.index') }}" variant="secondary">
                     Cancelar
-                </a>
-                <button type="submit" style="display: inline-flex; align-items: center; padding: 12px 24px; background: linear-gradient(135deg, #8b5cf6, #ec4899); color: white; border: 3px solid #8b5cf6; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 10px rgba(139, 92, 246, 0.3);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 15px rgba(139, 92, 246, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 10px rgba(139, 92, 246, 0.3)';">
-                    <i data-lucide="save" style="width: 18px; height: 18px; margin-right: 8px;"></i>
+                </x-ui.button>
+                <x-ui.button type="submit" variant="primary" icon="save">
                     Atualizar Aluguel
-                </button>
+                </x-ui.button>
             </div>
         </form>
-    </div>
-</div>
+</x-ui.card>
 
 <style>
     @media (max-width: 768px) {

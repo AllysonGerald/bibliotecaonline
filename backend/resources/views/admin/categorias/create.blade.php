@@ -3,74 +3,65 @@
 @section('title', 'Nova Categoria')
 
 @section('content')
-<div class="mb-6">
-    <a href="{{ route('admin.categorias.index') }}" class="inline-flex items-center text-slate-600 hover:text-cyan-600 mb-4">
-        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-        </svg>
-        Voltar
-    </a>
-    <h2 class="text-2xl font-bold text-slate-900">Nova Categoria</h2>
-</div>
 
-<div class="bg-white rounded-lg shadow-md border border-slate-200 p-6">
+<x-ui.page-header 
+    title="Nova Categoria" 
+    subtitle="Crie uma nova categoria no catálogo"
+>
+    <x-ui.button href="{{ route('admin.categorias.index') }}" variant="secondary" icon="arrow-left">Voltar</x-ui.button>
+</x-ui.page-header>
+
+<x-ui.card 
+    borderColor="#e9d5ff"
+    shadowColor="rgba(139, 92, 246, 0.15)"
+    backgroundGradient="linear-gradient(135deg, #f3e8ff, #faf5ff, white)"
+>
     <form method="POST" action="{{ route('admin.categorias.store') }}">
         @csrf
 
-        <div class="space-y-6">
-            <div>
-                <label for="nome" class="block text-sm font-medium text-slate-700 mb-2">Nome *</label>
-                <input
-                    type="text"
-                    name="nome"
-                    id="nome"
-                    value="{{ old('nome') }}"
-                    required
-                    class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 @error('nome') border-red-500 @enderror"
-                >
-                @error('nome')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
+        <div style="display: grid; grid-template-columns: 1fr; gap: 24px;">
+            <x-forms.input
+                type="text"
+                name="nome"
+                label="Nome"
+                :value="old('nome')"
+                required
+                borderColor="#e9d5ff"
+                focusColor="#8b5cf6"
+                backgroundGradient="linear-gradient(135deg, #f3e8ff, #ffffff)"
+            />
 
-            <div>
-                <label for="descricao" class="block text-sm font-medium text-slate-700 mb-2">Descrição</label>
-                <textarea
-                    name="descricao"
-                    id="descricao"
-                    rows="4"
-                    class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 @error('descricao') border-red-500 @enderror"
-                >{{ old('descricao') }}</textarea>
-                @error('descricao')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
+            <x-forms.input
+                type="textarea"
+                name="descricao"
+                label="Descrição"
+                :value="old('descricao')"
+                borderColor="#e9d5ff"
+                focusColor="#8b5cf6"
+                backgroundGradient="linear-gradient(135deg, #f3e8ff, #ffffff)"
+            />
 
-            <div>
-                <label for="icone" class="block text-sm font-medium text-slate-700 mb-2">Ícone</label>
-                <input
-                    type="text"
-                    name="icone"
-                    id="icone"
-                    value="{{ old('icone') }}"
-                    placeholder="Nome do ícone ou classe CSS"
-                    class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 @error('icone') border-red-500 @enderror"
-                >
-                @error('icone')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
+            <x-forms.input
+                type="text"
+                name="icone"
+                label="Ícone"
+                :value="old('icone')"
+                placeholder="Nome do ícone ou classe CSS"
+                borderColor="#e9d5ff"
+                focusColor="#8b5cf6"
+                backgroundGradient="linear-gradient(135deg, #f3e8ff, #ffffff)"
+            />
         </div>
 
-        <div class="mt-6 flex justify-end space-x-3">
-            <a href="{{ route('admin.categorias.index') }}" class="px-6 py-2 border border-slate-300 rounded-lg text-slate-700 hover:bg-slate-50 transition-colors font-medium">
+        <div style="margin-top: 32px; display: flex; justify-content: flex-end; gap: 12px; flex-wrap: wrap;">
+            <x-ui.button href="{{ route('admin.categorias.index') }}" variant="secondary">
                 Cancelar
-            </a>
-            <button type="submit" class="px-6 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors font-medium">
+            </x-ui.button>
+            <x-ui.button type="submit" variant="primary" icon="tag">
                 Criar Categoria
-            </button>
+            </x-ui.button>
         </div>
     </form>
-</div>
+</x-ui.card>
 @endsection
 

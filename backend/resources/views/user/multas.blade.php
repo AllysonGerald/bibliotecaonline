@@ -3,140 +3,245 @@
 @section('title', 'Minhas Multas')
 
 @section('content')
-<div style="margin-bottom: 32px;">
-    <h1 style="font-size: 36px; font-weight: 900; color: #1f2937; margin-bottom: 8px;">Minhas Multas</h1>
-    <p style="font-size: 18px; color: #6b7280; font-weight: 500;">Visualize suas multas pendentes e pagas</p>
-</div>
+<x-ui.page-header
+    title="Minhas Multas"
+    subtitle="Visualize suas multas pendentes e pagas"
+/>
 
 <!-- Resumo -->
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 32px;">
-    <div style="background: linear-gradient(135deg, #fee2e2, #fef2f2, white); border-radius: 16px; padding: 24px; border: 3px solid #fca5a5; box-shadow: 0 10px 30px rgba(239, 68, 68, 0.15);">
-        <div style="display: flex; align-items: center; gap: 16px;">
-            <div style="width: 56px; height: 56px; background: linear-gradient(135deg, #ef4444, #dc2626); border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);">
-                <i data-lucide="alert-circle" style="width: 28px; height: 28px; color: white;"></i>
-            </div>
-            <div style="flex: 1;">
-                <p style="font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Multas Pendentes</p>
-                <p style="font-size: 32px; font-weight: 900; color: #1f2937; margin: 0;">{{ $unpaidFines->count() }}</p>
-            </div>
-        </div>
-    </div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; margin-bottom: 32px;">
+    <x-ui.stat-card
+        label="Multas Pendentes"
+        :value="$unpaidFines->count()"
+        icon="alert-circle"
+        iconColor="#ef4444"
+        backgroundGradient="linear-gradient(135deg, #fee2e2, #fef2f2, white)"
+        borderColor="#fca5a5"
+        shadowColor="rgba(239, 68, 68, 0.15)"
+    />
 
-    <div style="background: linear-gradient(135deg, #d1fae5, #f0fdf4, white); border-radius: 16px; padding: 24px; border: 3px solid #86efac; box-shadow: 0 10px 30px rgba(34, 197, 94, 0.15);">
-        <div style="display: flex; align-items: center; gap: 16px;">
-            <div style="width: 56px; height: 56px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);">
-                <i data-lucide="check-circle" style="width: 28px; height: 28px; color: white;"></i>
-            </div>
-            <div style="flex: 1;">
-                <p style="font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Multas Pagas</p>
-                <p style="font-size: 32px; font-weight: 900; color: #1f2937; margin: 0;">{{ $paidFines->count() }}</p>
-            </div>
-        </div>
-    </div>
+    <x-ui.stat-card
+        label="Multas Pagas"
+        :value="$paidFines->count()"
+        icon="check-circle"
+        iconColor="#10b981"
+        backgroundGradient="linear-gradient(135deg, #d1fae5, #f0fdf4, white)"
+        borderColor="#86efac"
+        shadowColor="rgba(16, 185, 129, 0.15)"
+    />
 
-    <div style="background: linear-gradient(135deg, #f3e8ff, #faf5ff, white); border-radius: 16px; padding: 24px; border: 3px solid #e9d5ff; box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15);">
-        <div style="display: flex; align-items: center; gap: 16px;">
-            <div style="width: 56px; height: 56px; background: linear-gradient(135deg, #8b5cf6, #a855f7); border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);">
-                <i data-lucide="dollar-sign" style="width: 28px; height: 28px; color: white;"></i>
-            </div>
-            <div style="flex: 1;">
-                <p style="font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Total Pendente</p>
-                <p style="font-size: 32px; font-weight: 900; color: #1f2937; margin: 0;">R$ {{ number_format($unpaidFines->sum('valor'), 2, ',', '.') }}</p>
-            </div>
-        </div>
-    </div>
+    <x-ui.stat-card
+        label="Total Pendente"
+        :value="'R$ ' . number_format($unpaidFines->sum('valor'), 2, ',', '.')"
+        icon="dollar-sign"
+        iconColor="#8b5cf6"
+        backgroundGradient="linear-gradient(135deg, #f3e8ff, #faf5ff, white)"
+        borderColor="#e9d5ff"
+        shadowColor="rgba(139, 92, 246, 0.15)"
+    />
 </div>
 
 <!-- Filtros -->
-<div style="background: white; border-radius: 20px; padding: 24px; border: 3px solid #e9d5ff; box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15); margin-bottom: 32px;">
-    <form method="GET" action="{{ route('minhas-multas') }}" style="display: flex; gap: 12px; flex-wrap: wrap;">
-        <a href="{{ route('minhas-multas') }}" style="display: inline-flex; align-items: center; padding: 10px 20px; background: {{ !request('status') ? 'linear-gradient(135deg, #8b5cf6, #ec4899)' : 'linear-gradient(135deg, #f3e8ff, #faf5ff)' }}; color: {{ !request('status') ? 'white' : '#8b5cf6' }}; border-radius: 12px; font-size: 14px; font-weight: 700; text-decoration: none; border: {{ !request('status') ? 'none' : '3px solid #e9d5ff' }}; transition: all 0.3s;" onmouseover="this.style.transform='scale(1.05)';" onmouseout="this.style.transform='scale(1)';">
+<x-ui.card
+    title="Filtros"
+    icon="filter"
+    iconColor="#8b5cf6"
+    borderColor="#e9d5ff"
+    shadowColor="rgba(139, 92, 246, 0.15)"
+    backgroundGradient="white"
+    class="margin-bottom: 32px;"
+>
+    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <x-ui.button
+            href="{{ route('minhas-multas') }}"
+            variant="secondary"
+            class="padding: 12px 24px; font-size: 14px; font-weight: 700; {{ !request('status') ? 'background: linear-gradient(135deg, #8b5cf6, #a855f7); color: white; border-color: #8b5cf6;' : 'background: linear-gradient(135deg, #f3e8ff, #faf5ff); color: #8b5cf6; border-color: #e9d5ff;' }}"
+        >
             Todas ({{ $fines->count() }})
-        </a>
-        <a href="{{ route('minhas-multas', ['status' => 'pendente']) }}" style="display: inline-flex; align-items: center; padding: 10px 20px; background: {{ request('status') === 'pendente' ? 'linear-gradient(135deg, #ef4444, #dc2626)' : 'linear-gradient(135deg, #fee2e2, #fef2f2)' }}; color: {{ request('status') === 'pendente' ? 'white' : '#991b1b' }}; border-radius: 12px; font-size: 14px; font-weight: 700; text-decoration: none; border: {{ request('status') === 'pendente' ? 'none' : '3px solid #fca5a5' }}; transition: all 0.3s;" onmouseover="this.style.transform='scale(1.05)';" onmouseout="this.style.transform='scale(1)';">
+        </x-ui.button>
+        <x-ui.button
+            href="{{ route('minhas-multas', ['status' => 'pendente']) }}"
+            variant="secondary"
+            class="padding: 12px 24px; font-size: 14px; font-weight: 700; {{ request('status') === 'pendente' ? 'background: linear-gradient(135deg, #ef4444, #dc2626); color: white; border-color: #ef4444;' : 'background: linear-gradient(135deg, #fee2e2, #fecaca); color: #991b1b; border-color: #fecaca;' }}"
+        >
             Pendentes ({{ $unpaidFines->count() }})
-        </a>
-        <a href="{{ route('minhas-multas', ['status' => 'paga']) }}" style="display: inline-flex; align-items: center; padding: 10px 20px; background: {{ request('status') === 'paga' ? 'linear-gradient(135deg, #10b981, #059669)' : 'linear-gradient(135deg, #d1fae5, #a7f3d0)' }}; color: {{ request('status') === 'paga' ? 'white' : '#065f46' }}; border-radius: 12px; font-size: 14px; font-weight: 700; text-decoration: none; border: {{ request('status') === 'paga' ? 'none' : '3px solid #86efac' }}; transition: all 0.3s;" onmouseover="this.style.transform='scale(1.05)';" onmouseout="this.style.transform='scale(1)';">
+        </x-ui.button>
+        <x-ui.button
+            href="{{ route('minhas-multas', ['status' => 'paga']) }}"
+            variant="secondary"
+            class="padding: 12px 24px; font-size: 14px; font-weight: 700; {{ request('status') === 'paga' ? 'background: linear-gradient(135deg, #10b981, #059669); color: white; border-color: #10b981;' : 'background: linear-gradient(135deg, #d1fae5, #a7f3d0); color: #065f46; border-color: #a7f3d0;' }}"
+        >
             Pagas ({{ $paidFines->count() }})
-        </a>
-    </form>
-</div>
+        </x-ui.button>
+    </div>
+</x-ui.card>
 
 <!-- Lista de Multas -->
 @if($fines->count() > 0)
-    <div style="display: flex; flex-direction: column; gap: 20px;">
+    <div style="display: flex; flex-direction: column; gap: 24px;">
         @foreach($fines as $fine)
-            <div style="background: white; border-radius: 20px; padding: 24px; border: 3px solid {{ $fine->paga ? '#86efac' : '#fca5a5' }}; box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15); transition: all 0.3s; position: relative; overflow: hidden;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 15px 40px rgba(139, 92, 246, 0.25)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 30px rgba(139, 92, 246, 0.15)';">
+            <div class="fine-card-hover" data-paid="{{ $fine->paga ? 'true' : 'false' }}" style="background: white; border-radius: 20px; padding: 24px; border: 3px solid {{ $fine->paga ? '#e0f2fe' : '#fee2e2' }}; box-shadow: 0 10px 30px {{ $fine->paga ? 'rgba(14, 165, 233, 0.15)' : 'rgba(239, 68, 68, 0.15)' }}; transition: all 0.3s; position: relative; overflow: hidden;">
+                <!-- Decorative top bar -->
+                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 6px; background: linear-gradient(90deg, {{ $fine->paga ? '#10b981, #059669' : '#ef4444, #dc2626' }});"></div>
+
                 <!-- Decorative background -->
-                <div style="position: absolute; top: -30px; right: -30px; width: 120px; height: 120px; background: rgba(139, 92, 246, 0.1); border-radius: 50%; filter: blur(40px); z-index: 0;"></div>
-                
-                <div style="position: relative; z-index: 1; display: grid; grid-template-columns: 1fr; gap: 20px; @media (min-width: 768px) { grid-template-columns: 120px 1fr auto; }">
-                    <!-- Ícone -->
-                    <div style="width: 100%; height: 120px; background: linear-gradient(135deg, {{ $fine->paga ? '#d1fae5' : '#fee2e2' }}, {{ $fine->paga ? '#f0fdf4' : '#fef2f2' }}); border-radius: 16px; display: flex; align-items: center; justify-content: center; @media (min-width: 768px) { width: 120px; height: 120px; }">
-                        <i data-lucide="{{ $fine->paga ? 'check-circle' : 'alert-circle' }}" style="width: 48px; height: 48px; color: {{ $fine->paga ? '#10b981' : '#ef4444' }};"></i>
+                <div style="position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: rgba({{ $fine->paga ? '16, 185, 129' : '239, 68, 68' }}, 0.08); border-radius: 50%; filter: blur(40px); z-index: 0;"></div>
+
+                <div style="position: relative; z-index: 1; display: grid; grid-template-columns: 1fr; gap: 24px; @media (min-width: 768px) { grid-template-columns: 140px 1fr auto; }">
+                    <!-- Imagem do Livro -->
+                    <div style="width: 100%; height: 180px; background: linear-gradient(135deg, {{ $fine->paga ? '#d1fae5, #a7f3d0' : '#fee2e2, #fecaca' }}); border-radius: 16px; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 4px 12px {{ $fine->paga ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)' }}; @media (min-width: 768px) { width: 140px; height: 180px; }">
+                        @if($fine->rental->book->imagem_capa)
+                            <img src="{{ $fine->rental->book->imagem_capa }}" alt="{{ $fine->rental->book->titulo }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        @else
+                            <x-ui.icon name="book-open" size="56" style="color: {{ $fine->paga ? '#10b981' : '#ef4444' }};" />
+                        @endif
                     </div>
 
                     <!-- Informações da Multa -->
-                    <div style="flex: 1;">
-                        <h3 style="font-size: 22px; font-weight: 900; color: #1f2937; margin-bottom: 8px;">{{ $fine->rental->book->titulo }}</h3>
-                        <p style="font-size: 16px; color: #6b7280; font-weight: 600; margin-bottom: 16px;">{{ $fine->rental->book->author?->nome ?? 'Autor desconhecido' }}</p>
-                        
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 16px;">
-                            <div>
-                                <label style="display: block; font-size: 12px; font-weight: 700; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Valor da Multa</label>
-                                <p style="font-size: 24px; font-weight: 900; color: {{ $fine->paga ? '#10b981' : '#ef4444' }};">R$ {{ number_format($fine->valor, 2, ',', '.') }}</p>
-                            </div>
-                            <div>
-                                <label style="display: block; font-size: 12px; font-weight: 700; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Aluguel #</label>
-                                <p style="font-size: 14px; color: #1f2937; font-weight: 600;">{{ $fine->rental->id }}</p>
-                            </div>
-                            @if($fine->paga && $fine->paga_em)
-                                <div>
-                                    <label style="display: block; font-size: 12px; font-weight: 700; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Paga em</label>
-                                    <p style="font-size: 14px; color: #1f2937; font-weight: 600;">{{ $fine->paga_em->format('d/m/Y H:i') }}</p>
+                    <div style="flex: 1; display: flex; flex-direction: column; gap: 16px;">
+                        <div>
+                            <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 8px; flex-wrap: wrap;">
+                                <h3 style="font-size: 24px; font-weight: 900; color: #1f2937; margin: 0; line-height: 1.3; flex: 1; min-width: 0;">{{ $fine->rental->book->titulo }}</h3>
+                                <div style="display: flex; align-items: center; gap: 12px; flex-shrink: 0;">
+                                    <x-ui.icon name="{{ $fine->paga ? 'check-circle' : ($fine->pagamento_solicitado ? 'clock' : 'alert-circle') }}" size="24" :style="'color: ' . ($fine->paga ? '#10b981' : ($fine->pagamento_solicitado ? '#f59e0b' : '#ef4444')) . '; flex-shrink: 0;'" />
+                                    @if($fine->paga)
+                                        <x-ui.badge variant="success" size="md">Paga</x-ui.badge>
+                                    @elseif($fine->pagamento_solicitado)
+                                        <x-ui.badge variant="warning" size="md">Pagamento Solicitado</x-ui.badge>
+                                    @else
+                                        <x-ui.badge variant="danger" size="md">Pendente</x-ui.badge>
+                                    @endif
                                 </div>
-                            @endif
+                            </div>
+                            <p style="font-size: 16px; color: #6b7280; font-weight: 600; margin: 0;">{{ $fine->rental->book->author?->nome ?? 'Autor desconhecido' }}</p>
                         </div>
 
-                        <!-- Status -->
-                        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-                            @if($fine->paga)
-                                <span style="display: inline-block; padding: 8px 16px; background: linear-gradient(135deg, #d1fae5, #a7f3d0); color: #065f46; border-radius: 10px; font-size: 13px; font-weight: 700; border: 2px solid #86efac;">
-                                    Paga
-                                </span>
-                            @else
-                                <span style="display: inline-block; padding: 8px 16px; background: linear-gradient(135deg, #fee2e2, #fef2f2); color: #991b1b; border-radius: 10px; font-size: 13px; font-weight: 700; border: 2px solid #fca5a5;">
-                                    Pendente
-                                </span>
+                        <!-- Valor da Multa -->
+                        <div style="padding: 16px; background: linear-gradient(135deg, {{ $fine->paga ? '#d1fae5, #a7f3d0' : '#fee2e2, #fecaca' }}); border-radius: 12px; border: 2px solid {{ $fine->paga ? '#a7f3d0' : '#fecaca' }}; border-left: 4px solid {{ $fine->paga ? '#10b981' : '#ef4444' }};">
+                            <label style="display: block; font-size: 11px; font-weight: 700; color: #9ca3af; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Valor da Multa</label>
+                            <p style="font-size: 32px; font-weight: 900; color: {{ $fine->paga ? '#10b981' : '#ef4444' }}; margin: 0; line-height: 1;">R$ {{ number_format($fine->valor, 2, ',', '.') }}</p>
+                        </div>
+
+                        <!-- Informações do Aluguel -->
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; padding: 16px; background: linear-gradient(135deg, {{ $fine->paga ? '#f0fdf4, #d1fae5' : '#fef2f2, #fee2e2' }}); border-radius: 12px; border: 2px solid {{ $fine->paga ? '#a7f3d0' : '#fecaca' }};">
+                            <div>
+                                <label style="display: block; font-size: 11px; font-weight: 700; color: #9ca3af; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">ID do Aluguel</label>
+                                <p style="font-size: 15px; color: #1f2937; font-weight: 700; margin: 0;">#{{ $fine->rental->id }}</p>
+                            </div>
+                            <div>
+                                <label style="display: block; font-size: 11px; font-weight: 700; color: #9ca3af; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Alugado em</label>
+                                <p style="font-size: 15px; color: #1f2937; font-weight: 700; margin: 0;">{{ $fine->rental->alugado_em->format('d/m/Y') }}</p>
+                            </div>
+                            <div>
+                                <label style="display: block; font-size: 11px; font-weight: 700; color: #9ca3af; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Devolução prevista</label>
+                                <p style="font-size: 15px; color: #1f2937; font-weight: 700; margin: 0;">{{ $fine->rental->data_devolucao->format('d/m/Y') }}</p>
+                            </div>
+                            @if($fine->rental->devolvido_em)
+                                <div>
+                                    <label style="display: block; font-size: 11px; font-weight: 700; color: #9ca3af; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Devolvido em</label>
+                                    <p style="font-size: 15px; color: #1f2937; font-weight: 700; margin: 0;">{{ $fine->rental->devolvido_em->format('d/m/Y') }}</p>
+                                </div>
+                            @endif
+                            @if($fine->pagamento_solicitado && $fine->pagamento_solicitado_em)
+                                <div>
+                                    <label style="display: block; font-size: 11px; font-weight: 700; color: #9ca3af; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Solicitado em</label>
+                                    <p style="font-size: 15px; color: #1f2937; font-weight: 700; margin: 0;">{{ $fine->pagamento_solicitado_em->format('d/m/Y H:i') }}</p>
+                                </div>
+                            @endif
+                            @if($fine->paga && $fine->paga_em)
+                                <div>
+                                    <label style="display: block; font-size: 11px; font-weight: 700; color: #9ca3af; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Paga em</label>
+                                    <p style="font-size: 15px; color: #1f2937; font-weight: 700; margin: 0;">{{ $fine->paga_em->format('d/m/Y H:i') }}</p>
+                                </div>
                             @endif
                         </div>
                     </div>
 
                     <!-- Ações -->
                     <div style="display: flex; flex-direction: column; gap: 12px; justify-content: center; @media (min-width: 768px) { align-items: flex-end; }">
-                        <a href="{{ route('meus-alugueis') }}" style="display: inline-flex; align-items: center; padding: 10px 20px; background: linear-gradient(135deg, #f3e8ff, #faf5ff); color: #8b5cf6; border: 3px solid #e9d5ff; border-radius: 12px; font-size: 14px; font-weight: 700; text-decoration: none; transition: all 0.3s; white-space: nowrap;" onmouseover="this.style.background='linear-gradient(135deg, #8b5cf6, #a855f7)'; this.style.color='white'; this.style.borderColor='#8b5cf6';" onmouseout="this.style.background='linear-gradient(135deg, #f3e8ff, #faf5ff)'; this.style.color='#8b5cf6'; this.style.borderColor='#e9d5ff';">
-                            <i data-lucide="book-open" style="width: 16px; height: 16px; margin-right: 6px;"></i>
+                        <x-ui.button
+                            href="{{ route('meus-alugueis') }}"
+                            variant="secondary"
+                            icon="book-open"
+                            class="padding: 12px 24px; font-size: 14px; font-weight: 700; white-space: nowrap; background: linear-gradient(135deg, {{ $fine->paga ? '#d1fae5, #a7f3d0' : '#fee2e2, #fecaca' }}); color: {{ $fine->paga ? '#065f46' : '#991b1b' }}; border-color: {{ $fine->paga ? '#a7f3d0' : '#fecaca' }}; width: 100%; @media (min-width: 768px) { width: auto; }"
+                        >
                             Ver Aluguel
-                        </a>
+                        </x-ui.button>
+                        @if(!$fine->paga && !$fine->pagamento_solicitado)
+                            <x-ui.button
+                                type="button"
+                                onclick="openPayFineModal('pay-fine-{{ $fine->id }}')"
+                                variant="success"
+                                icon="check-circle"
+                                class="padding: 12px 24px; font-size: 14px; font-weight: 700; white-space: nowrap; width: 100%; @media (min-width: 768px) { width: auto; }"
+                            >
+                                Realizei Pagamento
+                            </x-ui.button>
+
+                            <!-- Modal de Confirmação de Pagamento -->
+                            <x-modals.pay-fine-modal
+                                id="pay-fine-{{ $fine->id }}"
+                                title="Realizei Pagamento"
+                                message="Ao informar que realizou o pagamento, o administrador será notificado e confirmará o recebimento. Deseja continuar?"
+                                action="{{ route('multas.pay', $fine) }}"
+                                :fineValue="'R$ ' . number_format($fine->valor, 2, ',', '.')"
+                            />
+                        @elseif($fine->pagamento_solicitado && !$fine->paga)
+                            <div style="padding: 12px; background: linear-gradient(135deg, #fef3c7, #fde68a); border-radius: 12px; border: 2px solid #fbbf24; text-align: center; display: flex; align-items: center; justify-content: center; width: 100%; @media (min-width: 768px) { width: auto; min-width: 280px; }">
+                                <p style="font-size: 13px; font-weight: 700; color: #92400e; margin: 0; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                                    <x-ui.icon name="clock" size="16" style="color: #f59e0b; flex-shrink: 0;" />
+                                    <span>Aguardando confirmação do administrador</span>
+                                </p>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
         @endforeach
     </div>
+
+    <style>
+        .fine-card-hover:hover {
+            transform: translateY(-4px);
+        }
+    </style>
+
+    <script>
+        (function() {
+            const cards = document.querySelectorAll('.fine-card-hover');
+            cards.forEach(function(card) {
+                const isPaid = card.getAttribute('data-paid') === 'true';
+                const originalBorder = isPaid ? '#e0f2fe' : '#fee2e2';
+                const originalShadow = isPaid ? 'rgba(14, 165, 233, 0.15)' : 'rgba(239, 68, 68, 0.15)';
+
+                card.addEventListener('mouseenter', function() {
+                    this.style.boxShadow = '0 15px 40px ' + (isPaid ? 'rgba(16, 185, 129, 0.25)' : 'rgba(239, 68, 68, 0.25)') + ' !important';
+                    this.style.borderColor = (isPaid ? '#10b981' : '#ef4444') + ' !important';
+                });
+                card.addEventListener('mouseleave', function() {
+                    this.style.boxShadow = '0 10px 30px ' + originalShadow + ' !important';
+                    this.style.borderColor = originalBorder + ' !important';
+                });
+            });
+        })();
+
+        function openPayFineModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = 'block';
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+            }
+        }
+    </script>
 @else
-    <div style="background: white; border-radius: 20px; padding: 64px 32px; border: 3px solid #e9d5ff; box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15); text-align: center;">
-        <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #f3e8ff, #fce7f3); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px;">
-            <i data-lucide="check-circle" style="width: 40px; height: 40px; color: #8b5cf6;"></i>
-        </div>
-        <h3 style="font-size: 24px; font-weight: 900; color: #1f2937; margin-bottom: 12px;">Nenhuma multa encontrada</h3>
-        <p style="font-size: 16px; color: #6b7280; font-weight: 500; margin-bottom: 24px;">
-            @if(request('status'))
-                Não há multas com este status.
-            @else
-                Você não possui multas registradas.
-            @endif
-        </p>
-    </div>
+    <x-ui.empty-state
+        title="Nenhuma multa encontrada"
+        :message="request('status') ? 'Não há multas com este status.' : 'Você não possui multas registradas.'"
+        icon="check-circle"
+        iconColor="#8b5cf6"
+        backgroundGradient="linear-gradient(135deg, #f3e8ff, #fce7f3)"
+    />
 @endif
 @endsection
-

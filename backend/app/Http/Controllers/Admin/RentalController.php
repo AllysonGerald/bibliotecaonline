@@ -118,13 +118,21 @@ class RentalController extends Controller
     {
         $validated = $request->validated();
 
+        // Converter taxa_atraso se vier formatada (máscara de moeda)
+        $taxaAtraso = 0.0;
+        if (isset($validated['taxa_atraso']) && $validated['taxa_atraso'] !== null && $validated['taxa_atraso'] !== '') {
+            $taxaAtraso = is_numeric($validated['taxa_atraso'])
+                ? (float) $validated['taxa_atraso']
+                : (float) str_replace(['R$', '.', ','], ['', '', '.'], $validated['taxa_atraso']);
+        }
+
         $dto = new RentalDTO(
             usuarioId: (int) $validated['usuario_id'],
             livroId: (int) $validated['livro_id'],
             alugadoEm: Carbon::parse($validated['alugado_em']),
             dataDevolucao: Carbon::parse($validated['data_devolucao']),
             devolvidoEm: isset($validated['devolvido_em']) ? Carbon::parse($validated['devolvido_em']) : null,
-            taxaAtraso: (float) ($validated['taxa_atraso'] ?? 0),
+            taxaAtraso: $taxaAtraso,
             status: RentalStatus::from($validated['status']),
         );
 
@@ -146,13 +154,21 @@ class RentalController extends Controller
     {
         $validated = $request->validated();
 
+        // Converter taxa_atraso se vier formatada (máscara de moeda)
+        $taxaAtraso = 0.0;
+        if (isset($validated['taxa_atraso']) && $validated['taxa_atraso'] !== null && $validated['taxa_atraso'] !== '') {
+            $taxaAtraso = is_numeric($validated['taxa_atraso'])
+                ? (float) $validated['taxa_atraso']
+                : (float) str_replace(['R$', '.', ','], ['', '', '.'], $validated['taxa_atraso']);
+        }
+
         $dto = new RentalDTO(
             usuarioId: (int) $validated['usuario_id'],
             livroId: (int) $validated['livro_id'],
             alugadoEm: Carbon::parse($validated['alugado_em']),
             dataDevolucao: Carbon::parse($validated['data_devolucao']),
             devolvidoEm: isset($validated['devolvido_em']) ? Carbon::parse($validated['devolvido_em']) : null,
-            taxaAtraso: (float) ($validated['taxa_atraso'] ?? 0),
+            taxaAtraso: $taxaAtraso,
             status: RentalStatus::from($validated['status']),
         );
 

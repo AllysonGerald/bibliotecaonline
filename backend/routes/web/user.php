@@ -17,6 +17,7 @@ Route::middleware('auth')->group(static function (): void {
     Route::post('/livros/{livro}/reservas', [App\Http\Controllers\UserReservationController::class, 'store'])->name('reservas.store');
 
     Route::get('/minhas-multas', [App\Http\Controllers\FineController::class, 'index'])->name('minhas-multas');
+    Route::post('/multas/{multa}/pagar', [App\Http\Controllers\FineController::class, 'pay'])->name('multas.pay');
 
     Route::get('/perfil', [App\Http\Controllers\ProfileController::class, 'show'])->name('perfil');
     Route::put('/perfil', [App\Http\Controllers\ProfileController::class, 'update'])->name('perfil.update');

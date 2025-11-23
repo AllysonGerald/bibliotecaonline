@@ -102,4 +102,21 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(sta
     Route::get('atividades', [App\Http\Controllers\Admin\ActivityController::class, 'index'])
         ->name('atividades.index')
     ;
+
+    // Rotas de Multas
+    // Rotas específicas devem vir ANTES da rota resource para evitar conflitos
+    Route::get('multas/solicitacoes-pagamento', [App\Http\Controllers\Admin\FineController::class, 'paymentRequests'])
+        ->name('multas.payment-requests')
+    ;
+    Route::post('multas/{multa}/pagar', [App\Http\Controllers\Admin\FineController::class, 'pay'])
+        ->name('multas.pay')
+    ;
+    Route::resource('multas', App\Http\Controllers\Admin\FineController::class)
+        ->parameters(['multas' => 'multa'])
+        ->only(['index', 'show'])
+        ->names([
+            'index' => 'multas.index',
+            'show' => 'multas.show',
+        ])
+    ;
 });

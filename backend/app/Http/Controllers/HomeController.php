@@ -83,11 +83,11 @@ class HomeController extends Controller
         ;
         foreach ($userWishlists as $wishlist) {
             $activities->push([
-                'type' => 'wishlist',
+                'type' => 'lista de desejos',
                 'action' => 'adicionado',
                 'title' => $wishlist->book->titulo ?? 'Livro removido',
                 'date' => $wishlist->created_at,
-                'route' => route('wishlist'),
+                'route' => route('lista-desejos'),
                 'icon' => 'heart',
                 'color' => '#f97316',
             ]);

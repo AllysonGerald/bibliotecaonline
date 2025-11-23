@@ -9,7 +9,9 @@
     'layout' => 'grid', // 'grid' ou 'list'
 ])
 
-<div style="background: white; border-radius: 20px; padding: 32px; border: 3px solid #e9d5ff; box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15);">
+<div style="background: linear-gradient(135deg, #f3e8ff, #faf5ff, white); border-radius: 20px; padding: 32px; border: 3px solid #e9d5ff; box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15); position: relative; overflow: hidden;">
+    <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(139, 92, 246, 0.15); border-radius: 50%; filter: blur(60px); z-index: 0;"></div>
+    <div style="position: relative; z-index: 1;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
         <h3 style="font-size: 22px; font-weight: 900; color: #1f2937; display: flex; align-items: center; gap: 12px; margin: 0;">
             <div style="width: 40px; height: 40px; background: linear-gradient(135deg, {{ $iconColor }}, #ec4899); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
@@ -28,10 +30,10 @@
     @if($books->count() > 0)
         @if($layout === 'grid')
             <!-- Layout Grid (padrão para usuário) -->
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; max-height: 400px; overflow-y: auto; padding-right: 8px;">
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; max-height: 500px; overflow-y: auto; padding-right: 8px;">
                 @foreach($books as $book)
                     <a href="{{ route($viewRoute, $book) }}" style="text-decoration: none; display: block;">
-                        <div style="background: linear-gradient(135deg, #f3e8ff, #faf5ff); border-radius: 16px; padding: 16px; border: 2px solid #e9d5ff; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.1); transition: all 0.3s; height: 100%;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 25px rgba(139, 92, 246, 0.2)'; this.style.borderColor='{{ $iconColor }}';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(139, 92, 246, 0.1)'; this.style.borderColor='#e9d5ff';">
+                        <div style="background: linear-gradient(135deg, #f3e8ff, #faf5ff); border-radius: 16px; padding: 16px; border: 2px solid #e9d5ff; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.1); transition: all 0.3s; min-height: 220px; display: flex; flex-direction: column;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 25px rgba(139, 92, 246, 0.2)'; this.style.borderColor='{{ $iconColor }}';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(139, 92, 246, 0.1)'; this.style.borderColor='#e9d5ff';">
                             <div style="width: 100%; height: 120px; background: linear-gradient(135deg, #f3e8ff, #fce7f3); border-radius: 12px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
                                 @if($book->imagem_capa)
                                     <img src="{{ str_starts_with($book->imagem_capa, 'http') ? $book->imagem_capa : asset('storage/'.$book->imagem_capa) }}" alt="{{ $book->titulo }}" style="width: 100%; height: 100%; object-fit: cover;">
@@ -79,5 +81,6 @@
             </a>
         </div>
     @endif
+    </div>
 </div>
 

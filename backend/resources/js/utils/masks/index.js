@@ -1,153 +1,84 @@
 /**
  * Utilitário de Máscaras para Inputs
  * Biblioteca Online - Sistema de Máscaras
+ *
+ * Este arquivo exporta todas as máscaras e mantém compatibilidade
+ * com a API antiga (InputMasks)
  */
 
+import { PhoneMask } from './phone.js';
+import { CpfMask } from './cpf.js';
+import { CnpjMask } from './cnpj.js';
+import { CepMask } from './cep.js';
+import { DateMask } from './date.js';
+import { CurrencyMask } from './currency.js';
+import { DateTimeMask } from './datetime.js';
+
+/**
+ * Classe principal que mantém compatibilidade com código existente
+ */
 class InputMasks {
-    /**
-     * Aplica máscara de telefone brasileiro
-     * Formato: (00) 00000-0000 ou (00) 0000-0000
-     */
+    // Métodos de telefone
     static phone(input) {
-        let value = input.value.replace(/\D/g, '');
-        
-        if (value.length <= 10) {
-            // Telefone fixo: (00) 0000-0000
-            value = value.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
-        } else {
-            // Celular: (00) 00000-0000
-            value = value.replace(/^(\d{2})(\d{5})(\d{0,4}).*/, '($1) $2-$3');
-        }
-        
-        input.value = value;
+        PhoneMask.apply(input);
     }
 
-    /**
-     * Remove máscara de telefone
-     * Retorna apenas números
-     */
     static unMaskPhone(value) {
-        return value ? value.replace(/\D/g, '') : '';
+        return PhoneMask.remove(value);
     }
 
-    /**
-     * Aplica máscara de CPF
-     * Formato: 000.000.000-00
-     */
+    // Métodos de CPF
     static cpf(input) {
-        let value = input.value.replace(/\D/g, '');
-        value = value.replace(/^(\d{3})(\d{3})(\d{3})(\d{0,2}).*/, '$1.$2.$3-$4');
-        input.value = value;
+        CpfMask.apply(input);
     }
 
-    /**
-     * Remove máscara de CPF
-     */
     static unMaskCpf(value) {
-        return value ? value.replace(/\D/g, '') : '';
+        return CpfMask.remove(value);
     }
 
-    /**
-     * Aplica máscara de CNPJ
-     * Formato: 00.000.000/0000-00
-     */
+    // Métodos de CNPJ
     static cnpj(input) {
-        let value = input.value.replace(/\D/g, '');
-        value = value.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{0,2}).*/, '$1.$2.$3/$4-$5');
-        input.value = value;
+        CnpjMask.apply(input);
     }
 
-    /**
-     * Remove máscara de CNPJ
-     */
     static unMaskCnpj(value) {
-        return value ? value.replace(/\D/g, '') : '';
+        return CnpjMask.remove(value);
     }
 
-    /**
-     * Aplica máscara de CEP
-     * Formato: 00000-000
-     */
+    // Métodos de CEP
     static cep(input) {
-        let value = input.value.replace(/\D/g, '');
-        value = value.replace(/^(\d{5})(\d{0,3}).*/, '$1-$2');
-        input.value = value;
+        CepMask.apply(input);
     }
 
-    /**
-     * Remove máscara de CEP
-     */
     static unMaskCep(value) {
-        return value ? value.replace(/\D/g, '') : '';
+        return CepMask.remove(value);
     }
 
-    /**
-     * Aplica máscara de data
-     * Formato: 00/00/0000
-     */
+    // Métodos de data
     static date(input) {
-        let value = input.value.replace(/\D/g, '');
-        value = value.replace(/^(\d{2})(\d{2})(\d{0,4}).*/, '$1/$2/$3');
-        input.value = value;
+        DateMask.apply(input);
     }
 
-    /**
-     * Remove máscara de data
-     */
     static unMaskDate(value) {
-        return value ? value.replace(/\D/g, '') : '';
+        return DateMask.remove(value);
     }
 
-    /**
-     * Aplica máscara de moeda brasileira
-     * Formato: R$ 0,00
-     */
+    // Métodos de moeda
     static currency(input) {
-        let value = input.value.replace(/\D/g, '');
-        value = (value / 100).toFixed(2) + '';
-        value = value.replace('.', ',');
-        value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-        input.value = 'R$ ' + value;
+        CurrencyMask.apply(input);
     }
 
-    /**
-     * Remove máscara de moeda e retorna valor numérico
-     */
     static unMaskCurrency(value) {
-        if (!value) return '';
-        let numericValue = value.replace(/[^\d,]/g, '').replace(',', '.');
-        return parseFloat(numericValue) || 0;
+        return CurrencyMask.remove(value);
     }
 
-    /**
-     * Aplica máscara de data/hora
-     * Formato: 00/00/0000 00:00
-     */
+    // Métodos de data/hora
     static dateTime(input) {
-        let value = input.value.replace(/\D/g, '');
-        
-        if (value.length <= 8) {
-            // Apenas data: 00/00/0000
-            value = value.replace(/^(\d{2})(\d{2})(\d{0,4}).*/, '$1/$2/$3');
-        } else if (value.length <= 10) {
-            // Data completa: 00/00/0000
-            value = value.replace(/^(\d{2})(\d{2})(\d{4}).*/, '$1/$2/$3');
-        } else if (value.length <= 12) {
-            // Data + hora parcial: 00/00/0000 00
-            value = value.replace(/^(\d{2})(\d{2})(\d{4})(\d{0,2}).*/, '$1/$2/$3 $4');
-        } else {
-            // Data + hora completa: 00/00/0000 00:00
-            value = value.replace(/^(\d{2})(\d{2})(\d{4})(\d{2})(\d{0,2}).*/, '$1/$2/$3 $4:$5');
-        }
-        
-        input.value = value;
+        DateTimeMask.apply(input);
     }
 
-    /**
-     * Remove máscara de data/hora
-     */
     static unMaskDateTime(value) {
-        return value ? value.replace(/\D/g, '') : '';
+        return DateTimeMask.remove(value);
     }
 
     /**
@@ -160,10 +91,9 @@ class InputMasks {
                 input.addEventListener('input', function() {
                     InputMasks.phone(this);
                 });
-                
-                // Aplica máscara no valor inicial se existir (mesmo que venha sem máscara do banco)
+
+                // Aplica máscara no valor inicial se existir
                 if (input.value) {
-                    // Se o valor não tem máscara (só números), aplica a máscara
                     if (!input.value.includes('(') && !input.value.includes(')')) {
                         InputMasks.phone(input);
                     }
@@ -175,7 +105,7 @@ class InputMasks {
                 input.addEventListener('input', function() {
                     InputMasks.cpf(this);
                 });
-                
+
                 if (input.value) {
                     InputMasks.cpf(input);
                 }
@@ -186,7 +116,7 @@ class InputMasks {
                 input.addEventListener('input', function() {
                     InputMasks.cnpj(this);
                 });
-                
+
                 if (input.value) {
                     InputMasks.cnpj(input);
                 }
@@ -197,7 +127,7 @@ class InputMasks {
                 input.addEventListener('input', function() {
                     InputMasks.cep(this);
                 });
-                
+
                 if (input.value) {
                     InputMasks.cep(input);
                 }
@@ -208,7 +138,7 @@ class InputMasks {
                 input.addEventListener('input', function() {
                     InputMasks.date(this);
                 });
-                
+
                 if (input.value) {
                     InputMasks.date(input);
                 }
@@ -219,12 +149,10 @@ class InputMasks {
                 input.addEventListener('input', function() {
                     InputMasks.currency(this);
                 });
-                
-                // Aplica máscara no valor inicial se existir (mesmo que venha sem máscara do banco)
+
+                // Aplica máscara no valor inicial se existir
                 if (input.value) {
-                    // Se o valor não tem máscara (não começa com R$), aplica a máscara
                     if (!input.value.toString().startsWith('R$')) {
-                        // Converte valor numérico para formato de moeda
                         let numericValue = parseFloat(input.value) || 0;
                         input.value = numericValue.toString();
                         InputMasks.currency(input);
@@ -237,9 +165,8 @@ class InputMasks {
                 input.addEventListener('input', function() {
                     InputMasks.dateTime(this);
                 });
-                
+
                 if (input.value) {
-                    // Se o valor não tem máscara, aplica a máscara
                     if (!input.value.includes('/') && !input.value.includes(':')) {
                         InputMasks.dateTime(input);
                     }
@@ -296,6 +223,12 @@ if (document.readyState === 'loading') {
     InputMasks.init();
 }
 
-// Exporta para uso global
+// Exporta para uso global (compatibilidade)
 window.InputMasks = InputMasks;
+
+// Exporta classes individuais para uso modular
+export { PhoneMask, CpfMask, CnpjMask, CepMask, DateMask, CurrencyMask, DateTimeMask };
+
+// Exporta classe principal como default
+export default InputMasks;
 
